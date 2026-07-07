@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Special Offers & Discounts at Inithat Custom Gifts. Up to 40% off on custom gifts.">
+  <title>Special Offers & Discounts | Inithat Custom Gifts</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="images/logo.png">
+</head>
+
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <img src="images/logo.png" alt="Inithat Custom Gifts Logo" onerror="this.style.background='var(--primary)'; this.alt='I';">
+      <div class="nav-brand-text">
+        <span class="nav-brand-name">Inithat Custom Gifts</span>
+        <span class="nav-brand-tagline">Made with Love</span>
+      </div>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="bulk-retail.html">Bulk / Retail</a>
+      <a href="offers.html" class="active">Offers</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="contact.html">Contact</a>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Shown when logged OUT -->
+      <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
+      <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
+      <!-- Shown when logged IN -->
+      <span id="navUserGreet" style="display:none; color:var(--gold); font-weight:600; font-size:0.85rem;"></span>
+      <button onclick="logout()" class="nav-auth-btn login-btn" id="navLogoutBtn" style="display:none; cursor:pointer; border:none;">LOGOUT</button>
+      <div class="nav-cart" id="navCart">
+        <span class="cart-icon">🛒</span>
+        <span>CART</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Offers Hero Section -->
+  <section class="section special-offer" style="padding-top: 120px; min-height: 85vh;">
+    <div class="offer-content">
+      <div class="offer-text reveal-left active">
+        <h2>
+          Festive Season
+          <span>Gift Deals! 🎁</span>
+        </h2>
+        <p>Don't miss out on our biggest sale! Get up to 40% off on all personalized custom gifts. Perfect for birthdays, anniversaries, and special moments.</p>
+
+        <div class="offer-timer" id="offerTimer" style="margin-bottom: 24px;">
+          <div class="timer-block">
+            <span class="number" id="timerDays">12</span>
+            <span class="label">Days</span>
+          </div>
+          <div class="timer-block">
+            <span class="number" id="timerHours">08</span>
+            <span class="label">Hours</span>
+          </div>
+          <div class="timer-block">
+            <span class="number" id="timerMins">45</span>
+            <span class="label">Mins</span>
+          </div>
+          <div class="timer-block">
+            <span class="number" id="timerSecs">30</span>
+            <span class="label">Secs</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <a href="products.html" class="btn btn-gold">Browse Sale Catalog →</a>
+        </div>
+      </div>
+
+      <div class="offer-image reveal-right active">
+        <img src="images/gift-box.png" alt="Special Gift Box Offer">
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-brand">
+          <img src="images/logo.png" alt="Inithat Custom Gifts"
+            onerror="this.style.background='var(--primary)'; this.alt='I';">
+          <div class="nav-brand-text">
+            <span class="nav-brand-name">Inithat Custom Gifts</span>
+            <span class="nav-brand-tagline">Made with Love</span>
+          </div>
+        </a>
+        <p>We create beautiful, personalized gifts that celebrate your special moments. Every gift tells a unique story
+          crafted with love and care.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook">📘</a>
+          <a href="#" aria-label="Instagram">📸</a>
+          <a href="#" aria-label="Twitter">🐦</a>
+          <a href="#" aria-label="YouTube">🎬</a>
+          <a href="#" aria-label="Pinterest">📌</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="bulk-retail.html">Bulk / Retail</a></li>
+          <li><a href="offers.html">Special Offers</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="products.html">Custom Mugs</a></li>
+          <li><a href="products.html">Photo Frames</a></li>
+          <li><a href="products.html">Keychains</a></li>
+          <li><a href="products.html">T-Shirts</a></li>
+          <li><a href="products.html">Jewelry</a></li>
+          <li><a href="products.html">Home Decor</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Get in Touch</h4>
+        <ul class="footer-contact">
+          <li>
+            <span>📍</span>
+            <span>Inithat Custom Gifts, Main Street, Your City, India</span>
+          </li>
+          <li>
+            <span>📞</span>
+            <span>+91 98765 43210</span>
+          </li>
+          <li>
+            <span>✉️</span>
+            <span>hello@inithatgifts.com</span>
+          </li>
+          <li>
+            <span>⏰</span>
+            <span>Mon - Sat: 9:00 AM - 8:00 PM</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 <a href="index.html">Inithat Custom Gifts</a>. All rights reserved. Made with ❤️ in India.</p>
+      <div class="payment-methods">
+        💳 🏧 📱 🔒
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

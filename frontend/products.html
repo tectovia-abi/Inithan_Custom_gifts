@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Browse custom products at Inithat Custom Gifts. Personalized mugs, frames, keychains, and apparel.">
+  <title>Our Product Collection | Inithat Custom Gifts</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <style>
+    .occasions-section {
+      padding: 24px var(--space-md);
+      background: var(--off-white);
+      border-radius: var(--radius-lg);
+      margin: 20px auto 35px auto;
+      max-width: 1100px;
+      text-align: center;
+      box-shadow: inset 0 0 15px rgba(196, 30, 58, 0.01);
+      border: 1px solid rgba(196, 30, 58, 0.06);
+    }
+    .occasions-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--primary);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+    }
+    .occasions-title::before,
+    .occasions-title::after {
+      content: "";
+      height: 1.5px;
+      width: 30px;
+      background-color: var(--primary);
+    }
+    .occasions-grid {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .occasion-item {
+      flex: 1 1 100px;
+      max-width: 120px;
+      text-align: center;
+    }
+    .occasion-icon-wrapper {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      margin: 0 auto 10px auto;
+      box-shadow: 0 3px 8px rgba(196, 30, 58, 0.15);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+      cursor: pointer;
+    }
+    .occasion-icon-wrapper:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(196, 30, 58, 0.3);
+    }
+    .occasion-icon-wrapper svg {
+      width: 24px;
+      height: 24px;
+    }
+    .occasion-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1.3;
+      max-width: 110px;
+      margin: 0 auto;
+      font-family: var(--font-body);
+    }
+
+    /* --- New Products Layout Styles --- */
+    .products-page-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    /* Search & Trending Section */
+    .products-search-section {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .search-wrapper {
+      position: relative;
+      max-width: 700px;
+      margin: 0 auto 15px auto;
+    }
+    
+    .search-wrapper input {
+      width: 100%;
+      padding: 16px 24px 16px 50px;
+      font-size: 1.1rem;
+      border: 2px solid var(--gray-200);
+      border-radius: 50px;
+      outline: none;
+      transition: all var(--transition-normal);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .search-wrapper input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(196, 30, 58, 0.1);
+    }
+    
+    .search-wrapper .search-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      color: var(--gray-400);
+    }
+
+    .trending-tags {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 0.9rem;
+    }
+
+    .trending-label {
+      color: var(--gray-500);
+      font-weight: 600;
+    }
+
+    .trending-tag {
+      background: var(--off-white);
+      color: var(--primary);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid rgba(196, 30, 58, 0.1);
+      transition: all var(--transition-fast);
+    }
+
+    .trending-tag:hover {
+      background: var(--primary);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    /* Layout: Sidebar + Grid */
+    .products-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    /* Sidebar Filters */
+    .products-sidebar {
+      background: var(--white);
+      padding: 24px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-100);
+      position: sticky;
+      top: 100px;
+    }
+
+    .filter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--gray-100);
+    }
+
+    .filter-header h3 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .clear-filters {
+      font-size: 0.85rem;
+      color: var(--primary);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .filter-group {
+      margin-bottom: 24px;
+    }
+
+    .filter-group-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .filter-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .filter-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      color: var(--gray-600);
+      cursor: pointer;
+    }
+
+    .filter-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .products-layout {
+        grid-template-columns: 1fr;
+      }
+      .products-sidebar {
+        display: none; /* In a full app, this would be a sliding drawer */
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <img src="images/logo.png" alt="Inithat Custom Gifts Logo" onerror="this.style.background='var(--primary)'; this.alt='I';">
+      <div class="nav-brand-text">
+        <span class="nav-brand-name">Inithat Custom Gifts</span>
+        <span class="nav-brand-tagline">Made with Love</span>
+      </div>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="products.html" class="active">Products</a>
+      <a href="bulk-retail.html">Bulk / Retail</a>
+      <a href="offers.html">Offers</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="contact.html">Contact</a>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Shown when logged OUT -->
+      <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
+      <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
+      <!-- Shown when logged IN -->
+      <span id="navUserGreet" style="display:none; color:var(--gold); font-weight:600; font-size:0.85rem;"></span>
+      <button onclick="logout()" class="nav-auth-btn login-btn" id="navLogoutBtn" style="display:none; cursor:pointer; border:none;">LOGOUT</button>
+      <div class="nav-cart" id="navCart">
+        <span class="cart-icon">🛒</span>
+        <span>CART</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Products Showcase Section -->
+  <section class="section products" style="padding-top: 120px; min-height: 85vh; background: var(--gray-100);">
+    
+    <div class="products-page-container">
+      
+      <!-- Top Search & Trending -->
+      <div class="products-search-section reveal active">
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="mainProductSearch" placeholder="Search gifts, mugs, pillows, birthdays...">
+        </div>
+        <div class="trending-tags">
+          <span class="trending-label">Trending:</span>
+          <span class="trending-tag" onclick="document.getElementById('mainProductSearch').value='Magic Mug'; document.getElementById('mainProductSearch').dispatchEvent(new Event('input'))">🔥 Magic Mug</span>
+          <span class="trending-tag" onclick="document.getElementById('mainProductSearch').value='Birthday'; document.getElementById('mainProductSearch').dispatchEvent(new Event('input'))">🔥 Birthday Gifts</span>
+          <span class="trending-tag" onclick="document.getElementById('mainProductSearch').value='Corporate'; document.getElementById('mainProductSearch').dispatchEvent(new Event('input'))">🔥 Corporate Gifts</span>
+        </div>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="products-layout reveal active">
+        
+        <!-- Left Sidebar (Filters) -->
+        <aside class="products-sidebar">
+          <div class="filter-header">
+            <h3>Filters</h3>
+            <span class="clear-filters" onclick="document.getElementById('mainProductSearch').value=''; document.getElementById('mainProductSearch').dispatchEvent(new Event('input')); document.querySelectorAll('.filter-item input').forEach(cb => cb.checked = false); initProductTabs();">Clear All</span>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-group-title">Category <span>▼</span></div>
+            <div class="filter-list">
+              <label class="filter-item"><input type="checkbox" value="mugs" class="cat-filter"> Mugs & Drinkware</label>
+              <label class="filter-item"><input type="checkbox" value="frames" class="cat-filter"> Photo Frames</label>
+              <label class="filter-item"><input type="checkbox" value="accessories" class="cat-filter"> Accessories</label>
+              <label class="filter-item"><input type="checkbox" value="apparel" class="cat-filter"> Apparel</label>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-group-title">Occasion <span>▼</span></div>
+            <div class="filter-list">
+              <label class="filter-item"><input type="checkbox"> Birthday</label>
+              <label class="filter-item"><input type="checkbox"> Anniversary</label>
+              <label class="filter-item"><input type="checkbox"> Corporate</label>
+              <label class="filter-item"><input type="checkbox"> Wedding</label>
+            </div>
+          </div>
+          
+          <div class="filter-group">
+            <div class="filter-group-title">Price Range <span>▼</span></div>
+            <div class="filter-list">
+              <label class="filter-item"><input type="checkbox"> Under ₹500</label>
+              <label class="filter-item"><input type="checkbox"> ₹500 - ₹1000</label>
+              <label class="filter-item"><input type="checkbox"> Over ₹1000</label>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-group-title">Availability <span>▼</span></div>
+            <div class="filter-list">
+              <label class="filter-item"><input type="checkbox" checked> In Stock</label>
+              <label class="filter-item"><input type="checkbox"> Pre-Order</label>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Right Content (Grid) -->
+        <div class="products-content">
+
+          <div class="products-grid" id="productsGrid">
+            <div style="text-align:center; grid-column:1/-1; padding:40px; color:var(--gray-500);">
+              Loading live products catalog from database...
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-brand">
+          <img src="images/logo.png" alt="Inithat Custom Gifts"
+            onerror="this.style.background='var(--primary)'; this.alt='I';">
+          <div class="nav-brand-text">
+            <span class="nav-brand-name">Inithat Custom Gifts</span>
+            <span class="nav-brand-tagline">Made with Love</span>
+          </div>
+        </a>
+        <p>We create beautiful, personalized gifts that celebrate your special moments. Every gift tells a unique story
+          crafted with love and care.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook">📘</a>
+          <a href="#" aria-label="Instagram">📸</a>
+          <a href="#" aria-label="Twitter">🐦</a>
+          <a href="#" aria-label="YouTube">🎬</a>
+          <a href="#" aria-label="Pinterest">📌</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="bulk-retail.html">Bulk / Retail</a></li>
+          <li><a href="offers.html">Special Offers</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="products.html">Custom Mugs</a></li>
+          <li><a href="products.html">Photo Frames</a></li>
+          <li><a href="products.html">Keychains</a></li>
+          <li><a href="products.html">T-Shirts</a></li>
+          <li><a href="products.html">Jewelry</a></li>
+          <li><a href="products.html">Home Decor</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Get in Touch</h4>
+        <ul class="footer-contact">
+          <li>
+            <span>📍</span>
+            <span>Inithat Custom Gifts, Main Street, Your City, India</span>
+          </li>
+          <li>
+            <span>📞</span>
+            <span>+91 98765 43210</span>
+          </li>
+          <li>
+            <span>✉️</span>
+            <span>hello@inithatgifts.com</span>
+          </li>
+          <li>
+            <span>⏰</span>
+            <span>Mon - Sat: 9:00 AM - 8:00 PM</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 <a href="index.html">Inithat Custom Gifts</a>. All rights reserved. Made with ❤️ in India.</p>
+      <div class="payment-methods">
+        💳 🏧 📱 🔒
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

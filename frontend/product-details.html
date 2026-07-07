@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details | Inithat Custom Gifts</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <style>
+    body { background: #ffffff; padding-top: 80px; }
+    .pdp-container { max-width: 1400px; margin: 0 auto; padding: 20px 30px; display: grid; grid-template-columns: 40% 40% 20%; gap: 30px; }
+    
+    /* Left Column: Images */
+    .pdp-image-col { display: flex; flex-direction: column; gap: 15px; position: sticky; top: 100px; height: fit-content; }
+    .main-image-container { border: 1px solid var(--gray-200); border-radius: 8px; padding: 20px; display: flex; align-items: center; justify-content: center; background: #fff; min-height: 400px; }
+    .main-image-container img { max-width: 100%; max-height: 500px; object-fit: contain; }
+    .thumbnail-gallery { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; }
+    .thumbnail { width: 60px; height: 60px; border: 1px solid var(--gray-300); border-radius: 4px; padding: 5px; cursor: pointer; transition: border-color 0.2s; }
+    .thumbnail:hover, .thumbnail.active { border-color: var(--primary); border-width: 2px; }
+    .thumbnail img { width: 100%; height: 100%; object-fit: contain; }
+
+    /* Center Column: Info */
+    .pdp-info-col { display: flex; flex-direction: column; gap: 15px; }
+    .product-brand { color: var(--primary); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    .product-title { font-size: 2.2rem; font-family: var(--font-display); font-weight: 700; color: var(--dark); line-height: 1.2; margin: 0; }
+    .product-rating { display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: var(--gray-500); }
+    .stars { color: var(--gold); font-size: 1.2rem; }
+    .divider { height: 1px; background: var(--gray-200); margin: 15px 0; }
+    
+    .price-block { display: flex; align-items: baseline; gap: 12px; }
+    .discount-badge { color: var(--primary); font-size: 1.5rem; font-weight: 600; }
+    .current-price { font-size: 2.5rem; font-weight: 700; color: var(--dark); }
+    .mrp { color: var(--gray-500); font-size: 1.1rem; text-decoration: line-through; }
+    .tax-inclusive { font-size: 0.9rem; color: var(--gray-500); font-style: italic; }
+
+    .product-description { margin-top: 20px; font-size: 1.05rem; line-height: 1.6; color: var(--dark); }
+    .product-features { margin-top: 15px; padding-left: 20px; }
+    .product-features li { margin-bottom: 10px; color: var(--gray-600); }
+
+    /* Right Column: Buy Box */
+    .pdp-buy-col { position: sticky; top: 100px; height: fit-content; }
+    .buy-box { border: 1px solid var(--gray-200); border-radius: 12px; padding: 25px; display: flex; flex-direction: column; gap: 15px; background: var(--off-white); box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+    .buy-price { font-size: 2rem; font-weight: 700; color: var(--dark); margin: 0; }
+    .delivery-info { font-size: 1rem; color: var(--dark); line-height: 1.5; }
+    .delivery-info strong { color: var(--primary); }
+    .stock-status { color: var(--green); font-size: 1.1rem; font-weight: 600; margin-top: 5px; }
+    
+    .quantity-selector { margin-top: 10px; }
+    .quantity-selector select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--gray-300); background: var(--white); outline: none; font-size: 1rem; color: var(--dark); font-family: var(--font-body); cursor: pointer; transition: border-color 0.2s; }
+    .quantity-selector select:focus { border-color: var(--primary); }
+    
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { -moz-appearance: textfield; }
+    
+    .action-btn { width: 100%; padding: 14px; border-radius: 8px; border: none; font-size: 1.05rem; font-family: var(--font-body); font-weight: 700; cursor: pointer; transition: all 0.3s ease; margin-top: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .add-cart-btn { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+    .add-cart-btn:hover { background: rgba(196, 30, 58, 0.05); }
+    .buy-now-btn { background: var(--primary); color: var(--white); box-shadow: 0 4px 10px rgba(196, 30, 58, 0.2); }
+    .buy-now-btn:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(196, 30, 58, 0.3); }
+
+    .secure-transaction { display: flex; align-items: center; gap: 10px; color: var(--gray-500); font-size: 0.9rem; margin-top: 10px; }
+    
+    .seller-info { font-size: 0.9rem; color: var(--gray-500); margin-top: 10px; line-height: 1.6; }
+    .seller-info span { color: var(--primary); font-weight: 600; cursor: pointer; }
+
+    /* Loading / Error */
+    #pdpLoading, #pdpError { grid-column: 1 / -1; text-align: center; padding: 100px 20px; font-size: 1.2rem; color: var(--gray-500); }
+    #pdpError { color: var(--primary); }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .pdp-container { grid-template-columns: 1fr 1fr; }
+      .pdp-buy-col { grid-column: 1 / -1; }
+    }
+    @media (max-width: 768px) {
+      .pdp-container { grid-template-columns: 1fr; }
+      .pdp-image-col { position: relative; top: 0; }
+      .pdp-buy-col { position: relative; top: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <img src="images/logo.png" alt="Inithat Custom Gifts Logo" onerror="this.style.background='var(--primary)'; this.alt='I';">
+      <div class="nav-brand-text">
+        <span class="nav-brand-name">Inithat Custom Gifts</span>
+        <span class="nav-brand-tagline">Made with Love</span>
+      </div>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="products.html" class="active">Products</a>
+      <a href="bulk-retail.html">Bulk / Retail</a>
+      <a href="offers.html">Offers</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
+      <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
+      <span id="navUserGreet" style="display:none; color:var(--gold); font-weight:600; font-size:0.85rem;"></span>
+      <button onclick="logout()" class="nav-auth-btn login-btn" id="navLogoutBtn" style="display:none; cursor:pointer; border:none;">LOGOUT</button>
+      <div class="nav-cart" id="navCart">
+        <span class="cart-icon">🛒</span>
+        <span>CART</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+    </div>
+  </nav>
+
+  <div id="pdpLoading">Loading product details...</div>
+  <div id="pdpError" style="display: none;">Product not found or an error occurred.</div>
+
+  <div class="pdp-container" id="pdpContainer" style="display: none;">
+    <!-- Rendered via JS -->
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('id');
+
+      if (!productId) {
+        document.getElementById('pdpLoading').style.display = 'none';
+        document.getElementById('pdpError').style.display = 'block';
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:5000/api/products/${productId}`);
+        const data = await response.json();
+
+        if (data.success && data.product) {
+          renderProduct(data.product);
+        } else {
+          throw new Error('Product not found');
+        }
+      } catch (err) {
+        console.error('Error fetching product:', err);
+        document.getElementById('pdpLoading').style.display = 'none';
+        document.getElementById('pdpError').style.display = 'block';
+      }
+    });
+
+    function renderProduct(p) {
+      document.getElementById('pdpLoading').style.display = 'none';
+      const container = document.getElementById('pdpContainer');
+      container.style.display = 'grid';
+
+      const safeName = p.name.replace(/'/g, "\\'");
+      const discountPercent = p.costPrice > p.price ? Math.round(((p.costPrice - p.price) / p.costPrice) * 100) : 0;
+      
+      let thumbnailsHtml = `<div class="thumbnail active" onclick="changeImage('${p.imageUrl}')"><img src="${p.imageUrl}" onerror="this.src='images/gift-box.png'"></div>`;
+      if (p.galleryImages && p.galleryImages.length > 0) {
+        p.galleryImages.forEach(img => {
+          thumbnailsHtml += `<div class="thumbnail" onclick="changeImage('${img}')"><img src="${img}" onerror="this.src='images/gift-box.png'"></div>`;
+        });
+      }
+
+      let featuresHtml = '';
+      if (p.detailedDescription) {
+        const lines = p.detailedDescription.split('\n').filter(l => l.trim() !== '');
+        featuresHtml = lines.map(l => `<li>${l}</li>`).join('');
+      } else {
+        featuresHtml = `<li>Premium quality custom gift</li><li>Ideal for personal or corporate use</li><li>Crafted with precision</li>`;
+      }
+
+      container.innerHTML = `
+        <!-- Left: Images -->
+        <div class="pdp-image-col">
+          <div class="main-image-container">
+            <img id="mainProductImg" src="${p.imageUrl}" alt="${p.name}" onerror="this.src='images/gift-box.png'">
+          </div>
+          <div class="thumbnail-gallery">
+            ${thumbnailsHtml}
+          </div>
+        </div>
+
+        <!-- Center: Details -->
+        <div class="pdp-info-col">
+          <div class="product-brand">${p.brand || 'Inithat Custom Gifts'}</div>
+          <h1 class="product-title">${p.name}</h1>
+          <a href="#" style="color: var(--primary); text-decoration: none; font-size: 0.95rem; font-weight: 500; margin-top: 5px;">Visit the ${p.brand || 'Inithat'} Store</a>
+          
+          <div class="product-rating">
+            <span class="stars">★★★★½</span>
+            <span style="color: var(--gray-500);">(1,403 ratings)</span>
+          </div>
+          <div class="divider"></div>
+
+          <div class="price-block">
+            ${discountPercent > 0 ? `<span class="discount-badge">-${discountPercent}%</span>` : ''}
+            <span class="current-price">₹${Number(p.price).toLocaleString('en-IN')}</span>
+          </div>
+          ${p.costPrice > p.price ? `<div class="mrp">M.R.P.: ₹${Number(p.costPrice).toLocaleString('en-IN')}</div>` : ''}
+          <div class="tax-inclusive">Inclusive of all taxes</div>
+
+          <div class="product-description" style="margin-top: 25px;">
+            <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: var(--dark);">About this item</h3>
+            <ul class="product-features">
+              ${featuresHtml}
+            </ul>
+            <p style="margin-top: 15px; color: var(--gray-600); line-height: 1.6;">${p.shortDescription || 'Experience the perfect blend of personalization and quality with our uniquely crafted gifts. Designed to leave a lasting impression on your loved ones or corporate clients.'}</p>
+          </div>
+        </div>
+
+        <!-- Right: Buy Box -->
+        <div class="pdp-buy-col">
+          <div class="buy-box">
+            <div class="buy-price">₹${Number(p.price).toLocaleString('en-IN')}</div>
+            
+            <div id="pincodeSection" style="background: var(--gray-100); border: 1px solid var(--gray-200); border-radius: 8px; padding: 15px; margin: 10px 0;">
+              <div style="font-size: 0.95rem; font-weight: 600; color: var(--dark); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 1.1rem;">📍</span> Check Delivery Time
+              </div>
+              <div style="display: flex; gap: 8px; width: 100%;">
+                <input type="text" id="pincodeInput" placeholder="Enter Pincode" maxlength="6" style="flex: 1; min-width: 0; box-sizing: border-box; padding: 10px; border: 1px solid var(--gray-300); border-radius: 6px; font-family: var(--font-body); font-size: 0.95rem; outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--gray-300)'">
+                <button onclick="updateDelivery()" style="flex-shrink: 0; box-sizing: border-box; padding: 10px 15px; background: var(--dark); color: white; border: none; border-radius: 6px; cursor: pointer; font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.background='var(--primary)'" onmouseout="this.style.background='var(--dark)'">Check</button>
+              </div>
+              <div id="deliveryEstimation" style="margin-top: 12px; font-size: 0.95rem; line-height: 1.4; display: none; color: var(--dark); padding-top: 10px; border-top: 1px solid var(--gray-200);">
+                Estimated delivery: <strong id="deliveryDateStr" style="color: var(--green); font-size: 1.05rem;"></strong>
+              </div>
+            </div>
+
+            <div class="stock-status">
+              ${p.stockQuantity > 0 ? 'In stock' : '<span style="color:var(--primary); font-weight:700;">Currently unavailable</span>'}
+            </div>
+
+            <div class="quantity-selector" style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+              <span style="font-size: 1rem; color: var(--dark); font-weight: 500;">Quantity:</span>
+              <div style="display: flex; align-items: center; border: 1px solid var(--gray-300); border-radius: 8px; background: var(--white); overflow: hidden;">
+                <button onclick="updateQty(-1)" style="padding: 10px 15px; border: none; background: transparent; cursor: pointer; font-size: 1.2rem; font-weight: 600; color: var(--primary); transition: background 0.2s;" onmouseover="this.style.background='var(--gray-100)'" onmouseout="this.style.background='transparent'">−</button>
+                <input type="number" id="pdpQty" value="1" min="1" max="10" style="width: 50px; text-align: center; border: none; border-left: 1px solid var(--gray-300); border-right: 1px solid var(--gray-300); font-size: 1.1rem; font-family: var(--font-body); font-weight: 600; color: var(--dark); outline: none;" readonly>
+                <button onclick="updateQty(1)" style="padding: 10px 15px; border: none; background: transparent; cursor: pointer; font-size: 1.2rem; font-weight: 600; color: var(--primary); transition: background 0.2s;" onmouseover="this.style.background='var(--gray-100)'" onmouseout="this.style.background='transparent'">+</button>
+              </div>
+            </div>
+
+            <button class="action-btn add-cart-btn" onclick="addToCart('${safeName}', ${p.price}, '${p.imageUrl}', '${p._id}', '${p.category || 'Custom Gift'}')">Add to Cart</button>
+            <button class="action-btn buy-now-btn" onclick="buyNow('${safeName}', ${p.price}, '${p.imageUrl}', '${p._id}', '${p.category || 'Custom Gift'}')">Buy Now</button>
+
+            <div class="secure-transaction">
+              🔒 Secure transaction
+            </div>
+
+
+          </div>
+        </div>
+      `;
+    }
+
+    function changeImage(src) {
+      document.getElementById('mainProductImg').src = src;
+      document.querySelectorAll('.thumbnail').forEach(el => el.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+    }
+
+    function updateDelivery() {
+      const pin = document.getElementById('pincodeInput').value.trim();
+      if(pin.length !== 6 || isNaN(pin)) {
+        alert('Please enter a valid 6-digit Pincode');
+        return;
+      }
+      
+
+
+      // Logic: 3 days for local (starts with 62), 5 days for regional (starts with 6), 7 days for national
+      let days = 7;
+      if (pin.startsWith('62')) {
+        days = 3;
+      } else if (pin.startsWith('6') || pin.startsWith('5')) {
+        days = 5;
+      }
+
+      const deliveryDate = new Date();
+      deliveryDate.setDate(deliveryDate.getDate() + days);
+      
+      const options = { weekday: 'long', month: 'short', day: 'numeric' };
+      const dateString = deliveryDate.toLocaleDateString('en-IN', options);
+
+      document.getElementById('deliveryDateStr').innerText = dateString;
+      document.getElementById('deliveryEstimation').style.display = 'block';
+    }
+
+    function updateQty(change) {
+      const qtyInput = document.getElementById('pdpQty');
+      let currentVal = parseInt(qtyInput.value) || 1;
+      let newVal = currentVal + change;
+      if (newVal < 1) newVal = 1;
+      if (newVal > 10) newVal = 10;
+      qtyInput.value = newVal;
+    }
+  </script>
+</body>
+</html>

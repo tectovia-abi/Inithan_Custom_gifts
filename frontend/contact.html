@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Contact Inithat Custom Gifts. We are here to help with custom orders and inquiries.">
+  <title>Contact Us | Inithat Custom Gifts</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="images/logo.png">
+</head>
+
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <img src="images/logo.png" alt="Inithat Custom Gifts Logo" onerror="this.style.background='var(--primary)'; this.alt='I';">
+      <div class="nav-brand-text">
+        <span class="nav-brand-name">Inithat Custom Gifts</span>
+        <span class="nav-brand-tagline">Made with Love</span>
+      </div>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="bulk-retail.html">Bulk / Retail</a>
+      <a href="offers.html">Offers</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="contact.html" class="active">Contact</a>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Shown when logged OUT -->
+      <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
+      <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
+      <!-- Shown when logged IN -->
+      <span id="navUserGreet" style="display:none; color:var(--gold); font-weight:600; font-size:0.85rem;"></span>
+      <button onclick="logout()" class="nav-auth-btn login-btn" id="navLogoutBtn" style="display:none; cursor:pointer; border:none;">LOGOUT</button>
+      <div class="nav-cart" id="navCart">
+        <span class="cart-icon">🛒</span>
+        <span>CART</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Contact Section -->
+  <section class="section newsletter" style="padding-top: 120px; min-height: 85vh;">
+    <div class="newsletter-container reveal active">
+      <span class="section-label">Get in Touch 📞</span>
+      <h2>We'd Love to Hear From You</h2>
+      <p style="margin-bottom: 24px;">Have questions about custom designs or bulk orders? Send us a message or subscribe to our newsletter!</p>
+      
+      <form class="newsletter-form" id="contactForm" onsubmit="event.preventDefault(); alert('Thank you for contacting Inithat Custom Gifts! We will reply shortly.');">
+        <input type="text" placeholder="Your Name" required style="margin-bottom:10px; border-radius:30px; padding:12px 20px;">
+        <input type="email" placeholder="Your Email Address" required id="contactEmail" style="border-radius:30px; padding:12px 20px;">
+        <button type="submit" style="margin-top:10px;">Send Message →</button>
+      </form>
+      
+      <div style="margin-top: 30px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; font-size: 0.9rem; color: var(--gray-400);">
+        <span>📧 support@inithatgifts.com</span>
+        <span>📞 +91 98765 43210</span>
+        <span>📍 Made with Love, India</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-brand">
+          <img src="images/logo.png" alt="Inithat Custom Gifts"
+            onerror="this.style.background='var(--primary)'; this.alt='I';">
+          <div class="nav-brand-text">
+            <span class="nav-brand-name">Inithat Custom Gifts</span>
+            <span class="nav-brand-tagline">Made with Love</span>
+          </div>
+        </a>
+        <p>We create beautiful, personalized gifts that celebrate your special moments. Every gift tells a unique story
+          crafted with love and care.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook">📘</a>
+          <a href="#" aria-label="Instagram">📸</a>
+          <a href="#" aria-label="Twitter">🐦</a>
+          <a href="#" aria-label="YouTube">🎬</a>
+          <a href="#" aria-label="Pinterest">📌</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="bulk-retail.html">Bulk / Retail</a></li>
+          <li><a href="offers.html">Special Offers</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="products.html">Custom Mugs</a></li>
+          <li><a href="products.html">Photo Frames</a></li>
+          <li><a href="products.html">Keychains</a></li>
+          <li><a href="products.html">T-Shirts</a></li>
+          <li><a href="products.html">Jewelry</a></li>
+          <li><a href="products.html">Home Decor</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Get in Touch</h4>
+        <ul class="footer-contact">
+          <li>
+            <span>📍</span>
+            <span>Inithat Custom Gifts, Main Street, Your City, India</span>
+          </li>
+          <li>
+            <span>📞</span>
+            <span>+91 98765 43210</span>
+          </li>
+          <li>
+            <span>✉️</span>
+            <span>hello@inithatgifts.com</span>
+          </li>
+          <li>
+            <span>⏰</span>
+            <span>Mon - Sat: 9:00 AM - 8:00 PM</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 <a href="index.html">Inithat Custom Gifts</a>. All rights reserved. Made with ❤️ in India.</p>
+      <div class="payment-methods">
+        💳 🏧 📱 🔒
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

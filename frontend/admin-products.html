@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Inithat Custom Gifts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="icon" type="image/png" href="images/logo.png">
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-brand">
+        <img src="images/logo.png" alt="Logo" class="admin-logo" onerror="this.style.display='none'">
+        <div class="admin-brand-text">
+          <h2>Inithat Gifts</h2>
+          <span>Admin Panel</span>
+        </div>
+      </div>
+      
+      <nav class="admin-nav">
+          <a href="admin-dashboard.html" class="admin-nav-link">
+            <span>📊</span> Dashboard
+          </a>
+          <a href="admin-products.html" class="admin-nav-link active">
+            <span>🛍️</span> Products
+          </a>
+          <a href="admin-users.html" class="admin-nav-link">
+            <span>👥</span> Users
+          </a>
+          <a href="admin-inquiries.html" class="admin-nav-link">
+            <span>📝</span> Bulk Inquiries
+          </a>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <a href="index.html" class="admin-nav-link">
+          <span class="icon">🏠</span> Back to Store
+        </a>
+        <a href="#" class="admin-nav-link logout-link" onclick="logout()">
+          <span class="icon">🚪</span> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <header class="admin-header">
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <div class="header-title" id="headerTitle">Manage Products</div>
+        <div class="header-user">
+          <span id="adminName">Admin User</span>
+          <div class="admin-avatar" id="adminAvatar">A</div>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <section id="productsSection" class="admin-section active">
+          <div class="section-header" style="display: flex; flex-wrap: wrap; gap: 15px;">
+            <h2>Manage Products</h2>
+            <div style="display: flex; gap: 15px; flex-grow: 1; justify-content: flex-end;">
+              <input type="text" id="productSearch" placeholder="Search by name, code, or category..." style="padding: 10px 15px; border: 1px solid var(--admin-border); border-radius: 8px; width: 100%; max-width: 300px; font-family: inherit;">
+              <a href="admin-add-product.html" class="btn btn-primary" style="text-decoration: none; display: flex; align-items: center; white-space: nowrap;">+ Add Product</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Code</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                  <tr><td colspan="4" class="text-center">Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

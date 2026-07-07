@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Customer Reviews and Testimonials for Inithat Custom Gifts. See what our happy customers say.">
+  <title>Customer Reviews | Inithat Custom Gifts</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="images/logo.png">
+</head>
+
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <img src="images/logo.png" alt="Inithat Custom Gifts Logo" onerror="this.style.background='var(--primary)'; this.alt='I';">
+      <div class="nav-brand-text">
+        <span class="nav-brand-name">Inithat Custom Gifts</span>
+        <span class="nav-brand-tagline">Made with Love</span>
+      </div>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="bulk-retail.html">Bulk / Retail</a>
+      <a href="offers.html">Offers</a>
+      <a href="reviews.html" class="active">Reviews</a>
+      <a href="contact.html">Contact</a>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Shown when logged OUT -->
+      <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
+      <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
+      <!-- Shown when logged IN -->
+      <span id="navUserGreet" style="display:none; color:var(--gold); font-weight:600; font-size:0.85rem;"></span>
+      <button onclick="logout()" class="nav-auth-btn login-btn" id="navLogoutBtn" style="display:none; cursor:pointer; border:none;">LOGOUT</button>
+      <div class="nav-cart" id="navCart">
+        <span class="cart-icon">🛒</span>
+        <span>CART</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Testimonials Section -->
+  <section class="section testimonials" style="padding-top: 120px; min-height: 85vh;">
+    <div class="section-header reveal active">
+      <span class="section-label">Wall of Love 💕</span>
+      <h2 class="section-title">What Our Customers Say</h2>
+      <p class="section-desc">Real reviews from people who made their special moments memorable with Inithat Custom Gifts.</p>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal active">
+        <div class="testimonial-quote">"</div>
+        <p class="testimonial-text">The custom mug turned out even better than I imagined! The print quality is fantastic and it arrived right in time for my sister's birthday.</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">P</div>
+          <div>
+            <div class="testimonial-name">Priya Sharma</div>
+            <div class="testimonial-role">Custom Mug Buyer</div>
+            <div class="testimonial-stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal active">
+        <div class="testimonial-quote">"</div>
+        <p class="testimonial-text">I ordered a custom photo frame for our anniversary and my wife was thrilled! The engraving was flawless and the packaging was beautiful.</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background: linear-gradient(135deg, var(--gold), var(--gold-dark));">A</div>
+          <div>
+            <div class="testimonial-name">Arjun Patel</div>
+            <div class="testimonial-role">Anniversary Gift</div>
+            <div class="testimonial-stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal active">
+        <div class="testimonial-quote">"</div>
+        <p class="testimonial-text">Best custom gift shop ever! I've ordered corporate gifts for my team and everyone loved them. The attention to detail is amazing.</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background: linear-gradient(135deg, var(--green), var(--green-light));">S</div>
+          <div>
+            <div class="testimonial-name">Sneha Kumar</div>
+            <div class="testimonial-role">Corporate Gifts</div>
+            <div class="testimonial-stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-brand">
+          <img src="images/logo.png" alt="Inithat Custom Gifts"
+            onerror="this.style.background='var(--primary)'; this.alt='I';">
+          <div class="nav-brand-text">
+            <span class="nav-brand-name">Inithat Custom Gifts</span>
+            <span class="nav-brand-tagline">Made with Love</span>
+          </div>
+        </a>
+        <p>We create beautiful, personalized gifts that celebrate your special moments. Every gift tells a unique story
+          crafted with love and care.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook">📘</a>
+          <a href="#" aria-label="Instagram">📸</a>
+          <a href="#" aria-label="Twitter">🐦</a>
+          <a href="#" aria-label="YouTube">🎬</a>
+          <a href="#" aria-label="Pinterest">📌</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="bulk-retail.html">Bulk / Retail</a></li>
+          <li><a href="offers.html">Special Offers</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="products.html">Custom Mugs</a></li>
+          <li><a href="products.html">Photo Frames</a></li>
+          <li><a href="products.html">Keychains</a></li>
+          <li><a href="products.html">T-Shirts</a></li>
+          <li><a href="products.html">Jewelry</a></li>
+          <li><a href="products.html">Home Decor</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Get in Touch</h4>
+        <ul class="footer-contact">
+          <li>
+            <span>📍</span>
+            <span>Inithat Custom Gifts, Main Street, Your City, India</span>
+          </li>
+          <li>
+            <span>📞</span>
+            <span>+91 98765 43210</span>
+          </li>
+          <li>
+            <span>✉️</span>
+            <span>hello@inithatgifts.com</span>
+          </li>
+          <li>
+            <span>⏰</span>
+            <span>Mon - Sat: 9:00 AM - 8:00 PM</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 <a href="index.html">Inithat Custom Gifts</a>. All rights reserved. Made with ❤️ in India.</p>
+      <div class="payment-methods">
+        💳 🏧 📱 🔒
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

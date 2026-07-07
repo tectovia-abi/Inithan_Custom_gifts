@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Inithat Custom Gifts - Personalized gifts made with love. Find unique custom mugs, frames, keychains, jewelry, and more for every occasion.">
+  <meta name="keywords"
+    content="custom gifts, personalized gifts, handmade gifts, gift shop, custom mugs, photo frames, engraved keychains">
+  <meta name="author" content="Inithat Custom Gifts">
+  <title>Inithat Custom Gifts | Made With Love - Personalized Gifts for Every Occasion</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="images/logo.png">
+</head>
+
+<body>
+
+
+
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <a href="#" class="nav-brand">
+      <img src="images/logo.png" alt="Inithat Custom Gifts Logo"
+        onerror="this.style.background='var(--primary)'; this.alt='I';">
+      <div class="nav-brand-text">
+        <span class="nav-brand-name">Inithat Custom Gifts</span>
+        <span class="nav-brand-tagline">Made with Love</span>
+      </div>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="active">Home</a>
+      <a href="products.html">Products</a>
+      <a href="bulk-retail.html">Bulk / Retail</a>
+      <a href="offers.html">Offers</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="contact.html">Contact</a>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Shown when logged OUT -->
+      <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
+      <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
+      <!-- Shown when logged IN -->
+      <span id="navUserGreet" style="display:none; color:var(--gold); font-weight:600; font-size:0.85rem;"></span>
+      <button onclick="logout()" class="nav-auth-btn login-btn" id="navLogoutBtn" style="display:none; cursor:pointer; border:none;">LOGOUT</button>
+      <div class="nav-cart" id="navCart">
+        <span class="cart-icon">🛒</span>
+        <span>CART</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-ref" id="home">
+    <!-- Decorative floating hearts -->
+    <span class="hero-heart h1">💕</span>
+    <span class="hero-heart h2">❤️</span>
+    <span class="hero-heart h3">💖</span>
+    <span class="hero-heart h4">💝</span>
+
+    <div class="hero-ref-container">
+      <!-- LEFT: Mascot Image -->
+      <div class="hero-ref-mascot">
+        <img src="images/logoman.png" alt="Inithan Mascot" class="mascot-img">
+      </div>
+
+      <!-- MIDDLE: Text Content -->
+      <div class="hero-ref-text">
+        <div class="hero-ref-script-wrap">
+          <span class="hero-ref-script">Turning Memories</span>
+          <span class="hero-heart-inline">💕</span>
+        </div>
+
+        <h1 class="hero-ref-headline">
+          INTO <span class="highlight-red">GIFTS</span>
+        </h1>
+        <div class="hero-ref-divider"></div>
+
+        <p class="hero-ref-sub">Personalized Gifts Crafted<br>With Love For Every Occasion</p>
+
+        <div class="hero-ref-features">
+          <div class="hero-ref-feat">
+            <span class="feat-icon">🎁</span>
+            <span>Unique<br>Designs</span>
+          </div>
+          <div class="hero-ref-feat">
+            <span class="feat-icon">💎</span>
+            <span>Premium<br>Quality</span>
+          </div>
+          <div class="hero-ref-feat">
+            <span class="feat-icon">💝</span>
+            <span>Made With<br>Love</span>
+          </div>
+        </div>
+
+        <div class="hero-ref-cta">
+          <a href="#products" class="hero-btn-explore">
+            EXPLORE GIFTS →
+          </a>
+          <a href="https://wa.me/919876543210" class="hero-btn-whatsapp" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            WHATSAPP NOW
+          </a>
+        </div>
+      </div>
+
+      <!-- RIGHT: Gift box image -->
+      <div class="hero-ref-image-wrap">
+        <div class="hero-ref-silk"></div>
+        <img src="images/hero.jpeg" alt="Open Gift Box with Personalized Custom Gifts by Inithan" class="hero-ref-img" id="heroImage">
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="section categories" id="categories">
+    <div class="section-header reveal">
+      <span class="section-label">What We Offer</span>
+      <h2 class="section-title">Shop by Category</h2>
+      <p class="section-desc">Discover our wide range of personalized and custom-made gifts perfect for every occasion
+        and loved one.</p>
+    </div>
+
+    <div class="categories-grid">
+      <div class="category-card reveal" style="transition-delay: 0.1s;">
+        <div class="category-icon">🎂</div>
+        <h3>Birthday Gifts</h3>
+        <p>Make their birthday extra special with personalized surprises</p>
+      </div>
+      <div class="category-card reveal" style="transition-delay: 0.2s;">
+        <div class="category-icon">💍</div>
+        <h3>Wedding & Anniversary</h3>
+        <p>Celebrate love with unique commemorative gifts</p>
+      </div>
+      <div class="category-card reveal" style="transition-delay: 0.3s;">
+        <div class="category-icon">🏠</div>
+        <h3>Home Decor</h3>
+        <p>Custom home accessories that add a personal touch</p>
+      </div>
+      <div class="category-card reveal" style="transition-delay: 0.4s;">
+        <div class="category-icon">🎄</div>
+        <h3>Festive Specials</h3>
+        <p>Seasonal gifts that spread joy and warmth</p>
+      </div>
+      <div class="category-card reveal" style="transition-delay: 0.5s;">
+        <div class="category-icon">👔</div>
+        <h3>Corporate Gifts</h3>
+        <p>Professional custom gifts for business occasions</p>
+      </div>
+      <div class="category-card reveal" style="transition-delay: 0.6s;">
+        <div class="category-icon">👶</div>
+        <h3>Baby & Kids</h3>
+        <p>Adorable personalized gifts for little ones</p>
+      </div>
+      <div class="category-card reveal" style="transition-delay: 0.7s;">
+        <div class="category-icon">✈️</div>
+        <h3>Travel Gifts</h3>
+        <p>Custom accessories for the adventurer in your life</p>
+      </div>
+      <div class="category-card reveal" style="transition-delay: 0.8s;">
+        <div class="category-icon">🐾</div>
+        <h3>Pet Lovers</h3>
+        <p>Personalized gifts for furry family members</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section class="section products" id="products">
+    <div class="section-header reveal">
+      <span class="section-label">Our Collection</span>
+      <h2 class="section-title">Bestselling Custom Gifts</h2>
+      <p class="section-desc">Each gift is crafted with care and personalized just for you. Browse our most loved items.
+      </p>
+    </div>
+
+    <div class="products-tabs reveal">
+      <button class="product-tab active" data-filter="all">All Products</button>
+      <button class="product-tab" data-filter="mugs">Custom Mugs</button>
+      <button class="product-tab" data-filter="frames">Photo Frames</button>
+      <button class="product-tab" data-filter="accessories">Accessories</button>
+      <button class="product-tab" data-filter="apparel">Apparel</button>
+    </div>
+
+    <div class="products-grid" id="productsGrid">
+      <!-- Product 1 -->
+      <div class="product-card reveal" data-category="mugs">
+        <span class="product-badge sale">HOT</span>
+        <div class="product-wishlist" onclick="toggleWishlist(this)">♡</div>
+        <div class="product-image">
+          <img src="images/custom-mug.png" alt="Personalized Custom Mug">
+          <div class="product-overlay">
+            <button onclick="addToCart('Custom Photo Mug', 499)">Add to Cart</button>
+            <button>Quick View</button>
+          </div>
+        </div>
+        <div class="product-info">
+          <span class="product-category">Custom Mugs</span>
+          <h3 class="product-name">Personalized Photo Mug</h3>
+          <div class="product-rating">
+            <span class="stars">★★★★★</span>
+            <span class="count">(128)</span>
+          </div>
+          <div class="product-price">
+            <span class="current">₹499</span>
+            <span class="original">₹699</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 2 -->
+      <div class="product-card reveal" data-category="frames">
+        <span class="product-badge new">NEW</span>
+        <div class="product-wishlist" onclick="toggleWishlist(this)">♡</div>
+        <div class="product-image">
+          <img src="images/custom-frame.png" alt="Engraved Photo Frame">
+          <div class="product-overlay">
+            <button onclick="addToCart('Engraved Wooden Frame', 899)">Add to Cart</button>
+            <button>Quick View</button>
+          </div>
+        </div>
+        <div class="product-info">
+          <span class="product-category">Photo Frames</span>
+          <h3 class="product-name">Engraved Wooden Frame</h3>
+          <div class="product-rating">
+            <span class="stars">★★★★★</span>
+            <span class="count">(95)</span>
+          </div>
+          <div class="product-price">
+            <span class="current">₹899</span>
+            <span class="original">₹1,199</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 3 -->
+      <div class="product-card reveal" data-category="accessories">
+        <div class="product-wishlist" onclick="toggleWishlist(this)">♡</div>
+        <div class="product-image">
+          <img src="images/custom-keychain.png" alt="Custom Engraved Keychain">
+          <div class="product-overlay">
+            <button onclick="addToCart('Engraved Metal Keychain', 349)">Add to Cart</button>
+            <button>Quick View</button>
+          </div>
+        </div>
+        <div class="product-info">
+          <span class="product-category">Accessories</span>
+          <h3 class="product-name">Engraved Metal Keychain</h3>
+          <div class="product-rating">
+            <span class="stars">★★★★☆</span>
+            <span class="count">(67)</span>
+          </div>
+          <div class="product-price">
+            <span class="current">₹349</span>
+            <span class="original">₹499</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 4 -->
+      <div class="product-card reveal" data-category="frames">
+        <span class="product-badge sale">-30%</span>
+        <div class="product-wishlist" onclick="toggleWishlist(this)">♡</div>
+        <div class="product-image">
+          <img src="images/custom-pillow.png" alt="Custom Photo Pillow">
+          <div class="product-overlay">
+            <button onclick="addToCart('Custom Photo Pillow', 749)">Add to Cart</button>
+            <button>Quick View</button>
+          </div>
+        </div>
+        <div class="product-info">
+          <span class="product-category">Home Decor</span>
+          <h3 class="product-name">Custom Photo Pillow</h3>
+          <div class="product-rating">
+            <span class="stars">★★★★★</span>
+            <span class="count">(203)</span>
+          </div>
+          <div class="product-price">
+            <span class="current">₹749</span>
+            <span class="original">₹1,099</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 5 -->
+      <div class="product-card reveal" data-category="apparel">
+        <span class="product-badge new">NEW</span>
+        <div class="product-wishlist" onclick="toggleWishlist(this)">♡</div>
+        <div class="product-image">
+          <img src="images/custom-tshirt.png" alt="Custom Printed T-Shirt">
+          <div class="product-overlay">
+            <button onclick="addToCart('Custom Printed T-Shirt', 599)">Add to Cart</button>
+            <button>Quick View</button>
+          </div>
+        </div>
+        <div class="product-info">
+          <span class="product-category">Apparel</span>
+          <h3 class="product-name">Custom Printed T-Shirt</h3>
+          <div class="product-rating">
+            <span class="stars">★★★★☆</span>
+            <span class="count">(156)</span>
+          </div>
+          <div class="product-price">
+            <span class="current">₹599</span>
+            <span class="original">₹799</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 6 -->
+      <div class="product-card reveal" data-category="accessories">
+        <span class="product-badge sale">BEST</span>
+        <div class="product-wishlist" onclick="toggleWishlist(this)">♡</div>
+        <div class="product-image">
+          <img src="images/custom-jewelry.png" alt="Personalized Jewelry">
+          <div class="product-overlay">
+            <button onclick="addToCart('Custom Gold Pendant', 1499)">Add to Cart</button>
+            <button>Quick View</button>
+          </div>
+        </div>
+        <div class="product-info">
+          <span class="product-category">Jewelry</span>
+          <h3 class="product-name">Custom Gold Pendant</h3>
+          <div class="product-rating">
+            <span class="stars">★★★★★</span>
+            <span class="count">(89)</span>
+          </div>
+          <div class="product-price">
+            <span class="current">₹1,499</span>
+            <span class="original">₹2,199</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem;" class="reveal">
+      <a href="#" class="btn btn-primary">View All Products →</a>
+    </div>
+  </section>
+
+  <!-- Special Offer Section -->
+  <section class="section special-offer" id="offers">
+    <div class="offer-content">
+      <div class="offer-text reveal-left">
+        <h2>
+          Special Season
+          <span>Gift Sale!</span>
+        </h2>
+        <p>Don't miss out on our biggest sale of the year! Get up to 40% off on all custom gifts. Perfect for birthdays,
+          anniversaries, festivals, and every special moment.</p>
+
+        <div class="offer-timer" id="offerTimer">
+          <div class="timer-block">
+            <span class="number" id="timerDays">12</span>
+            <span class="label">Days</span>
+          </div>
+          <div class="timer-block">
+            <span class="number" id="timerHours">08</span>
+            <span class="label">Hours</span>
+          </div>
+          <div class="timer-block">
+            <span class="number" id="timerMins">45</span>
+            <span class="label">Mins</span>
+          </div>
+          <div class="timer-block">
+            <span class="number" id="timerSecs">30</span>
+            <span class="label">Secs</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <a href="#products" class="btn btn-gold">Shop Now →</a>
+          <a href="#" class="btn btn-outline">View Offers</a>
+        </div>
+      </div>
+
+      <div class="offer-image reveal-right">
+        <img src="images/gift-box.png" alt="Special Gift Box Offer">
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us -->
+  <section class="section why-us">
+    <div class="section-header reveal">
+      <span class="section-label">Why Choose Us</span>
+      <h2 class="section-title">What Makes Us Special</h2>
+      <p class="section-desc">We go above and beyond to make every gift unique, memorable, and crafted with genuine
+        care.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card reveal" style="transition-delay: 0.1s;">
+        <div class="feature-icon">🎨</div>
+        <h3>Custom Designs</h3>
+        <p>Each gift is uniquely designed and personalized according to your specifications</p>
+      </div>
+      <div class="feature-card reveal" style="transition-delay: 0.2s;">
+        <div class="feature-icon">⭐</div>
+        <h3>Premium Quality</h3>
+        <p>We use only the finest materials to ensure lasting quality and durability</p>
+      </div>
+      <div class="feature-card reveal" style="transition-delay: 0.3s;">
+        <div class="feature-icon">🚚</div>
+        <h3>Fast Delivery</h3>
+        <p>Quick turnaround and reliable shipping to get your gifts on time</p>
+      </div>
+      <div class="feature-card reveal" style="transition-delay: 0.4s;">
+        <div class="feature-icon">💝</div>
+        <h3>Gift Wrapping</h3>
+        <p>Beautiful complimentary gift wrapping to make every gift extra special</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section testimonials" id="testimonials">
+    <div class="section-header reveal">
+      <span class="section-label" style="color: var(--gold);">Customer Love</span>
+      <h2 class="section-title">What Our Customers Say</h2>
+      <p class="section-desc">Join thousands of happy customers who found the perfect personalized gift with us.</p>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal" style="transition-delay: 0.1s;">
+        <div class="testimonial-quote">"</div>
+        <p class="testimonial-text">The custom mug I ordered for my mom's birthday was absolutely perfect! The quality
+          exceeded my expectations and it was delivered right on time.</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">R</div>
+          <div>
+            <div class="testimonial-name">Riya Sharma</div>
+            <div class="testimonial-role">Birthday Gift</div>
+            <div class="testimonial-stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal" style="transition-delay: 0.2s;">
+        <div class="testimonial-quote">"</div>
+        <p class="testimonial-text">I ordered a custom photo frame for our anniversary and my wife was thrilled! The
+          engraving was flawless and the packaging was beautiful.</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background: linear-gradient(135deg, var(--gold), var(--gold-dark));">A
+          </div>
+          <div>
+            <div class="testimonial-name">Arjun Patel</div>
+            <div class="testimonial-role">Anniversary Gift</div>
+            <div class="testimonial-stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal" style="transition-delay: 0.3s;">
+        <div class="testimonial-quote">"</div>
+        <p class="testimonial-text">Best custom gift shop ever! I've ordered corporate gifts for my team and everyone
+          loved them. The attention to detail is amazing.</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar"
+            style="background: linear-gradient(135deg, var(--green), var(--green-light));">S</div>
+          <div>
+            <div class="testimonial-name">Sneha Kumar</div>
+            <div class="testimonial-role">Corporate Gifts</div>
+            <div class="testimonial-stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="gallery">
+    <div class="section-header reveal">
+      <span class="section-label">Our Creations</span>
+      <h2 class="section-title">Gift Gallery</h2>
+      <p class="section-desc">A glimpse of the beautiful custom gifts we've created for our lovely customers.</p>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="images/custom-mug.png" alt="Custom Mug Gallery">
+      </div>
+      <div class="gallery-item">
+        <img src="images/custom-frame.png" alt="Custom Frame Gallery">
+      </div>
+      <div class="gallery-item">
+        <img src="images/custom-keychain.png" alt="Custom Keychain Gallery">
+      </div>
+      <div class="gallery-item">
+        <img src="images/custom-pillow.png" alt="Custom Pillow Gallery">
+      </div>
+      <div class="gallery-item">
+        <img src="images/custom-tshirt.png" alt="Custom T-Shirt Gallery">
+      </div>
+      <div class="gallery-item">
+        <img src="images/custom-jewelry.png" alt="Custom Jewelry Gallery">
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="section newsletter" id="contact">
+    <div class="newsletter-container reveal">
+      <span class="section-label">Stay Connected</span>
+      <h2>Get Exclusive Offers & Updates</h2>
+      <p>Subscribe to our newsletter and be the first to know about new products, special discounts, and festive
+        collections!</p>
+      <form class="newsletter-form" id="newsletterForm" onsubmit="handleNewsletter(event)">
+        <input type="email" placeholder="Enter your email address" required id="newsletterEmail">
+        <button type="submit">Subscribe →</button>
+      </form>
+      <p style="margin-top: 1rem; font-size: 0.8rem; color: var(--gray-400);">
+        🔒 We respect your privacy. Unsubscribe anytime.
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-brand">
+          <img src="images/logo.png" alt="Inithat Custom Gifts"
+            onerror="this.style.background='var(--primary)'; this.alt='I';">
+          <div class="nav-brand-text">
+            <span class="nav-brand-name">Inithat Custom Gifts</span>
+            <span class="nav-brand-tagline">Made with Love</span>
+          </div>
+        </a>
+        <p>We create beautiful, personalized gifts that celebrate your special moments. Every gift tells a unique story
+          crafted with love and care.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook">📘</a>
+          <a href="#" aria-label="Instagram">📸</a>
+          <a href="#" aria-label="Twitter">🐦</a>
+          <a href="#" aria-label="YouTube">🎬</a>
+          <a href="#" aria-label="Pinterest">📌</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="bulk-retail.html">Bulk / Retail</a></li>
+          <li><a href="offers.html">Special Offers</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="products.html">Custom Mugs</a></li>
+          <li><a href="products.html">Photo Frames</a></li>
+          <li><a href="products.html">Keychains</a></li>
+          <li><a href="products.html">T-Shirts</a></li>
+          <li><a href="products.html">Jewelry</a></li>
+          <li><a href="products.html">Home Decor</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Get in Touch</h4>
+        <ul class="footer-contact">
+          <li>
+            <span>📍</span>
+            <span>Inithat Custom Gifts, Main Street, Your City, India</span>
+          </li>
+          <li>
+            <span>📞</span>
+            <span>+91 98765 43210</span>
+          </li>
+          <li>
+            <span>✉️</span>
+            <span>hello@inithatgifts.com</span>
+          </li>
+          <li>
+            <span>⏰</span>
+            <span>Mon - Sat: 9:00 AM - 8:00 PM</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 <a href="index.html">Inithat Custom Gifts</a>. All rights reserved. Made with ❤️ in India.</p>
+      <div class="payment-methods">
+        💳 🏧 📱 🔒
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top"
+    onclick="window.scrollTo({top:0, behavior:'smooth'})">
+    ↑
+  </button>
+
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>

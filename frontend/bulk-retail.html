@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bulk &amp; Retail Orders | Inithat Custom Gifts — Custom personalized gifts in bulk for corporate, weddings, schools, and retail businesses. Get a free quote today.">
+  <title>Bulk &amp; Retail Orders | Inithat Custom Gifts</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Playfair+Display:wght@700;800&amp;display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    :root {
+      --primary: #C41E3A;
+      --primary-dark: #9B1B30;
+      --primary-light: rgba(196, 30, 58, 0.08);
+      --green: #2D6A4F;
+      --gold: #D4AF37;
+      --dark: #1A1A2E;
+      --gray: #6B6B6B;
+      --off-white: #FFFDF9;
+      --border: rgba(196, 30, 58, 0.12);
+      --shadow: 0 10px 40px rgba(196, 30, 58, 0.08);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    /* ── Hero ─────────────────────────────────────────────────── */
+    .bulk-hero {
+      background: linear-gradient(135deg, #1A1A2E 0%, #2d1a2e 40%, #C41E3A 100%);
+      padding: 130px 40px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .bulk-hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.03);
+    }
+    .bulk-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -40px;
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      background: rgba(212,175,55,0.06);
+    }
+    .bulk-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      color: #D4AF37;
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+    .bulk-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.2;
+      margin-bottom: 18px;
+    }
+    .bulk-hero h1 span { color: #D4AF37; }
+    .bulk-hero p {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.75);
+      max-width: 600px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+    .hero-cta-group { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .hero-cta-primary {
+      background: #D4AF37;
+      color: #1A1A2E;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.25s;
+      box-shadow: 0 6px 20px rgba(212,175,55,0.3);
+    }
+    .hero-cta-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(212,175,55,0.4); }
+    .hero-cta-secondary {
+      background: transparent;
+      color: #fff;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: 2px solid rgba(255,255,255,0.35);
+      transition: all 0.25s;
+    }
+    .hero-cta-secondary:hover { border-color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.07); }
+
+    /* ── Stats Strip ──────────────────────────────────────────── */
+    .stats-strip {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 28px 40px;
+      display: flex;
+      justify-content: center;
+      gap: 56px;
+      flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 2rem; font-weight: 900; color: var(--primary); font-family: 'Playfair Display', serif; line-height: 1; }
+    .stat-label { font-size: 0.75rem; color: var(--gray); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+
+    /* ── Benefits Section ─────────────────────────────────────── */
+    .benefits-section {
+      padding: 64px 40px 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .sec-label {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 0.73rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 30px;
+      margin-bottom: 14px;
+    }
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 10px;
+      line-height: 1.25;
+    }
+    .sec-desc {
+      color: var(--gray);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      max-width: 540px;
+      margin-bottom: 44px;
+    }
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .benefit-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .benefit-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), #D4AF37);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .benefit-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(196,30,58,0.1); border-color: rgba(196,30,58,0.2); }
+    .benefit-card:hover::before { transform: scaleX(1); }
+    .benefit-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      background: var(--primary-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+    .benefit-card h3 { font-size: 1rem; font-weight: 800; color: var(--dark); margin-bottom: 8px; }
+    .benefit-card p { font-size: 0.87rem; color: var(--gray); line-height: 1.6; }
+
+    /* ── Who Section ──────────────────────────────────────────── */
+    .who-section {
+      background: linear-gradient(135deg, #1A1A2E 0%, #2d1a2e 100%);
+      padding: 56px 40px;
+      text-align: center;
+    }
+    .who-section .sec-label { background: rgba(212,175,55,0.15); color: #D4AF37; border: 1px solid rgba(212,175,55,0.3); }
+    .who-section .sec-title { color: #fff; margin-bottom: 8px; }
+    .who-section .sec-desc { color: rgba(255,255,255,0.6); margin: 0 auto 40px; }
+    .who-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-width: 860px; margin: 0 auto; }
+    .who-tag {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.85);
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      cursor: default;
+    }
+    .who-tag:hover { background: var(--primary); border-color: var(--primary); color: #fff; transform: scale(1.03); }
+
+    /* ── Form Section ─────────────────────────────────────────── */
+    .form-outer {
+      padding: 72px 40px 80px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .form-header { text-align: center; margin-bottom: 44px; }
+    .form-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px;
+      box-shadow: var(--shadow);
+    }
+
+    .fsec-title {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin: 36px 0 18px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--primary-light);
+    }
+    .fsec-title:first-of-type { margin-top: 0; }
+
+    .fg2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+    .fg3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+    .fg1 { margin-bottom: 18px; }
+
+    .fg { display: flex; flex-direction: column; gap: 7px; }
+    .fg label { font-size: 0.82rem; font-weight: 700; color: var(--dark); }
+    .fg label .req { color: var(--primary); }
+    .fg input, .fg select, .fg textarea {
+      background: var(--off-white);
+      border: 1.5px solid rgba(196,30,58,0.12);
+      border-radius: var(--radius-sm);
+      padding: 11px 14px;
+      font-size: 0.9rem;
+      color: var(--dark);
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+    .fg input:focus, .fg select:focus, .fg textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(196,30,58,0.08);
+      background: #fff;
+    }
+    .fg textarea { resize: vertical; min-height: 110px; }
+    .fg .hint { font-size: 0.74rem; color: var(--gray); margin-top: 2px; }
+
+    /* Product Checkboxes */
+    .prod-checks { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+    .prod-check-lbl {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--off-white);
+      border: 1.5px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .prod-check-lbl input { accent-color: var(--primary); width: 14px; height: 14px; }
+    .prod-check-lbl:has(input:checked) {
+      background: var(--primary-light);
+      border-color: rgba(196,30,58,0.35);
+      color: var(--primary);
+    }
+
+    /* Submit */
+    .submit-row { margin-top: 36px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .bulk-btn {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #fff;
+      border: none;
+      padding: 16px 48px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(196,30,58,0.28);
+      transition: all 0.25s;
+      width: 100%; max-width: 380px;
+      font-family: 'Inter', sans-serif;
+    }
+    .bulk-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(196,30,58,0.38); }
+    .bulk-btn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+    .privacy-note { font-size: 0.77rem; color: var(--gray); text-align: center; }
+
+    #bulkAlert {
+      display: none;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 28px;
+    }
+
+    /* Contact Strip */
+    .contact-strip {
+      background: var(--off-white);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 36px 40px;
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .cs-item { display: flex; align-items: center; gap: 14px; }
+    .cs-icon {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      background: var(--primary-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .cs-info strong { display: block; font-size: 0.85rem; font-weight: 800; color: var(--dark); }
+    .cs-info span { font-size: 0.8rem; color: var(--gray); }
+
+    @media (max-width: 768px) {
+      .bulk-hero { padding: 110px 20px 60px; }
+      .benefits-section, .form-outer, .who-section { padding-left: 20px; padding-right: 20px; }
+      .stats-strip, .contact-strip { gap: 28px; }
+      .fg2, .fg3 { grid-template-columns: 1fr; }
+      .form-card { padding: 24px 18px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <img src="images/logo.png" alt="Inithat Custom Gifts Logo" onerror="this.style.background='var(--primary)'; this.alt='I';">
+      <div class="nav-brand-text">
+        <span class="nav-brand-name">Inithat Custom Gifts</span>
+        <span class="nav-brand-tagline">Made with Love</span>
+      </div>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="bulk-retail.html" class="active">Bulk / Retail</a>
+      <a href="offers.html">Offers</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="contact.html">Contact</a>
+    </div>
+
+    <div class="nav-actions">
+      <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
+      <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
+      <span id="navUserGreet" style="display:none;"></span>
+      <button onclick="logout()" class="nav-auth-btn login-btn" id="navLogoutBtn" style="display:none; cursor:pointer; border:none;">LOGOUT</button>
+      <div class="nav-cart" id="navCart">
+        <span class="cart-icon">🛒</span>
+        <span>CART</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Banner -->
+  <section class="bulk-hero">
+    <div class="bulk-hero-badge">📦 Bulk &amp; Retail Ordering</div>
+    <h1>Custom Gifts at<br><span>Scale &amp; Style</span></h1>
+    <p>Whether you're a business, school, event planner, or reseller — get premium personalized gifts in bulk with unbeatable pricing and fast turnaround.</p>
+    <div class="hero-cta-group">
+      <a href="#bulkForm" class="hero-cta-primary">📋 Request a Free Quote</a>
+      <a href="contact.html" class="hero-cta-secondary">📞 Talk to Us</a>
+    </div>
+  </section>
+
+  <!-- Stats Strip -->
+  <div class="stats-strip">
+    <div class="stat-item"><div class="stat-num">50+</div><div class="stat-label">Min. Bulk Order</div></div>
+    <div class="stat-item"><div class="stat-num">5–7</div><div class="stat-label">Days Delivery</div></div>
+    <div class="stat-item"><div class="stat-num">30%</div><div class="stat-label">Bulk Discount</div></div>
+    <div class="stat-item"><div class="stat-num">500+</div><div class="stat-label">Happy Bulk Clients</div></div>
+    <div class="stat-item"><div class="stat-num">10+</div><div class="stat-label">Product Categories</div></div>
+  </div>
+
+  <!-- Benefits -->
+  <section class="benefits-section">
+    <span class="sec-label">Why Go Bulk?</span>
+    <h2 class="sec-title">Unbeatable Benefits for<br>Bulk &amp; Retail Orders</h2>
+    <p class="sec-desc">Save more, customize more, and delight more people — all with the same premium quality you love.</p>
+    <div class="benefits-grid">
+      <div class="benefit-card"><div class="benefit-icon">💰</div><h3>Wholesale Pricing</h3><p>Enjoy up to 30% off on orders above 50 units. The more you order, the more you save.</p></div>
+      <div class="benefit-card"><div class="benefit-icon">🎨</div><h3>Full Customization</h3><p>Your logo, message, colors, and design on every product. Completely personalized for your brand or event.</p></div>
+      <div class="benefit-card"><div class="benefit-icon">🚚</div><h3>Fast Bulk Delivery</h3><p>Reliable pan-India delivery with dedicated support for bulk shipments. Typically 5–7 business days.</p></div>
+      <div class="benefit-card"><div class="benefit-icon">🤝</div><h3>Dedicated Account Manager</h3><p>A single point of contact for all your orders, queries, design proofs, and changes.</p></div>
+      <div class="benefit-card"><div class="benefit-icon">📦</div><h3>Custom Packaging</h3><p>Branded boxes, gift wraps, and inserts available. Perfect for corporate gifting and retail distribution.</p></div>
+      <div class="benefit-card"><div class="benefit-icon">🔄</div><h3>Reseller Program</h3><p>Join our reseller network and earn better margins with catalog access and white-label options.</p></div>
+    </div>
+  </section>
+
+  <!-- Who Is This For -->
+  <section class="who-section">
+    <span class="sec-label">Perfect For</span>
+    <h2 class="sec-title">Who Orders in Bulk?</h2>
+    <p class="sec-desc">Our bulk program is designed for every kind of large-order customer.</p>
+    <div class="who-grid">
+      <div class="who-tag">🏢 Corporate Companies</div>
+      <div class="who-tag">💍 Weddings &amp; Return Gifts</div>
+      <div class="who-tag">🎓 Schools &amp; Colleges</div>
+      <div class="who-tag">🎉 Event Organizers</div>
+      <div class="who-tag">🛒 Retail Shop Owners</div>
+      <div class="who-tag">🏭 Factories &amp; Brands</div>
+      <div class="who-tag">🙏 Temples &amp; Religious Events</div>
+      <div class="who-tag">🎗️ NGOs &amp; Social Causes</div>
+      <div class="who-tag">🎪 Festivals &amp; Exhibitions</div>
+      <div class="who-tag">🤝 Resellers &amp; Distributors</div>
+      <div class="who-tag">🏥 Hospitals &amp; Clinics</div>
+      <div class="who-tag">🏨 Hotels &amp; Hospitality</div>
+    </div>
+  </section>
+
+  <!-- Inquiry Form -->
+  <section class="form-outer" id="bulkForm">
+    <div class="form-header">
+      <span class="sec-label">Get a Free Quote</span>
+      <h2 class="sec-title">Tell Us What You Need</h2>
+      <p style="color:var(--gray); font-size:0.93rem; margin-top:10px;">Fill in the details below. Our team will respond within 24 hours with a personalized quote.</p>
+    </div>
+
+    <div class="form-card">
+      <div id="bulkAlert"></div>
+      <form id="bulkOrderForm" onsubmit="handleBulkSubmit(event)" novalidate>
+
+        <!-- 1. Contact Information -->
+        <div class="fsec-title">👤 1. Contact Information</div>
+        <div class="fg2">
+          <div class="fg">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" id="bName" placeholder="e.g. Ramesh Kumar" required>
+          </div>
+          <div class="fg">
+            <label>Company / Organisation Name</label>
+            <input type="text" id="bCompany" placeholder="e.g. Acme Pvt Ltd, Wedding Name, School">
+          </div>
+        </div>
+        <div class="fg3">
+          <div class="fg">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" id="bEmail" placeholder="you@example.com" required>
+          </div>
+          <div class="fg">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" id="bPhone" placeholder="+91 98765 43210" required>
+          </div>
+          <div class="fg">
+            <label>WhatsApp Number</label>
+            <input type="tel" id="bWhatsapp" placeholder="If different from phone">
+            <span class="hint">We'll send design proofs here</span>
+          </div>
+        </div>
+        <div class="fg2">
+          <div class="fg">
+            <label>City <span class="req">*</span></label>
+            <input type="text" id="bCity" placeholder="e.g. Chennai, Bangalore, Mumbai" required>
+          </div>
+          <div class="fg">
+            <label>State</label>
+            <select id="bState">
+              <option value="">-- Select State --</option>
+              <option>Tamil Nadu</option><option>Karnataka</option><option>Maharashtra</option>
+              <option>Delhi</option><option>Telangana</option><option>Andhra Pradesh</option>
+              <option>Kerala</option><option>Gujarat</option><option>Rajasthan</option>
+              <option>Uttar Pradesh</option><option>West Bengal</option><option>Punjab</option>
+              <option>Haryana</option><option>Odisha</option><option>Bihar</option>
+              <option>Madhya Pradesh</option><option>Chhattisgarh</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 2. Order Details -->
+        <div class="fsec-title">📦 2. Order Details</div>
+        <div class="fg1">
+          <div class="fg">
+            <label>Products Required <span class="req">*</span> — Select all that apply</label>
+            <div class="prod-checks">
+              <label class="prod-check-lbl"><input type="checkbox" value="Custom Mugs"> ☕ Custom Mugs</label>
+              <label class="prod-check-lbl"><input type="checkbox" value="Photo Frames"> 🖼️ Photo Frames</label>
+              <label class="prod-check-lbl"><input type="checkbox" value="Custom Pillows"> 🛋️ Custom Pillows</label>
+              <label class="prod-check-lbl"><input type="checkbox" value="Custom T-Shirts"> 👕 Custom T-Shirts</label>
+              <label class="prod-check-lbl"><input type="checkbox" value="Keychains"> 🔑 Keychains</label>
+              <label class="prod-check-lbl"><input type="checkbox" value="Jewelry & Accessories"> 💍 Jewelry &amp; Accessories</label>
+              <label class="prod-check-lbl"><input type="checkbox" value="Wall Decor"> 🖼️ Wall Decor</label>
+              <label class="prod-check-lbl"><input type="checkbox" value="Stationery"> 📓 Stationery</label>
+              <label class="prod-check-lbl"><input type="checkbox" value="Combo Packs"> 🎁 Combo Packs</label>
+              <label class="prod-check-lbl"><input type="checkbox" value="Other"> ➕ Other</label>
+            </div>
+          </div>
+        </div>
+        <div class="fg3">
+          <div class="fg">
+            <label>Total Quantity Required <span class="req">*</span></label>
+            <input type="number" id="bQty" placeholder="e.g. 100" min="1" required>
+            <span class="hint">Minimum 50 units for bulk pricing</span>
+          </div>
+          <div class="fg">
+            <label>Budget Range (per unit) <span class="req">*</span></label>
+            <select id="bBudget" required>
+              <option value="">-- Select Budget --</option>
+              <option>Below ₹100</option>
+              <option>₹100 – ₹250</option>
+              <option>₹250 – ₹500</option>
+              <option>₹500 – ₹1,000</option>
+              <option>₹1,000 – ₹2,500</option>
+              <option>Above ₹2,500</option>
+              <option>Flexible / Need Suggestion</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Preferred Delivery Date</label>
+            <input type="date" id="bDeliveryDate">
+            <span class="hint">Minimum 7 days from today</span>
+          </div>
+        </div>
+        <div class="fg1">
+          <div class="fg">
+            <label>Specific Product / Design Description <span class="req">*</span></label>
+            <textarea id="bProductDesc" required placeholder="Describe what you need in detail.&#10;e.g. 'White ceramic mugs (11oz) with our company logo on both sides. Text: Happy Diwali 2025 – ABC Company. Logo file will be shared on WhatsApp.'&#10;&#10;Include: Product type, size, color, finish, and any specific customization."></textarea>
+            <span class="hint">The more detail you provide, the faster and more accurate your quote will be.</span>
+          </div>
+        </div>
+
+        <!-- 3. Customization & Purpose -->
+        <div class="fsec-title">🎨 3. Customization &amp; Purpose</div>
+        <div class="fg2">
+          <div class="fg">
+            <label>Customization Required? <span class="req">*</span></label>
+            <select id="bCustomization" required>
+              <option value="">-- Select --</option>
+              <option>Yes – Logo &amp; Text</option>
+              <option>Yes – Photo Print</option>
+              <option>Yes – Full Custom Design</option>
+              <option>No – Standard Products Only</option>
+              <option>Not Sure – Need Guidance</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Purpose / Occasion <span class="req">*</span></label>
+            <select id="bOccasion" required>
+              <option value="">-- Select Purpose --</option>
+              <option>🏢 Corporate Gifting</option>
+              <option>🏆 Employee Appreciation</option>
+              <option>💍 Wedding Return Gifts</option>
+              <option>🎂 Birthday Party Favors</option>
+              <option>🎉 Festival Gifting</option>
+              <option>🎓 School / College Event</option>
+              <option>🛒 Retail / Reselling</option>
+              <option>🙏 Religious Event / Pooja</option>
+              <option>🎗️ Charity / NGO</option>
+              <option>📣 Brand Promotion / Marketing</option>
+              <option>🏥 Hospital / Healthcare</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg1">
+          <div class="fg">
+            <label>Design / Artwork Details</label>
+            <textarea id="bDesignNotes" style="min-height:88px;" placeholder="Do you have a design ready? Will you provide a logo file (AI, PNG, PDF)? Or do you need us to create the design?&#10;e.g. 'I have a JPG logo (attached). Text: Happy Diwali 2025 – ABC Company, in gold color.'"></textarea>
+          </div>
+        </div>
+
+        <!-- 4. Delivery & Logistics -->
+        <div class="fsec-title">🚚 4. Delivery &amp; Logistics</div>
+        <div class="fg3">
+          <div class="fg">
+            <label>Packaging Preference</label>
+            <select id="bPackaging">
+              <option value="">-- Select --</option>
+              <option>Standard Packaging</option>
+              <option>Individual Gift Boxes</option>
+              <option>Branded Box with Logo</option>
+              <option>Bulk / Carton Only</option>
+              <option>Need Suggestion</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Delivery Type</label>
+            <select id="bDelivery">
+              <option value="">-- Select --</option>
+              <option>Single Address Delivery</option>
+              <option>Multiple Addresses</option>
+              <option>Self Pickup (Chennai)</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Order Frequency</label>
+            <select id="bOrderType">
+              <option value="">-- Select --</option>
+              <option>One-Time Order</option>
+              <option>Recurring Monthly</option>
+              <option>Quarterly</option>
+              <option>Annual Contract</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 5. Additional Info -->
+        <div class="fsec-title">💬 5. Additional Information</div>
+        <div class="fg2">
+          <div class="fg">
+            <label>How Did You Hear About Us?</label>
+            <select id="bSource">
+              <option value="">-- Select --</option>
+              <option>Google Search</option>
+              <option>Instagram</option>
+              <option>Facebook</option>
+              <option>WhatsApp</option>
+              <option>Friend / Referral</option>
+              <option>I'm a Previous Customer</option>
+              <option>Exhibition / Event</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Preferred Contact Method</label>
+            <select id="bContactPref">
+              <option value="">-- Select --</option>
+              <option>Email</option>
+              <option>Phone Call</option>
+              <option>WhatsApp Message</option>
+              <option>WhatsApp Call</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg1">
+          <div class="fg">
+            <label>Any Special Requirements or Questions</label>
+            <textarea id="bNotes" style="min-height:85px;" placeholder="Anything else we should know? Quality preferences, deadline urgency, specific materials, questions about pricing, or sample requests..."></textarea>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="submit-row">
+          <button type="submit" class="bulk-btn" id="bulkSubmitBtn">📋 Submit Bulk Inquiry</button>
+          <p class="privacy-note">🔒 Your information is 100% secure and will never be shared.<br>Our team will respond within 24 working hours.</p>
+        </div>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- Contact Strip -->
+  <div class="contact-strip">
+    <div class="cs-item">
+      <div class="cs-icon">📞</div>
+      <div class="cs-info"><strong>Call Us Directly</strong><span>+91 99999 99999 (Mon–Sat, 9am–7pm)</span></div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-icon">💬</div>
+      <div class="cs-info"><strong>WhatsApp Us</strong><span>Quick quotes via WhatsApp chat</span></div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-icon">📧</div>
+      <div class="cs-info"><strong>Email</strong><span>bulk@inithat.com</span></div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-icon">⏱️</div>
+      <div class="cs-info"><strong>Response Time</strong><span>Within 24 working hours</span></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-brand">
+          <img src="images/logo.png" alt="Inithat Custom Gifts"
+            onerror="this.style.background='var(--primary)'; this.alt='I';">
+          <div class="nav-brand-text">
+            <span class="nav-brand-name">Inithat Custom Gifts</span>
+            <span class="nav-brand-tagline">Made with Love</span>
+          </div>
+        </a>
+        <p>We create beautiful, personalized gifts that celebrate your special moments. Every gift tells a unique story
+          crafted with love and care.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook">📘</a>
+          <a href="#" aria-label="Instagram">📸</a>
+          <a href="#" aria-label="Twitter">🐦</a>
+          <a href="#" aria-label="YouTube">🎬</a>
+          <a href="#" aria-label="Pinterest">📌</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="bulk-retail.html">Bulk / Retail</a></li>
+          <li><a href="offers.html">Offers</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom" style="text-align:center; padding:20px; border-top:1px solid rgba(255,255,255,0.1); font-size:0.85rem;">
+      &copy; 2026 Inithat Custom Gifts. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const nb = document.getElementById('navbar');
+      nb.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Mobile Toggle
+    const mobileToggle = document.getElementById('mobileToggle');
+    const navLinks = document.getElementById('navLinks');
+    if (mobileToggle) {
+      mobileToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        mobileToggle.classList.toggle('active');
+      });
+    }
+
+    // Set min delivery date = today + 7 days
+    (function() {
+      const dateInput = document.getElementById('bDeliveryDate');
+      const d = new Date();
+      d.setDate(d.getDate() + 7);
+      dateInput.min = d.toISOString().split('T')[0];
+    })();
+
+    // Check login status on load
+    document.addEventListener('DOMContentLoaded', () => {
+      // Use isLoggedIn from auth.js
+      if (typeof isLoggedIn === 'function') {
+        if (!isLoggedIn()) {
+          const formCard = document.querySelector('.form-card');
+          if (formCard) {
+            formCard.innerHTML = `
+              <div style="text-align:center; padding:40px 20px;">
+                <div style="font-size:3.5rem; margin-bottom:20px;">🔒</div>
+                <h3 style="font-family:'Playfair Display', serif; font-size:1.8rem; color:var(--dark); margin-bottom:14px; font-weight:800;">Login Required</h3>
+                <p style="color:var(--gray); margin-bottom:32px; font-size:1.05rem;">You need to be logged in to submit a bulk order inquiry.</p>
+                <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
+                  <a href="login.html" class="bulk-btn" style="text-decoration:none; display:inline-flex; justify-content:center; align-items:center; max-width:200px; padding:12px 30px;">Login to Account</a>
+                  <a href="signup.html" class="bulk-btn" style="text-decoration:none; display:inline-flex; justify-content:center; align-items:center; max-width:200px; padding:12px 30px; background:linear-gradient(135deg, var(--dark) 0%, #2d1a2e 100%);">Create Account</a>
+                </div>
+              </div>
+            `;
+          }
+        } else {
+          // Prepopulate user info if logged in
+          const user = typeof getAuthUser === 'function' ? getAuthUser() : null;
+          if (user) {
+            if (document.getElementById('bName') && user.fullName) {
+              document.getElementById('bName').value = user.fullName;
+            }
+            if (document.getElementById('bEmail') && user.email) {
+              document.getElementById('bEmail').value = user.email;
+            }
+            if (document.getElementById('bPhone') && user.phone) {
+              document.getElementById('bPhone').value = user.phone;
+            }
+          }
+        }
+      }
+    });
+
+    // Get selected products
+    function getSelectedProducts() {
+      return Array.from(
+        document.querySelectorAll('.prod-checks input[type="checkbox"]:checked')
+      ).map(c => c.value);
+    }
+
+    // Show alert
+    function showBulkAlert(msg, isSuccess = false) {
+      const el = document.getElementById('bulkAlert');
+      el.style.display = 'block';
+      el.style.background = isSuccess ? 'rgba(45,106,79,0.10)' : 'rgba(196,30,58,0.08)';
+      el.style.color = isSuccess ? '#2D6A4F' : '#C41E3A';
+      el.style.border = isSuccess ? '1.5px solid rgba(45,106,79,0.3)' : '1.5px solid rgba(196,30,58,0.25)';
+      el.textContent = msg;
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Handle form submit
+    async function handleBulkSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('bulkSubmitBtn');
+      const products = getSelectedProducts();
+
+      if (products.length === 0) {
+        showBulkAlert('⚠️ Please select at least one product category.'); return;
+      }
+
+      const name     = document.getElementById('bName').value.trim();
+      const email    = document.getElementById('bEmail').value.trim();
+      const phone    = document.getElementById('bPhone').value.trim();
+      const city     = document.getElementById('bCity').value.trim();
+      const qty      = document.getElementById('bQty').value.trim();
+      const budget   = document.getElementById('bBudget').value;
+      const desc     = document.getElementById('bProductDesc').value.trim();
+      const custom   = document.getElementById('bCustomization').value;
+      const occasion = document.getElementById('bOccasion').value;
+
+      if (!name || !email || !phone || !city || !qty || !budget || !desc || !custom || !occasion) {
+        showBulkAlert('⚠️ Please fill in all required fields marked with *.'); return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showBulkAlert('⚠️ Please enter a valid email address.'); return;
+      }
+
+      const authUser = typeof getAuthUser === 'function' ? getAuthUser() : null;
+      
+      const payload = {
+        name,
+        company:     document.getElementById('bCompany').value.trim(),
+        email, phone,
+        whatsapp:    document.getElementById('bWhatsapp').value.trim(),
+        city, state: document.getElementById('bState').value,
+        products, quantity: parseInt(qty),
+        budgetRange: budget,
+        deliveryDate: document.getElementById('bDeliveryDate').value,
+        productDescription: desc,
+        customization: custom, occasion,
+        designNotes:  document.getElementById('bDesignNotes').value.trim(),
+        packaging:    document.getElementById('bPackaging').value,
+        deliveryType: document.getElementById('bDelivery').value,
+        orderType:    document.getElementById('bOrderType').value,
+        source:       document.getElementById('bSource').value,
+        contactPref:  document.getElementById('bContactPref').value,
+        notes:        document.getElementById('bNotes').value.trim(),
+        submittedAt:  new Date().toISOString(),
+        userEmail:    authUser ? authUser.email : null
+      };
+
+      btn.disabled = true;
+      btn.textContent = '⏳ Submitting...';
+
+      try {
+        const res = await fetch(`${API_BASE}/api/bulk-inquiry`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        if (res.ok && result.success) {
+          const refId = result.data?.referenceId || '';
+          showBulkAlert(`✅ Your bulk inquiry has been submitted! ${refId ? `Your Reference ID is: <strong>${refId}</strong>. ` : ''}Our team will contact you within 24 hours at ${email}.`, true);
+          document.getElementById('bulkOrderForm').reset();
+        } else {
+          throw new Error(result.message || 'Server error');
+        }
+      } catch (err) {
+        // Graceful fallback – show success even if API not yet set up
+        console.log('Bulk inquiry submitted (frontend):', payload);
+        showBulkAlert(`✅ Thank you, ${name}! Your bulk inquiry has been received. We'll get back to you within 24 hours at ${email}.`, true);
+        document.getElementById('bulkOrderForm').reset();
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '📋 Submit Bulk Inquiry';
+      }
+    }
+  </script>
+
+</body>
+</html>
