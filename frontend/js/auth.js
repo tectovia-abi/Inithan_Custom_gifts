@@ -4,7 +4,7 @@
  * and user-specific shopping cart management.
  */
 
-const API_BASE = 'http://localhost:5000';
+const API_BASE = 'http://127.0.0.1:5000';
 
 // ── Cookie Helper Functions (Professional Session Fallback) ──────────────────
 function setCookie(name, value, days = 7) {

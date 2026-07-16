@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="High performance machines for precision cutting, engraving & printing.">
+  <title>Machines & Printing Solutions | Inithat Custom Gifts</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles-v2.css">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <style>
+    /* Machines Page Specific Styles */
+    .machines-page-wrapper {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 30px var(--space-md);
+      font-family: var(--font-body);
+    }
+    
+    .breadcrumbs {
+      font-size: 0.9rem;
+      color: var(--gray-600);
+      margin-bottom: 30px;
+    }
+    .breadcrumbs a {
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .breadcrumbs a:hover {
+      color: var(--primary);
+    }
+    .breadcrumbs span.separator {
+      margin: 0 8px;
+      color: var(--gray-400);
+    }
+    .breadcrumbs span.current {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .machines-hero {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .machines-hero-title {
+      font-size: 2.5rem;
+      color: #9e1b1b;
+      font-family: var(--font-heading);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    .machines-hero-title svg {
+      color: #9e1b1b;
+      width: 40px;
+      height: 40px;
+    }
+    .machines-hero-subtitle {
+      color: var(--gray-700);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .machines-hero-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px 0;
+    }
+    .machines-hero-divider::before,
+    .machines-hero-divider::after {
+      content: "";
+      height: 1px;
+      width: 50px;
+      background-color: var(--gray-300);
+    }
+    .machines-hero-divider svg {
+      margin: 0 10px;
+      color: #9e1b1b;
+      width: 16px;
+      height: 16px;
+    }
+
+    .machines-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+      margin-bottom: 50px;
+    }
+
+    .machine-card {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+      border: 1px solid rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .machine-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
+
+    .mc-full-image {
+      width: 100%;
+      display: block;
+    }
+    .mc-full-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+    .machine-card:hover .mc-full-image img {
+      transform: scale(1.05);
+    }
+
+    .mc-body {
+      padding: 20px 15px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .mc-desc {
+      font-size: 0.9rem;
+      color: var(--gray-700);
+      text-align: center;
+      margin-bottom: 20px;
+      line-height: 1.4;
+      min-height: 40px;
+    }
+    .mc-features {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 25px 0;
+      flex-grow: 1;
+    }
+    .mc-features li {
+      font-size: 0.85rem;
+      color: var(--gray-700);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .mc-features li svg {
+      width: 16px;
+      height: 16px;
+      color: var(--theme-color);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .mc-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: var(--theme-color);
+      color: white;
+      text-decoration: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: filter 0.2s, transform 0.2s;
+    }
+    .mc-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    .support-banner {
+      background: #9e1b1b;
+      border-radius: 12px;
+      padding: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .support-features {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+    .sf-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .sf-icon {
+      width: 40px;
+      height: 40px;
+      border: 1.5px solid rgba(255,255,255,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sf-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+    .sf-text h4 {
+      font-size: 1rem;
+      margin-bottom: 3px;
+      font-weight: 600;
+    }
+    .sf-text p {
+      font-size: 0.8rem;
+      opacity: 0.8;
+      margin: 0;
+    }
+    .support-action {
+      text-align: right;
+    }
+    .support-action h4 {
+      font-size: 1rem;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .support-btn {
+      display: inline-block;
+      background: white;
+      color: #9e1b1b;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .support-btn:hover {
+      background: #f0f0f0;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 1200px) {
+      .machines-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .support-banner { flex-direction: column; align-items: stretch; text-align: center; }
+      .support-features { flex-direction: column; gap: 20px; }
+      .support-action { text-align: center; margin-top: 10px; }
+      .sf-item { justify-content: center; text-align: left; }
+    }
+    @media (max-width: 768px) {
+      .machines-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 500px) {
+      .machines-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <img src="images/logo.png" alt="Inithat Custom Gifts Logo" onerror="this.style.background='var(--primary)'; this.alt='I';">
+      <div class="nav-brand-text">
+        <span class="nav-brand-name">Inithat Custom Gifts</span>
+        <span class="nav-brand-tagline">Made with Love</span>
+      </div>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="bulk-retail.html">Bulk / Retail</a>
+      <a href="offers.html">Offers</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="contact.html">Contact</a>
+      <a href="machines.html" class="active">Machines</a>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Shown when logged OUT -->
+      <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
+      <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
+      <!-- Shown when logged IN -->
+      <span id="navUserGreet" style="display:none; color:var(--gold); font-weight:600; font-size:0.85rem;"></span>
+      <button onclick="logout()" class="nav-auth-btn login-btn" id="navLogoutBtn" style="display:none; cursor:pointer; border:none;">LOGOUT</button>
+      <div class="nav-cart" id="navCart">
+        <span class="cart-icon">🛒</span>
+        <span>CART</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="machines-page-wrapper">
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+      <a href="index.html">Home</a>
+      <span class="separator">&rsaquo;</span>
+      <a href="products.html">Categories</a>
+      <span class="separator">&rsaquo;</span>
+      <span class="current">Machines & Printing Solutions</span>
+    </div>
+
+    <!-- Hero -->
+    <div class="machines-hero">
+      <h1 class="machines-hero-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        Machines & Printing Solutions
+      </h1>
+      <div class="machines-hero-divider">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+      </div>
+      <p class="machines-hero-subtitle">High performance machines for precision cutting, engraving & printing.</p>
+    </div>
+
+    <!-- Grid -->
+    <div class="machines-grid">
+      <!-- Card 1 -->
+      <div class="machine-card" style="--theme-color: #5d1c13;">
+        <div class="mc-full-image">
+          <img src="images/co2_laser.jpg" alt="CO2 Laser Machine" onerror="this.src='images/placeholder_machine.png'">
+        </div>
+        <div class="mc-body">
+          <p class="mc-desc">Precision cutting & engraving for wood, acrylic, MDF & more.</p>
+          <ul class="mc-features">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8l4 4-4 4M8 12h8"></path></svg> High Precision</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8l4 4-4 4M8 12h8"></path></svg> Clean Cutting</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8l4 4-4 4M8 12h8"></path></svg> Multi Material Support</li>
+          </ul>
+          <a href="#" class="mc-btn">View Products &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="machine-card" style="--theme-color: #1a2f4c;">
+        <div class="mc-full-image">
+          <img src="images/fiber_marking.jpg" alt="Fiber Marking Machine" onerror="this.src='images/placeholder_machine.png'">
+        </div>
+        <div class="mc-body">
+          <p class="mc-desc">Permanent marking on metal surfaces with high accuracy.</p>
+          <ul class="mc-features">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8l4 4-4 4M8 12h8"></path></svg> Metal Engraving</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8l4 4-4 4M8 12h8"></path></svg> High Speed</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8l4 4-4 4M8 12h8"></path></svg> Long Lasting Mark</li>
+          </ul>
+          <a href="#" class="mc-btn">View Products &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="machine-card" style="--theme-color: #2c1a4c;">
+        <div class="mc-full-image">
+          <img src="images/uv_printer.jpg" alt="UV Printer" onerror="this.src='images/placeholder_machine.png'">
+        </div>
+        <div class="mc-body">
+          <p class="mc-desc">High quality printing on flat & round surfaces with UV ink.</p>
+          <ul class="mc-features">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8l4 4-4 4M8 12h8"></path></svg> Vibrant Colors</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8l4 4-4 4M8 12h8"></path></svg> Multi Surface Printing</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8l4 4-4 4M8 12h8"></path></svg> Fast & Durable</li>
+          </ul>
+          <a href="#" class="mc-btn">View Products &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="machine-card" style="--theme-color: #1b3d30;">
+        <div class="mc-full-image">
+          <img src="images/sublimation_printer.jpg" alt="Sublimation Printer" onerror="this.src='images/placeholder_machine.png'">
+        </div>
+        <div class="mc-body">
+          <p class="mc-desc">Perfect for mugs, t-shirts, plates & more.</p>
+          <ul class="mc-features">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8l4 4-4 4M8 12h8"></path></svg> Bright & Long Lasting</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8l4 4-4 4M8 12h8"></path></svg> Wide Applications</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8l4 4-4 4M8 12h8"></path></svg> High Productivity</li>
+          </ul>
+          <a href="#" class="mc-btn">View Products &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="machine-card" style="--theme-color: #5c3516;">
+        <div class="mc-full-image">
+          <img src="images/heat_press.jpg" alt="Heat Press Machine" onerror="this.src='images/placeholder_machine.png'">
+        </div>
+        <div class="mc-body">
+          <p class="mc-desc">Ideal for t-shirts, mugs, plates & custom products.</p>
+          <ul class="mc-features">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8l4 4-4 4M8 12h8"></path></svg> Uniform Heat</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8l4 4-4 4M8 12h8"></path></svg> Easy to Use</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8l4 4-4 4M8 12h8"></path></svg> Multiple Applications</li>
+          </ul>
+          <a href="#" class="mc-btn">View Products &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Support Banner -->
+    <div class="support-banner">
+      <div class="support-features">
+        <div class="sf-item">
+          <div class="sf-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </div>
+          <div class="sf-text">
+            <h4>Expert Support</h4>
+            <p>We're here to help you choose<br>the best machine.</p>
+          </div>
+        </div>
+        <div class="sf-item">
+          <div class="sf-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          </div>
+          <div class="sf-text">
+            <h4>Installation & Training</h4>
+            <p>Professional installation<br>& training provided.</p>
+          </div>
+        </div>
+        <div class="sf-item">
+          <div class="sf-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+          </div>
+          <div class="sf-text">
+            <h4>Best Quality Machines</h4>
+            <p>Quality machines for<br>long term performance.</p>
+          </div>
+        </div>
+        <div class="sf-item">
+          <div class="sf-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+          </div>
+          <div class="sf-text">
+            <h4>Warranty & Service</h4>
+            <p>1 Year Warranty &<br>Lifetime Support.</p>
+          </div>
+        </div>
+      </div>
+      <div class="support-action">
+        <h4>Need Help Choosing?</h4>
+        <a href="contact.html" class="support-btn">Contact Our Experts &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-brand">
+          <img src="images/logo.png" alt="Inithat Custom Gifts" onerror="this.style.background='var(--primary)'; this.alt='I';">
+          <div class="nav-brand-text">
+            <span class="nav-brand-name">Inithat Custom Gifts</span>
+            <span class="nav-brand-tagline">Made with Love</span>
+          </div>
+        </a>
+        <p>We create beautiful, personalized gifts that celebrate your special moments. Every gift tells a unique story crafted with love and care.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook">📘</a>
+          <a href="#" aria-label="Instagram">📸</a>
+          <a href="#" aria-label="Twitter">🐦</a>
+          <a href="#" aria-label="YouTube">🎬</a>
+          <a href="#" aria-label="Pinterest">📌</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="bulk-retail.html">Bulk / Retail</a></li>
+          <li><a href="offers.html">Special Offers</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="products.html">Custom Mugs</a></li>
+          <li><a href="products.html">Photo Frames</a></li>
+          <li><a href="products.html">Keychains</a></li>
+          <li><a href="products.html">T-Shirts</a></li>
+          <li><a href="products.html">Jewelry</a></li>
+          <li><a href="products.html">Home Decor</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Get in Touch</h4>
+        <ul class="footer-contact">
+          <li>
+            <span>📍</span>
+            <span>Inithat Custom Gifts, Main Street, Your City, India</span>
+          </li>
+          <li>
+            <span>📞</span>
+            <span>+91 98765 43210</span>
+          </li>
+          <li>
+            <span>✉️</span>
+            <span>hello@inithatgifts.com</span>
+          </li>
+          <li>
+            <span>⏰</span>
+            <span>Mon - Sat: 9:00 AM - 8:00 PM</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 <a href="index.html">Inithat Custom Gifts</a>. All rights reserved. Made with ❤️ in India.</p>
+      <div class="payment-methods">
+        💳 🏧 📱 🔒
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top"
+    onclick="window.scrollTo({top:0, behavior:'smooth'})">
+    ↑
+  </button>
+
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>

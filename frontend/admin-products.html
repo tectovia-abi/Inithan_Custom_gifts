@@ -29,6 +29,9 @@
           <a href="admin-products.html" class="admin-nav-link active">
             <span>🛍️</span> Products
           </a>
+          <a href="admin-categories.html" class="admin-nav-link">
+            <span>🗂️</span> Categories
+          </a>
           <a href="admin-users.html" class="admin-nav-link">
             <span>👥</span> Users
           </a>
@@ -60,32 +63,216 @@
 
       <div class="admin-content">
         <section id="productsSection" class="admin-section active">
-          <div class="section-header" style="display: flex; flex-wrap: wrap; gap: 15px;">
-            <h2>Manage Products</h2>
-            <div style="display: flex; gap: 15px; flex-grow: 1; justify-content: flex-end;">
-              <input type="text" id="productSearch" placeholder="Search by name, code, or category..." style="padding: 10px 15px; border: 1px solid var(--admin-border); border-radius: 8px; width: 100%; max-width: 300px; font-family: inherit;">
-              <a href="admin-add-product.html" class="btn btn-primary" style="text-decoration: none; display: flex; align-items: center; white-space: nowrap;">+ Add Product</a>
+          <!-- Page Header -->
+          <div class="page-header-container">
+            <div class="page-header-text">
+              <h2 class="page-title">Manage Products</h2>
+              <p class="page-subtitle">View, edit and manage all your products</p>
             </div>
           </div>
-          <div class="card">
+
+          <!-- Stat Cards -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon bg-pink text-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></div>
+              <div class="stat-info">
+                <span class="stat-label">Total Products</span>
+                <span class="stat-value" id="statTotalProducts">-</span>
+                <span class="stat-desc">All products</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon bg-green text-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+              <div class="stat-info">
+                <span class="stat-label">Active Products</span>
+                <span class="stat-value" id="statActiveProducts">-</span>
+                <span class="stat-desc">Published</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon bg-orange text-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></div>
+              <div class="stat-info">
+                <span class="stat-label">Low Stock</span>
+                <span class="stat-value" id="statLowStock">-</span>
+                <span class="stat-desc">Needs attention</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon bg-purple text-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l22 22M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path></svg></div>
+              <div class="stat-info">
+                <span class="stat-label">Out of Stock</span>
+                <span class="stat-value" id="statOutOfStock">-</span>
+                <span class="stat-desc">Currently unavailable</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon bg-blue text-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></div>
+              <div class="stat-info">
+                <span class="stat-label">Categories</span>
+                <span class="stat-value" id="statTotalCategories">-</span>
+                <span class="stat-desc">Total categories</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter Bar -->
+          <div class="filter-bar">
+            <div class="filter-search-group">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="productSearch" class="filter-input-search" placeholder="Search by name, code or category...">
+            </div>
+            <div class="filter-select-group">
+              <select class="filter-select" id="filterCategory">
+                <option value="">All Categories</option>
+              </select>
+              <select class="filter-select" id="filterStatus">
+                <option value="">All Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+                <option value="Out of Stock">Out of Stock</option>
+              </select>
+              <select class="filter-select" id="filterPrice">
+                <option value="">Price Range</option>
+              </select>
+              <button class="btn btn-outline filter-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                More Filters
+              </button>
+            </div>
+            <a href="admin-add-product.html" class="btn btn-primary add-product-btn">
+              + Add Product
+            </a>
+          </div>
+
+          <!-- Table Content -->
+          <div class="card table-card">
             <div class="table-responsive">
-              <table class="admin-table">
+              <table class="admin-table modern-table">
                 <thead>
                   <tr>
-                    <th>Image</th>
-                    <th>Product</th>
-                    <th>Code</th>
-                    <th>Price</th>
+                    <th>PRODUCT</th>
+                    <th>CATEGORY</th>
+                    <th>CODE / SKU</th>
+                    <th>PRICE</th>
+                    <th>ACTIONS</th>
                   </tr>
                 </thead>
                 <tbody id="productsTableBody">
-                  <tr><td colspan="4" class="text-center">Loading...</td></tr>
+                  <tr><td colspan="5" class="text-center" style="padding: 40px;">Loading products...</td></tr>
                 </tbody>
               </table>
+            </div>
+            <div class="pagination-footer">
+              <div class="pagination-info" id="paginationInfo">Showing products</div>
+              <div class="pagination-controls" id="paginationControls">
+                <button class="page-btn">&lt;</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">4</button>
+                <span class="page-dots">...</span>
+                <button class="page-btn" id="lastPageBtn">54</button>
+                <button class="page-btn">&gt;</button>
+              </div>
             </div>
           </div>
         </section>
 
+      </div>
+      
+      <!-- View Product Modal -->
+      <div id="viewProductModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 800px;">
+          <div class="modal-header">
+            <h3>View Product Details</h3>
+            <button class="close-modal" onclick="closeModal('viewProductModal')">&times;</button>
+          </div>
+          <div class="modal-body" id="viewProductBody">
+            <!-- Populated via JS -->
+            <div style="text-align: center; padding: 20px;">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Product Modal -->
+      <div id="editProductModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 900px;">
+          <div class="modal-header">
+            <h3>Edit Product</h3>
+            <button class="close-modal" onclick="closeModal('editProductModal')">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form id="editProductForm" class="form-grid">
+              <input type="hidden" id="editProductId">
+              <div class="form-column">
+                <div class="form-card">
+                  <h3>Basic Information</h3>
+                  <div class="input-group">
+                    <label>Product Name *</label>
+                    <input type="text" id="editProductName" required>
+                  </div>
+                  <div class="row-2">
+                    <div class="input-group">
+                      <label>Product Code *</label>
+                      <input type="text" id="editProductCode" required>
+                    </div>
+                    <div class="input-group">
+                      <label>Category *</label>
+                      <select id="editProductCategory" required>
+                        <option value="Custom Gifts">Custom Gifts</option>
+                        <option value="Corporate Gifts">Corporate Gifts</option>
+                        <option value="Awards & Trophies">Awards & Trophies</option>
+                        <option value="Signages">Signages</option>
+                        <option value="Accessories">Accessories</option>
+                        <option value="Photo Frames">Photo Frames</option>
+                        <option value="Custom Mugs">Custom Mugs</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="input-group">
+                    <label>Short Description</label>
+                    <textarea id="editProductShortDesc" rows="2"></textarea>
+                  </div>
+                </div>
+
+                <div class="form-card">
+                  <h3>Pricing & Inventory</h3>
+                  <div class="row-2">
+                    <div class="input-group">
+                      <label>Price (₹) *</label>
+                      <input type="number" id="editProductPrice" min="0" required>
+                    </div>
+                    <div class="input-group">
+                      <label>Stock Quantity</label>
+                      <input type="number" id="editProductStock" min="0">
+                    </div>
+                  </div>
+                  <div class="input-group">
+                    <label>Status</label>
+                    <select id="editProductStatus">
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                      <option value="Out of Stock">Out of Stock</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-column">
+                <div class="form-card">
+                  <h3>Product Image</h3>
+                  <div class="input-group">
+                    <label>Primary Image URL</label>
+                    <input type="text" id="editProductImage" placeholder="images/product.png">
+                  </div>
+                  <img id="editProductImagePreview" src="images/placeholder_machine.png" alt="Preview" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; margin-top: 10px;">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </main>
   </div>

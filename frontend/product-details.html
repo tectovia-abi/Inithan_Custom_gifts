@@ -98,6 +98,7 @@
       <a href="offers.html">Offers</a>
       <a href="reviews.html">Reviews</a>
       <a href="contact.html">Contact</a>
+      <a href="machines.html">Machines</a>
     </div>
     <div class="nav-actions">
       <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
@@ -133,7 +134,7 @@
       }
 
       try {
-        const response = await fetch(`http://localhost:5000/api/products/${productId}`);
+        const response = await fetch(`http://127.0.0.1:5000/api/products/${productId}`);
         const data = await response.json();
 
         if (data.success && data.product) {

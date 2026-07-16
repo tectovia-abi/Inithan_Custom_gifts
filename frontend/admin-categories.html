@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Categories | Admin | Inithat Custom Gifts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <style>
+    /* Modals - Force Center and Blue Backdrop */
+    .modal {
+      background-color: rgba(10, 30, 70, 0.6) !important; /* Blue tinted backdrop */
+      backdrop-filter: blur(4px);
+      width: 100vw !important;
+      height: 100vh !important;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      z-index: 99999 !important;
+      justify-content: center !important;
+      align-items: center !important;
+    }
+    .modal-content {
+      animation: popUpAnim 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      transform-origin: center;
+      margin: auto !important; /* Force center in flex/block */
+      position: relative !important;
+    }
+    @keyframes popUpAnim {
+      0% { transform: scale(0.7); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    /* Cleaned up old modal styles */
+    
+    /* Interactive Accordion Design */
+    .accordion-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .acc-item {
+      background: #fff;
+      border: 1px solid #eaeaea;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .acc-item.active {
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(196, 30, 58, 0.08);
+    }
+    .acc-header {
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      background: #fff;
+      transition: background 0.2s;
+    }
+    .acc-header:hover {
+      background: #fafafa;
+    }
+    .acc-title-group {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .acc-img {
+      width: 45px; height: 45px; border-radius: 8px; object-fit: cover; border: 1px solid #eee;
+    }
+    .acc-title {
+      font-size: 1.1rem; font-weight: 700; color: var(--dark);
+    }
+    .acc-count {
+      font-size: 0.85rem; color: #888; font-weight: 500; background: #f1f1f1; padding: 4px 10px; border-radius: 20px;
+    }
+    .acc-toggle-icon {
+      font-size: 1.2rem;
+      color: #999;
+      transition: transform 0.3s ease;
+    }
+    .acc-item.active .acc-toggle-icon {
+      transform: rotate(180deg);
+      color: var(--primary);
+    }
+    .acc-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+      background: #fafafa;
+    }
+    .acc-item.active .acc-body {
+      max-height: 1000px;
+      transition: max-height 0.6s ease-in-out;
+    }
+    .acc-content {
+      padding: 20px;
+      border-top: 1px solid #eaeaea;
+    }
+    .acc-actions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px dashed #ddd;
+    }
+    
+    .subcat-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .subcat-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #fff; padding: 8px 15px; border-radius: 25px;
+      font-size: 0.9rem; font-weight: 600; color: #444;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      transition: all 0.2s;
+    }
+    .subcat-pill:hover {
+      border-color: #ccc;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+    .subcat-pill .del-subcat {
+      cursor: pointer; color: #aaa; font-weight: bold; font-size: 1.1rem;
+    }
+    .subcat-pill .del-subcat:hover {
+      color: var(--primary);
+    }
+    
+    .btn-action {
+      padding: 8px 16px; font-size: 0.85rem; font-weight: 600;
+      border-radius: 8px; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-edit { background: #fff; border: 1px solid #ddd; color: var(--dark); }
+    .btn-edit:hover { background: #f1f1f1; }
+    .btn-delete { background: #fff5f6; border: 1px solid #fce8eb; color: var(--primary); }
+    .btn-delete:hover { background: var(--primary); color: #fff; }
+    .btn-add-sub { background: var(--dark); color: white; border: none; }
+    .btn-add-sub:hover { opacity: 0.9; }
+  </style>
+</head>
+
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-brand">
+        <img src="images/logo.png" alt="Logo" class="admin-logo" onerror="this.style.display='none'">
+        <div class="admin-brand-text">
+          <h2>Inithat Gifts</h2>
+          <span>Admin Panel</span>
+        </div>
+      </div>
+
+      <nav class="admin-nav">
+        <a href="admin-dashboard.html" class="admin-nav-link">
+          <span>📊</span> Dashboard
+        </a>
+        <a href="admin-products.html" class="admin-nav-link">
+          <span>🛍️</span> Products
+        </a>
+        <a href="admin-categories.html" class="admin-nav-link active">
+          <span>🗂️</span> Categories
+        </a>
+        <a href="admin-users.html" class="admin-nav-link">
+          <span>👥</span> Users
+        </a>
+        <a href="admin-inquiries.html" class="admin-nav-link">
+          <span>📝</span> Bulk Inquiries
+        </a>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <a href="index.html" class="admin-nav-link">
+          <span class="icon">🏠</span> Back to Store
+        </a>
+        <a href="#" class="admin-nav-link logout-link" onclick="logout()">
+          <span class="icon">🚪</span> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <header class="admin-header">
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <div class="header-title" id="headerTitle">Manage Categories</div>
+        <div class="header-user">
+          <span id="adminName">Admin User</span>
+          <div class="admin-avatar" id="adminAvatar">A</div>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <section class="admin-section active">
+          <div class="section-header" style="display: flex; flex-wrap: wrap; gap: 15px; max-width: 900px; margin: 0 auto 20px auto;">
+            <h2>Categories</h2>
+            <div style="display: flex; gap: 15px; flex-grow: 1; justify-content: flex-end;">
+              <button class="btn btn-primary" onclick="openCatModal()">+ Add Main Category</button>
+            </div>
+          </div>
+
+          <div class="accordion-container" id="categoriesContainer">
+            <p class="text-center" style="padding: 40px; color: #666;">Loading categories...</p>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Category Modal -->
+  <div class="modal" id="catModal">
+    <div class="modal-content" style="max-width: 450px;">
+      <div class="modal-header">
+        <h3 id="catModalTitle">Add Category</h3>
+        <button type="button" class="close-modal" onclick="closeModal('catModal')">&times;</button>
+      </div>
+      <form id="catForm" onsubmit="saveCategory(event)">
+        <input type="hidden" id="catId">
+        <div class="input-group">
+          <label>Category Name</label>
+          <input type="text" id="catName" required placeholder="e.g. 🎁 Photo Gifts">
+        </div>
+        <div style="margin-bottom: 20px;">
+          <label style="display:block; font-weight:600; margin-bottom:10px; font-size:0.9rem; color:var(--gray-600);">Image (Optional)</label>
+          <div class="modern-upload-box" id="catUploadBox">
+            <input type="file" id="catImageFile" accept="image/*">
+            <div class="modern-upload-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            </div>
+            <div class="modern-upload-label">Upload<br>Photo</div>
+            <img src="" class="modern-image-preview" id="catImagePreview">
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 25px;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('catModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="padding: 8px 15px;">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Subcategory Modal -->
+  <div class="modal" id="subcatModal">
+    <div class="modal-content" style="max-width: 450px;">
+      <div class="modal-header">
+        <h3>Add Subcategory</h3>
+        <button type="button" class="close-modal" onclick="closeModal('subcatModal')">&times;</button>
+      </div>
+      <form id="subcatForm" onsubmit="saveSubcategory(event)">
+        <input type="hidden" id="targetCatId">
+        <div class="input-group">
+          <label>Subcategory Name</label>
+          <input type="text" id="subcatName" required placeholder="e.g. Photo Frames">
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 25px;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('subcatModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="padding: 8px 15px;">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/auth.js?v=2"></script>
+  <script src="js/admin-categories.js?v=2"></script>
+</body>
+
+</html>

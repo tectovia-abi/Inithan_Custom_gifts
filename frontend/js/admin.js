@@ -238,19 +238,74 @@ function populateProducts(products) {
   const tbody = document.getElementById('productsTableBody');
   if (!tbody) return;
 
+  // Update Stats Cards
+  const statTotal = document.getElementById('statTotalProducts');
+  const statActive = document.getElementById('statActiveProducts');
+  const statLowStock = document.getElementById('statLowStock');
+  const statOutOfStock = document.getElementById('statOutOfStock');
+  const statCategories = document.getElementById('statTotalCategories');
+
+  if (statTotal) {
+    const total = products.length;
+    const active = products.filter(p => p.status === 'Active' || !p.status).length;
+    const outOfStock = products.filter(p => p.stockQuantity === 0).length;
+    const lowStock = products.filter(p => p.stockQuantity > 0 && p.stockQuantity <= 10).length;
+    const uniqueCategories = new Set(products.map(p => p.category || 'Custom Gifts')).size;
+
+    statTotal.textContent = total;
+    statActive.textContent = active;
+    statLowStock.textContent = lowStock;
+    statOutOfStock.textContent = outOfStock;
+    statCategories.textContent = uniqueCategories;
+    
+    // Update pagination info
+    const paginationInfo = document.getElementById('paginationInfo');
+    if (paginationInfo) {
+      paginationInfo.textContent = `Showing 1 to ${Math.min(6, total)} of ${total} products`;
+    }
+  }
+
   if (!products.length) {
-    tbody.innerHTML = '<tr><td colspan="4" class="text-center">No products found matching your search.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" class="text-center" style="padding: 40px;">No products found.</td></tr>';
     return;
   }
 
-  tbody.innerHTML = products.map(p => `
-    <tr>
-      <td><img src="${p.imageUrl}" alt="${p.name}" class="product-img-thumbnail" onerror="this.src='images/product-placeholder.png'"></td>
-      <td><strong>${p.name}</strong><br><span style="font-size:0.8rem; color:var(--gray-500)">${p.category || 'Custom Gifts'}</span></td>
-      <td>${p.code}</td>
-      <td>₹${p.price}</td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = products.map(p => {
+    // Determine category badge colors
+    let badgeClass = 'badge-red';
+    let catIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>';
+    if (p.category === 'Accessories') { badgeClass = 'badge-blue'; catIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>'; }
+    if (p.category === 'Photo Frames') { badgeClass = 'badge-purple'; catIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>'; }
+    if (p.category === 'Custom Mugs') { badgeClass = 'badge-orange'; catIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>'; }
+
+    return `
+      <tr>
+        <td>
+          <div class="product-cell">
+            <img src="${p.imageUrl}" alt="${p.name}" onerror="this.src='images/placeholder_machine.png'">
+            <div class="product-info">
+              <strong>${p.name}</strong>
+              <span>${p.shortDescription || p.category || 'Custom Product'}</span>
+            </div>
+          </div>
+        </td>
+        <td>
+          <span class="badge-pill ${badgeClass}">
+            ${catIcon} ${p.category || 'Custom Gifts'}
+          </span>
+        </td>
+        <td>${p.code || 'N/A'}</td>
+        <td>₹${p.price}</td>
+        <td>
+          <div class="action-cell">
+            <button class="action-btn view-btn" title="View" onclick="viewProduct('${p._id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+            <button class="action-btn edit-btn" title="Edit" onclick="editProduct('${p._id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
+            <button class="action-btn delete-btn" title="Delete" onclick="deleteProduct('${p._id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
 }
 
 function populateUsers(users) {
@@ -407,7 +462,7 @@ function closeInquiryModal() {
 async function updateInquiryStatus(id) {
   const status = document.getElementById('inquiryStatusSelect').value;
   try {
-    const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : 'http://localhost:5000';
+    const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : 'http://127.0.0.1:5000';
     const res = await fetch(`${apiBase}/api/bulk-inquiry/${id}/status`, {
       method: 'PUT',
       headers: {
@@ -426,5 +481,155 @@ async function updateInquiryStatus(id) {
   } catch (err) {
     console.error(err);
     alert('Server error updating state');
+  }
+}
+
+// ==========================================
+// Admin Products Actions (View, Edit, Delete)
+// ==========================================
+
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+}
+
+// Global cached products for quick viewing
+let cachedProducts = [];
+// Hook into fetchAdminData to save products (this function already exists above)
+const origPopulateProducts = populateProducts;
+populateProducts = function(products) {
+  cachedProducts = products;
+  origPopulateProducts(products);
+};
+
+function viewProduct(id) {
+  const product = cachedProducts.find(p => p._id === id);
+  if (!product) return alert('Product not found!');
+  
+  const body = document.getElementById('viewProductBody');
+  body.innerHTML = `
+    <div style="display: flex; gap: 20px; align-items: flex-start;">
+      <div style="flex: 1;">
+        <img src="${product.imageUrl}" alt="${product.name}" style="width: 100%; border-radius: 8px; border: 1px solid #eee;">
+      </div>
+      <div style="flex: 2;">
+        <h2 style="margin-top:0; margin-bottom:5px;">${product.name}</h2>
+        <div style="color: #6b7280; margin-bottom: 15px;">Code: ${product.code} | Category: ${product.category}</div>
+        <p><strong>Description:</strong><br/>${product.shortDescription || 'N/A'}</p>
+        <p><strong>Price:</strong> ₹${product.price}</p>
+        <p><strong>Stock:</strong> ${product.stockQuantity !== undefined ? product.stockQuantity : 'N/A'}</p>
+        <p><strong>Status:</strong> ${product.status || 'Active'}</p>
+      </div>
+    </div>
+  `;
+  openModal('viewProductModal');
+}
+
+function editProduct(id) {
+  const product = cachedProducts.find(p => p._id === id);
+  if (!product) return alert('Product not found!');
+  
+  document.getElementById('editProductId').value = product._id;
+  document.getElementById('editProductName').value = product.name;
+  document.getElementById('editProductCode').value = product.code;
+  document.getElementById('editProductCategory').value = product.category || 'Custom Gifts';
+  document.getElementById('editProductShortDesc').value = product.shortDescription || '';
+  document.getElementById('editProductPrice').value = product.price;
+  document.getElementById('editProductStock').value = product.stockQuantity !== undefined ? product.stockQuantity : 50;
+  document.getElementById('editProductStatus').value = product.status || 'Active';
+  document.getElementById('editProductImage').value = product.imageUrl || '';
+  document.getElementById('editProductImagePreview').src = product.imageUrl || 'images/placeholder_machine.png';
+  
+  openModal('editProductModal');
+}
+
+// Handle Edit Form Submission
+document.addEventListener('DOMContentLoaded', () => {
+  const editForm = document.getElementById('editProductForm');
+  if (editForm) {
+    // Handle image preview update
+    document.getElementById('editProductImage').addEventListener('input', (e) => {
+      document.getElementById('editProductImagePreview').src = e.target.value || 'images/placeholder_machine.png';
+    });
+    
+    editForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      
+      const id = document.getElementById('editProductId').value;
+      const data = {
+        name: document.getElementById('editProductName').value,
+        code: document.getElementById('editProductCode').value,
+        category: document.getElementById('editProductCategory').value,
+        shortDescription: document.getElementById('editProductShortDesc').value,
+        price: Number(document.getElementById('editProductPrice').value),
+        stockQuantity: Number(document.getElementById('editProductStock').value),
+        status: document.getElementById('editProductStatus').value,
+        imageUrl: document.getElementById('editProductImage').value,
+      };
+      
+      try {
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+        const res = await fetch(\`/api/products/\${id}\`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': \`Bearer \${token}\`
+          },
+          body: JSON.stringify(data)
+        });
+        
+        if (res.ok) {
+          closeModal('editProductModal');
+          fetchAdminData(); // Refresh table
+        } else {
+          const err = await res.json();
+          alert(err.message || 'Failed to update product');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Server error while saving product');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save Changes';
+      }
+    });
+  }
+});
+
+async function deleteProduct(id) {
+  if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) return;
+  
+  try {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    const res = await fetch(\`/api/products/\${id}\`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': \`Bearer \${token}\`
+      }
+    });
+    
+    if (res.ok) {
+      fetchAdminData(); // Refresh table
+    } else {
+      const err = await res.json();
+      alert(err.message || 'Failed to delete product');
+    }
+  } catch (error) {
+    console.error(error);
+    alert('Server error while deleting product');
   }
 }

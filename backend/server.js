@@ -7,6 +7,7 @@ const compression = require('compression');
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const bulkInquiryRoutes = require('./routes/bulkInquiryRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(express.static(frontendPath));
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/bulk-inquiry', bulkInquiryRoutes);
+app.use('/api/categories', categoryRoutes);
 
 // ── Health check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {

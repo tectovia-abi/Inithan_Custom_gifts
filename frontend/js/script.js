@@ -222,7 +222,7 @@ function initScrollAnimations() {
 async function loadDatabaseProducts() {
   const grid = document.getElementById('productsGrid');
   if (!grid) return;
-  const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : 'http://localhost:5000';
+  const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : 'http://127.0.0.1:5000';
 
   const renderProducts = (productList) => {
     grid.innerHTML = productList.map((p) => {
