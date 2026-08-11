@@ -134,7 +134,7 @@
       }
 
       try {
-        const response = await fetch(`http://127.0.0.1:5000/api/products/${productId}`);
+        const response = await fetch(`${API_BASE}/api/products/${productId}`);
         const data = await response.json();
 
         if (data.success && data.product) {
@@ -255,7 +255,7 @@
       }
 
       try {
-        const response = await fetch(`http://127.0.0.1:5000/api/products/${productId}`);
+        const response = await fetch(`${API_BASE}/api/products/${productId}`);
         const data = await response.json();
 
         if (data.success && data.product) {

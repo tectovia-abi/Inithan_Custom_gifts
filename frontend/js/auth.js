@@ -4,7 +4,9 @@
  * and user-specific shopping cart management.
  */
 
-const API_BASE = 'http://127.0.0.1:5000';
+const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port !== '8081'
+  ? 'http://127.0.0.1:8081'
+  : window.location.origin;
 
 // ── Cookie Helper Functions (Professional Session Fallback) ──────────────────
 function setCookie(name, value, days = 7) {

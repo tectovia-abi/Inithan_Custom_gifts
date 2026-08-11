@@ -242,7 +242,7 @@ async function sendBulkInquiryEmails(inquiry) {
                     <p style="color:#aaa;font-size:12px;margin:0 0 8px;">
                       📧 <a href="mailto:inithancustomgifts@gmail.com" style="color:#D4AF37;text-decoration:none;">inithancustomgifts@gmail.com</a>
                       &nbsp;&nbsp;|&nbsp;&nbsp;
-                      🌐 <a href="http://localhost:5000" style="color:#D4AF37;text-decoration:none;">inithat.com</a>
+                      🌐 <a href="http://localhost:8081" style="color:#D4AF37;text-decoration:none;">inithat.com</a>
                     </p>
                     <p style="color:#666;font-size:11px;margin:0;">&copy; 2026 Inithat Custom Gifts. All rights reserved.</p>
                     <p style="color:#555;font-size:11px;margin:5px 0 0;">This is an official automated communication. Please do not reply to this automated notice.</p>

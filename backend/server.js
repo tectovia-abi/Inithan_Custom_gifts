@@ -47,7 +47,7 @@ app.get('*', (req, res) => {
 const connectDB = require('./config/db');
 
 // ── Connect to MongoDB Atlas then start server ───────────────────────────────
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8081;
 
 if (process.env.NODE_ENV !== 'test') {
   connectDB().then(() => {
