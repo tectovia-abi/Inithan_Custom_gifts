@@ -427,7 +427,8 @@
   <!-- Standard Navigation Header -->
   <nav class="navbar" id="navbar">
     <a href="index.html" class="nav-brand">
-      <img src="images/logo.png" alt="Inithat Custom Gifts Logo" onerror="this.style.background='var(--pink-primary)'; this.alt='I';">
+      <img src="images/logo.png" alt="Inithat Custom Gifts Logo"
+        onerror="this.style.background='var(--pink-primary)'; this.alt='I';">
       <div class="nav-brand-text">
         <span class="nav-brand-name">Inithat Custom Gifts</span>
         <span class="nav-brand-tagline">Made with Love</span>
@@ -450,7 +451,8 @@
       <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
       <!-- Shown when logged IN -->
       <span id="navUserGreet" style="display:none; color:var(--gold); font-weight:600; font-size:0.85rem;"></span>
-      <button onclick="logout()" class="nav-auth-btn login-btn" id="navLogoutBtn" style="display:none; cursor:pointer; border:none;">LOGOUT</button>
+      <button onclick="logout()" class="nav-auth-btn login-btn" id="navLogoutBtn"
+        style="display:none; cursor:pointer; border:none;">LOGOUT</button>
       <div class="nav-cart" id="navCart" style="cursor: pointer;" onclick="window.location.href='cart.html'">
         <span class="cart-icon">🛒</span>
         <span>CART</span>
@@ -495,7 +497,8 @@
       Loading customization form...
     </div>
 
-    <div id="custError" style="display: none; text-align: center; padding: 80px 20px; color: var(--pink-primary); font-size: 1.2rem;">
+    <div id="custError"
+      style="display: none; text-align: center; padding: 80px 20px; color: var(--pink-primary); font-size: 1.2rem;">
       Product not found or unavailable.
     </div>
 
@@ -504,7 +507,8 @@
 
       <!-- Left Column: Product Summary Card -->
       <div class="product-summary-card">
-        <img id="p_img" src="images/gift-box.png" alt="Product" class="product-img-box" onerror="this.src='images/gift-box.png'">
+        <img id="p_img" src="images/gift-box.png" alt="Product" class="product-img-box"
+          onerror="this.src='images/gift-box.png'">
         <h2 id="p_name" class="product-title">Custom Gift Item</h2>
         <div id="p_code" class="product-sku">SKU: GIFT-001</div>
         <div id="p_price" class="product-price">₹0</div>
@@ -536,7 +540,8 @@
           </div>
           <div class="form-group" style="margin-bottom: 0;">
             <label id="textPromptLabel">Custom Name / Message to Print *</label>
-            <textarea id="custTextInput" rows="3" placeholder="Enter name(s), date, quote, or message to print..." required></textarea>
+            <textarea id="custTextInput" rows="3" placeholder="Enter name(s), date, quote, or message to print..."
+              required></textarea>
           </div>
         </div>
 
@@ -548,7 +553,8 @@
             <div class="photo-limit-badge" id="photoLimitBadge">Max: 1 Photo</div>
           </div>
           <p style="font-size: 0.85rem; color: #64748b; margin-top: 0; margin-bottom: 15px;">
-            Please upload clear, high-resolution photos for the best print quality. Click any photo to preview full size.
+            Please upload clear, high-resolution photos for the best print quality. Click any photo to preview full
+            size.
           </p>
 
           <div class="photo-upload-grid" id="photoGrid">
@@ -564,7 +570,8 @@
           </div>
           <div class="form-group" style="margin-bottom: 0;">
             <label>Specific placement instructions or design preferences</label>
-            <textarea id="custNotesInput" rows="2" placeholder="e.g. Please put text at bottom right in cursive font..."></textarea>
+            <textarea id="custNotesInput" rows="2"
+              placeholder="e.g. Please put text at bottom right in cursive font..."></textarea>
           </div>
         </div>
 
@@ -585,10 +592,15 @@
   </div>
 
   <!-- Global Photo View Lightbox Modal -->
-  <div id="globalPhotoModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; justify-content:center; align-items:center; backdrop-filter:blur(4px);" onclick="closePhotoModal()">
+  <div id="globalPhotoModal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; justify-content:center; align-items:center; backdrop-filter:blur(4px);"
+    onclick="closePhotoModal()">
     <div style="position:relative; max-width:90%; max-height:90%; text-align:center;" onclick="event.stopPropagation()">
-      <span onclick="closePhotoModal()" style="position:absolute; top:-40px; right:0; color:white; font-size:1.8rem; cursor:pointer; font-weight:bold; background:rgba(0,0,0,0.5); padding:2px 10px; border-radius:4px;">✕ Close</span>
-      <img id="globalPhotoModalImg" src="" style="max-width:100%; max-height:80vh; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5); border:3px solid white;">
+      <span onclick="closePhotoModal()"
+        style="position:absolute; top:-40px; right:0; color:white; font-size:1.8rem; cursor:pointer; font-weight:bold; background:rgba(0,0,0,0.5); padding:2px 10px; border-radius:4px;">✕
+        Close</span>
+      <img id="globalPhotoModalImg" src=""
+        style="max-width:100%; max-height:80vh; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5); border:3px solid white;">
     </div>
   </div>
 
@@ -629,6 +641,9 @@
       document.getElementById('custLoading').style.display = 'none';
       document.getElementById('custMainContent').style.display = 'grid';
 
+      // Dynamically update the page title for SEO and user experience
+      document.title = `Customize ${p.name} | Inithan Custom Gifts`;
+
       document.getElementById('p_name').innerText = p.name;
       document.getElementById('p_code').innerText = `SKU: ${p.code || 'GIFT-001'}`;
       document.getElementById('p_price').innerText = `₹${Number(p.price).toLocaleString('en-IN')}`;
@@ -646,7 +661,7 @@
       // Photo Upload Section
       const photoSec = document.getElementById('photoCardSection');
       const photoGrid = document.getElementById('photoGrid');
-      
+
       if (p.allowCustomImage === false) {
         photoSec.style.display = 'none';
       } else {
@@ -679,7 +694,7 @@
       const file = input.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function(evt) {
+        reader.onload = function (evt) {
           const base64 = evt.target.result;
           uploadedPhotos[index] = base64;
 

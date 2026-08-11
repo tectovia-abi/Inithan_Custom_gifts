@@ -1,5 +1,18 @@
 const Product = require('../models/Product');
 
+const slugify = (text) => {
+  if (!text) return '';
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')           // Replace spaces with -
+    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+    .replace(/^-+/, '')             // Trim - from start
+    .replace(/-+$/, '');            // Trim - from end
+};
+
 const createProduct = async (req, res) => {
   try {
     const {
@@ -51,7 +64,7 @@ const createProduct = async (req, res) => {
       shippingType: shippingType ? shippingType.trim() : 'Standard Delivery',
       metaTitle: metaTitle ? metaTitle.trim() : '',
       metaDescription: metaDescription ? metaDescription.trim() : '',
-      urlSlug: urlSlug ? urlSlug.trim() : '',
+      urlSlug: urlSlug && urlSlug.trim() ? urlSlug.trim() : slugify(name),
       visibility: visibility ? visibility.trim() : 'Visible (Public)',
       isFeatured: !!isFeatured,
       isBestSeller: !!isBestSeller,
@@ -270,7 +283,7 @@ const updateProduct = async (req, res) => {
 
     if (metaTitle !== undefined) product.metaTitle = metaTitle.trim();
     if (metaDescription !== undefined) product.metaDescription = metaDescription.trim();
-    if (urlSlug !== undefined) product.urlSlug = urlSlug.trim();
+    if (urlSlug !== undefined) product.urlSlug = urlSlug.trim() || slugify(name || product.name);
     if (visibility !== undefined) product.visibility = visibility.trim();
 
     if (isFeatured !== undefined) product.isFeatured = !!isFeatured;

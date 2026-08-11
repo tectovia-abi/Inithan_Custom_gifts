@@ -46,44 +46,44 @@ async function sendBulkInquiryEmails(inquiry) {
   const data = inquiry.toObject ? inquiry.toObject() : inquiry;
 
   // Escape all user-supplied values
-  const referenceId     = escHtml(data.referenceId || 'N/A');
-  const name            = escHtml(data.name);
-  const email           = escHtml(data.email);
-  const phone           = escHtml(data.phone);
-  const whatsapp        = escHtml(data.whatsapp);
-  const company         = escHtml(data.company);
-  const city            = escHtml(data.city);
-  const state           = escHtml(data.state);
-  const quantity        = escHtml(data.quantity);
-  const budgetRange     = escHtml(data.budgetRange);
-  const customization   = escHtml(data.customization);
-  const occasion        = escHtml(data.occasion);
-  const packaging       = escHtml(data.packaging);
-  const productDesc     = escHtml(data.productDescription);
-  const designNotes     = escHtml(data.designNotes);
-  const notes           = escHtml(data.notes);
-  const products        = (data.products || []).map(escHtml).join(', ');
-  const deliveryDate    = data.deliveryDate
+  const referenceId = escHtml(data.referenceId || 'N/A');
+  const name = escHtml(data.name);
+  const email = escHtml(data.email);
+  const phone = escHtml(data.phone);
+  const whatsapp = escHtml(data.whatsapp);
+  const company = escHtml(data.company);
+  const city = escHtml(data.city);
+  const state = escHtml(data.state);
+  const quantity = escHtml(data.quantity);
+  const budgetRange = escHtml(data.budgetRange);
+  const customization = escHtml(data.customization);
+  const occasion = escHtml(data.occasion);
+  const packaging = escHtml(data.packaging);
+  const productDesc = escHtml(data.productDescription);
+  const designNotes = escHtml(data.designNotes);
+  const notes = escHtml(data.notes);
+  const products = (data.products || []).map(escHtml).join(', ');
+  const deliveryDate = data.deliveryDate
     ? new Date(data.deliveryDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })
     : 'Flexible / Standard';
 
   const sharedHeaders = {
-    'X-Mailer':   'Inithan Creations Mailer',
+    'X-Mailer': 'Inithan Creations Mailer',
     'X-Priority': '3',
-    'Date':        new Date().toUTCString()
+    'Date': new Date().toUTCString()
   };
 
   const adminMailOptions = {
     from: {
-      name:    'Inithan Creations – Orders',
-      address:  process.env.EMAIL_USER
+      name: 'Inithan Creations – Orders',
+      address: process.env.EMAIL_USER
     },
-    to:       'inithanorders@gmail.com',
-    replyTo:   data.email,
-    subject:  `📦 New Bulk Order – ${name} (${company || 'N/A'})`,
+    to: 'inithanorders@gmail.com',
+    replyTo: data.email,
+    subject: `📦 New Bulk Order – ${name} (${company || 'N/A'})`,
     messageId: `<${timestamp}-admin@inithancreations.com>`,
-    date:      new Date(),
-    headers:   sharedHeaders,
+    date: new Date(),
+    headers: sharedHeaders,
     text: [
       'NEW BULK ORDER INQUIRY',
       '========================',
@@ -150,15 +150,15 @@ async function sendBulkInquiryEmails(inquiry) {
 
   const customerMailOptions = {
     from: {
-      name:    'Inithat Custom Gifts',
-      address:  process.env.EMAIL_USER
+      name: 'Inithat Custom Gifts',
+      address: process.env.EMAIL_USER
     },
-    to:       data.email,
-    replyTo:  'inithancustomgifts@gmail.com',
-    subject:  `✅ Bulk Order Inquiry Received – Inithat Custom Gifts`,
+    to: data.email,
+    replyTo: 'inithancustomgifts@gmail.com',
+    subject: `✅ Bulk Order Inquiry Received – Inithat Custom Gifts`,
     messageId: `<${timestamp}-customer@inithancreations.com>`,
-    date:      new Date(),
-    headers:   sharedHeaders,
+    date: new Date(),
+    headers: sharedHeaders,
     text: [
       `Hi ${data.name},`,
       '',
@@ -302,8 +302,8 @@ const createInquiry = async (req, res) => {
 const getInquiriesByUser = async (req, res) => {
   try {
     const userEmail = req.params.email;
-    const inquiries = await BulkInquiry.find({ 
-      $or: [{ userEmail: userEmail }, { email: userEmail }] 
+    const inquiries = await BulkInquiry.find({
+      $or: [{ userEmail: userEmail }, { email: userEmail }]
     }).lean().sort({ submittedAt: -1 });
     res.status(200).json({ success: true, count: inquiries.length, inquiries });
   } catch (error) {

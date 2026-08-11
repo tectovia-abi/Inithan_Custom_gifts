@@ -103,16 +103,16 @@ function saveUserCart(cartItems) {
 function updateNavbar() {
   const user = getAuthUser();
 
-  const loginBtn  = document.getElementById('navLoginBtn');
+  const loginBtn = document.getElementById('navLoginBtn');
   const signupBtn = document.getElementById('navSignupBtn');
   const logoutBtn = document.getElementById('navLogoutBtn');
   const userGreet = document.getElementById('navUserGreet');
-  const cartEl    = document.getElementById('navCart');
+  const cartEl = document.getElementById('navCart');
   const cartCount = document.getElementById('cartCount');
 
   if (user) {
     // LOGGED IN: Hide Login & Signup. Show Avatar & Cart.
-    if (loginBtn)  loginBtn.style.display  = 'none';
+    if (loginBtn) loginBtn.style.display = 'none';
     if (signupBtn) signupBtn.style.display = 'none';
     if (logoutBtn) logoutBtn.style.display = 'none'; // Hide standalone logout button since it's in the dropdown now
     if (cartEl) {
@@ -126,10 +126,10 @@ function updateNavbar() {
       userGreet.style.alignItems = 'center';
       userGreet.style.position = 'relative'; // Important for absolute positioning of dropdown
       userGreet.style.overflow = 'visible';
-      
+
       const firstName = user.fullName ? user.fullName.split(' ')[0] : 'User';
       const initial = firstName.charAt(0).toUpperCase();
-      
+
       userGreet.innerHTML = `
         <div class="user-avatar-container" style="position: relative; display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="toggleAvatarDropdown(event)">
           <div class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: var(--gold, #D4A853); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border: 2px solid white;">
@@ -164,10 +164,10 @@ function updateNavbar() {
     }
   } else {
     // LOGGED OUT: Show Login & Signup. Hide Logout, Greeting, AND CART!
-    if (loginBtn)  loginBtn.style.display  = 'inline-flex';
+    if (loginBtn) loginBtn.style.display = 'inline-flex';
     if (signupBtn) signupBtn.style.display = 'inline-flex';
     if (logoutBtn) logoutBtn.style.display = 'none';
-    if (cartEl)    cartEl.style.display    = 'none'; // HIDE CART WHEN NOT LOGGED IN!
+    if (cartEl) cartEl.style.display = 'none'; // HIDE CART WHEN NOT LOGGED IN!
     if (userGreet) userGreet.style.display = 'none';
   }
 }
@@ -181,7 +181,7 @@ function toggleAvatarDropdown(event) {
   }
 }
 
-document.addEventListener('click', function(event) {
+document.addEventListener('click', function (event) {
   const dropdown = document.getElementById('avatarDropdown');
   if (dropdown && dropdown.style.display === 'block') {
     if (!event.target.closest('.user-avatar-container')) {
