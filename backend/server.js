@@ -36,11 +36,18 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// ── Fallback: serve index.html for non-API routes ────────────────────────────
+// ── Fallback: serve specific HTML if it exists, else index.html ──────────────
+const fs = require('fs');
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api')) {
     return res.status(404).json({ success: false, message: 'API route not found' });
   }
+  // If the path ends with .html, try to serve that file directly
+  const requestedFile = path.join(frontendPath, req.path);
+  if (req.path !== '/' && req.path.endsWith('.html') && fs.existsSync(requestedFile)) {
+    return res.sendFile(requestedFile);
+  }
+  // Otherwise send index.html (SPA fallback)
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
