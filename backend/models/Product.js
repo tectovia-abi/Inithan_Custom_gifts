@@ -40,6 +40,12 @@ const productSchema = new mongoose.Schema({
   urlSlug: { type: String, default: '', trim: true },
   visibility: { type: String, default: 'Visible (Public)', trim: true },
 
+  // Customization Options
+  allowCustomText: { type: Boolean, default: true },
+  customTextLabel: { type: String, default: 'Custom Name / Message to Print', trim: true },
+  allowCustomImage: { type: Boolean, default: true },
+  maxCustomImages: { type: Number, default: 1, min: 1, max: 10 },
+
   // Feature Flags
   isFeatured: { type: Boolean, default: false },
   isBestSeller: { type: Boolean, default: false },

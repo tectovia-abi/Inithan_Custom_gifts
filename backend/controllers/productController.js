@@ -35,7 +35,7 @@ const createProduct = async (req, res) => {
       brand: brand ? brand.trim() : 'Inithat Custom Gifts',
       productType: productType ? productType.trim() : 'Physical',
       keywords: keywords ? keywords.trim() : '',
-      status: status ? status.trim() : 'Active',
+      status: (status && ['Active', 'Inactive', 'Draft', 'Out of Stock'].includes(status.trim())) ? status.trim() : 'Active',
       price: Number(price),
       discountPrice: discountPrice ? Number(discountPrice) : 0,
       costPrice: costPrice ? Number(costPrice) : 0,
@@ -58,6 +58,10 @@ const createProduct = async (req, res) => {
       isNewArrival: isNewArrival !== undefined ? !!isNewArrival : true,
       allowReviews: allowReviews !== undefined ? !!allowReviews : true,
       showOnHomepage: showOnHomepage !== undefined ? !!showOnHomepage : true,
+      allowCustomText: allowCustomText !== undefined ? !!allowCustomText : true,
+      customTextLabel: customTextLabel ? customTextLabel.trim() : 'Custom Name / Message to Print',
+      allowCustomImage: allowCustomImage !== undefined ? !!allowCustomImage : true,
+      maxCustomImages: maxCustomImages !== undefined ? Number(maxCustomImages) : 1,
       size: size ? size.trim() : '',
       color: color ? color.trim() : '',
       shape: shape ? shape.trim() : '',
@@ -243,7 +247,10 @@ const updateProduct = async (req, res) => {
     if (brand !== undefined) product.brand = brand.trim();
     if (productType !== undefined) product.productType = productType.trim();
     if (keywords !== undefined) product.keywords = keywords.trim();
-    if (status !== undefined) product.status = status.trim();
+    const validStatuses = ['Active', 'Inactive', 'Draft', 'Out of Stock'];
+    if (status !== undefined && status !== null && validStatuses.includes(status.trim())) {
+      product.status = status.trim();
+    }
     
     if (price !== undefined) product.price = Number(price);
     if (discountPrice !== undefined) product.discountPrice = Number(discountPrice);
@@ -271,6 +278,10 @@ const updateProduct = async (req, res) => {
     if (isNewArrival !== undefined) product.isNewArrival = !!isNewArrival;
     if (allowReviews !== undefined) product.allowReviews = !!allowReviews;
     if (showOnHomepage !== undefined) product.showOnHomepage = !!showOnHomepage;
+    if (allowCustomText !== undefined) product.allowCustomText = !!allowCustomText;
+    if (customTextLabel !== undefined) product.customTextLabel = customTextLabel.trim();
+    if (allowCustomImage !== undefined) product.allowCustomImage = !!allowCustomImage;
+    if (maxCustomImages !== undefined) product.maxCustomImages = Number(maxCustomImages);
 
     if (size !== undefined) product.size = size.trim();
     if (color !== undefined) product.color = color.trim();

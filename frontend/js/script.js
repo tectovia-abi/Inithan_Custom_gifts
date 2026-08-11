@@ -253,7 +253,7 @@ async function loadDatabaseProducts() {
             </div>
             <div style="display:flex; gap:10px; margin-top:15px;">
               <button onclick="addToCart('${safeName}', ${p.price}, '${imgSrc}', '${p._id}', '${p.category || 'Custom Gift'}')" style="flex:1; padding:8px; border:1px solid var(--primary, #C41E3A); background:transparent; color:var(--primary, #C41E3A); border-radius:6px; cursor:pointer; font-weight:600; font-size:0.9rem; transition:all 0.2s;">Add to Cart</button>
-              <button onclick="buyNow('${p._id}', '${safeName}', ${p.price}, '${imgSrc}', '${p.category || 'Custom Gift'}')" style="flex:1; padding:8px; background:var(--primary, #C41E3A); color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600; font-size:0.9rem; transition:all 0.2s;">Buy Now</button>
+              <button onclick="buyNow('${p._id}')" style="flex:1; padding:8px; background:var(--primary, #C41E3A); color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600; font-size:0.9rem; transition:all 0.2s;">Buy Now</button>
             </div>
           </div>
         </div>
@@ -400,6 +400,18 @@ function addToCart(name, price, imageUrl, productId, category) {
     qty = parseInt(qtyEl.value) || 1;
   }
 
+  // Collect customer customization data if on PDP
+  let customText = '';
+  const customTextEl = document.getElementById('customerCustomText');
+  if (customTextEl) {
+    customText = customTextEl.value.trim();
+  }
+
+  let customImages = [];
+  if (typeof customerPhotosData !== 'undefined' && Array.isArray(customerPhotosData)) {
+    customImages = customerPhotosData.filter(Boolean);
+  }
+
   const items = typeof getUserCart === 'function' ? getUserCart() : [];
   
   // Check if item already exists in cart to prevent duplicates
@@ -409,6 +421,8 @@ function addToCart(name, price, imageUrl, productId, category) {
     if (imageUrl) items[existingItemIndex].imageUrl = imageUrl;
     if (productId) items[existingItemIndex].productId = productId;
     if (category) items[existingItemIndex].category = category;
+    if (customText) items[existingItemIndex].customText = customText;
+    if (customImages.length) items[existingItemIndex].customImages = customImages;
   } else {
     items.push({ 
       name, 
@@ -417,7 +431,9 @@ function addToCart(name, price, imageUrl, productId, category) {
       addedAt: new Date().toISOString(),
       imageUrl: imageUrl || 'images/gift-box.png',
       productId: productId || null,
-      category: category || 'Custom Gift'
+      category: category || 'Custom Gift',
+      customText: customText || '',
+      customImages: customImages || []
     });
   }
 
@@ -458,6 +474,18 @@ function buyNow(name, price, imageUrl, productId, category) {
     qty = parseInt(qtyEl.value) || 1;
   }
 
+  // Collect customer customization data if on PDP
+  let customText = '';
+  const customTextEl = document.getElementById('customerCustomText');
+  if (customTextEl) {
+    customText = customTextEl.value.trim();
+  }
+
+  let customImages = [];
+  if (typeof customerPhotosData !== 'undefined' && Array.isArray(customerPhotosData)) {
+    customImages = customerPhotosData.filter(Boolean);
+  }
+
   // For 'Buy Now', replace cart with only this item at the selected quantity
   // This ensures checkout always shows exactly what the user intends to buy
   const buyNowCart = [{ 
@@ -467,7 +495,9 @@ function buyNow(name, price, imageUrl, productId, category) {
     addedAt: new Date().toISOString(),
     imageUrl: imageUrl || 'images/gift-box.png',
     productId: productId || null,
-    category: category || 'Custom Gift'
+    category: category || 'Custom Gift',
+    customText: customText || '',
+    customImages: customImages || []
   }];
 
   if (typeof saveUserCart === 'function') {

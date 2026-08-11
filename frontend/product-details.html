@@ -219,6 +219,127 @@
             <div id="pincodeSection" style="background: var(--gray-100); border: 1px solid var(--gray-200); border-radius: 8px; padding: 15px; margin: 10px 0;">
               <div style="font-size: 0.95rem; font-weight: 600; color: var(--dark); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
                 <span style="font-size: 1.1rem;">📍</span> Check Delivery Time
+      <a href="machines.html">Machines</a>
+    </div>
+    <div class="nav-actions">
+      <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
+      <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
+      <span id="navUserGreet" style="display:none; color:var(--gold); font-weight:600; font-size:0.85rem;"></span>
+      <button onclick="logout()" class="nav-auth-btn login-btn" id="navLogoutBtn" style="display:none; cursor:pointer; border:none;">LOGOUT</button>
+      <div class="nav-cart" id="navCart">
+        <span class="cart-icon">🛒</span>
+        <span>CART</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+    </div>
+  </nav>
+
+  <div id="pdpLoading">Loading product details...</div>
+  <div id="pdpError" style="display: none;">Product not found or an error occurred.</div>
+
+  <div class="pdp-container" id="pdpContainer" style="display: none;">
+    <!-- Rendered via JS -->
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('id');
+
+      if (!productId) {
+        document.getElementById('pdpLoading').style.display = 'none';
+        document.getElementById('pdpError').style.display = 'block';
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://127.0.0.1:5000/api/products/${productId}`);
+        const data = await response.json();
+
+        if (data.success && data.product) {
+          renderProduct(data.product);
+        } else {
+          throw new Error('Product not found');
+        }
+      } catch (err) {
+        console.error('Error fetching product:', err);
+        document.getElementById('pdpLoading').style.display = 'none';
+        document.getElementById('pdpError').style.display = 'block';
+      }
+    });
+
+    function renderProduct(p) {
+      document.getElementById('pdpLoading').style.display = 'none';
+      const container = document.getElementById('pdpContainer');
+      container.style.display = 'grid';
+
+      const safeName = p.name.replace(/'/g, "\\'");
+      const discountPercent = p.costPrice > p.price ? Math.round(((p.costPrice - p.price) / p.costPrice) * 100) : 0;
+      
+      let thumbnailsHtml = `<div class="thumbnail active" onclick="changeImage('${p.imageUrl}')"><img src="${p.imageUrl}" onerror="this.src='images/gift-box.png'"></div>`;
+      if (p.galleryImages && p.galleryImages.length > 0) {
+        p.galleryImages.forEach(img => {
+          thumbnailsHtml += `<div class="thumbnail" onclick="changeImage('${img}')"><img src="${img}" onerror="this.src='images/gift-box.png'"></div>`;
+        });
+      }
+
+      let featuresHtml = '';
+      if (p.detailedDescription) {
+        const lines = p.detailedDescription.split('\n').filter(l => l.trim() !== '');
+        featuresHtml = lines.map(l => `<li>${l}</li>`).join('');
+      } else {
+        featuresHtml = `<li>Premium quality custom gift</li><li>Ideal for personal or corporate use</li><li>Crafted with precision</li>`;
+      }
+
+      container.innerHTML = `
+        <!-- Left: Images -->
+        <div class="pdp-image-col">
+          <div class="main-image-container">
+            <img id="mainProductImg" src="${p.imageUrl}" alt="${p.name}" onerror="this.src='images/gift-box.png'">
+          </div>
+          <div class="thumbnail-gallery">
+            ${thumbnailsHtml}
+          </div>
+        </div>
+
+        <!-- Center: Details -->
+        <div class="pdp-info-col">
+          <div class="product-brand">${p.brand || 'Inithat Custom Gifts'}</div>
+          <h1 class="product-title">${p.name}</h1>
+          <a href="#" style="color: var(--primary); text-decoration: none; font-size: 0.95rem; font-weight: 500; margin-top: 5px;">Visit the ${p.brand || 'Inithat'} Store</a>
+          
+          <div class="product-rating">
+            <span class="stars">★★★★½</span>
+            <span style="color: var(--gray-500);">(1,403 ratings)</span>
+          </div>
+          <div class="divider"></div>
+
+          <div class="price-block">
+            ${discountPercent > 0 ? `<span class="discount-badge">-${discountPercent}%</span>` : ''}
+            <span class="current-price">₹${Number(p.price).toLocaleString('en-IN')}</span>
+          </div>
+          ${p.costPrice > p.price ? `<div class="mrp">M.R.P.: ₹${Number(p.costPrice).toLocaleString('en-IN')}</div>` : ''}
+          <div class="tax-inclusive">Inclusive of all taxes</div>
+
+          <div class="product-description" style="margin-top: 25px;">
+            <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: var(--dark);">About this item</h3>
+            <ul class="product-features">
+              ${featuresHtml}
+            </ul>
+            <p style="margin-top: 15px; color: var(--gray-600); line-height: 1.6;">${p.shortDescription || 'Experience the perfect blend of personalization and quality with our uniquely crafted gifts. Designed to leave a lasting impression on your loved ones or corporate clients.'}</p>
+          </div>
+        </div>
+
+        <!-- Right: Buy Box -->
+        <div class="pdp-buy-col">
+          <div class="buy-box">
+            <div class="buy-price">₹${Number(p.price).toLocaleString('en-IN')}</div>
+            
+            <div id="pincodeSection" style="background: var(--gray-100); border: 1px solid var(--gray-200); border-radius: 8px; padding: 15px; margin: 10px 0;">
+              <div style="font-size: 0.95rem; font-weight: 600; color: var(--dark); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 1.1rem;">📍</span> Check Delivery Time
               </div>
               <div style="display: flex; gap: 8px; width: 100%;">
                 <input type="text" id="pincodeInput" placeholder="Enter Pincode" maxlength="6" style="flex: 1; min-width: 0; box-sizing: border-box; padding: 10px; border: 1px solid var(--gray-300); border-radius: 6px; font-family: var(--font-body); font-size: 0.95rem; outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--gray-300)'">
@@ -229,30 +350,43 @@
               </div>
             </div>
 
-            <div class="stock-status">
-              ${p.stockQuantity > 0 ? 'In stock' : '<span style="color:var(--primary); font-weight:700;">Currently unavailable</span>'}
+            <div class="stock-status" style="margin-top: 15px;">
+              ${p.stockQuantity > 0 ? '<span style="color:var(--green); font-weight:700;">In Stock</span>' : '<span style="color:var(--primary); font-weight:700;">Currently unavailable</span>'}
             </div>
 
-            <div class="quantity-selector" style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
-              <span style="font-size: 1rem; color: var(--dark); font-weight: 500;">Quantity:</span>
-              <div style="display: flex; align-items: center; border: 1px solid var(--gray-300); border-radius: 8px; background: var(--white); overflow: hidden;">
-                <button onclick="updateQty(-1)" style="padding: 10px 15px; border: none; background: transparent; cursor: pointer; font-size: 1.2rem; font-weight: 600; color: var(--primary); transition: background 0.2s;" onmouseover="this.style.background='var(--gray-100)'" onmouseout="this.style.background='transparent'">−</button>
-                <input type="number" id="pdpQty" value="1" min="1" max="10" style="width: 50px; text-align: center; border: none; border-left: 1px solid var(--gray-300); border-right: 1px solid var(--gray-300); font-size: 1.1rem; font-family: var(--font-body); font-weight: 600; color: var(--dark); outline: none;" readonly>
-                <button onclick="updateQty(1)" style="padding: 10px 15px; border: none; background: transparent; cursor: pointer; font-size: 1.2rem; font-weight: 600; color: var(--primary); transition: background 0.2s;" onmouseover="this.style.background='var(--gray-100)'" onmouseout="this.style.background='transparent'">+</button>
-              </div>
+            <div style="margin: 20px 0; padding: 15px; background: #fff5f6; border-radius: 10px; border: 1px dashed var(--primary); text-align: center;">
+              <span style="font-size: 0.9rem; font-weight: 600; color: var(--primary); display: block; margin-bottom: 6px;">✨ Custom Gift Personalization Required</span>
+              <span style="font-size: 0.8rem; color: var(--gray-600);">Upload your photo(s) and custom text on the form before checkout.</span>
             </div>
 
-            <button class="action-btn add-cart-btn" onclick="addToCart('${safeName}', ${p.price}, '${p.imageUrl}', '${p._id}', '${p.category || 'Custom Gift'}')">Add to Cart</button>
-            <button class="action-btn buy-now-btn" onclick="buyNow('${safeName}', ${p.price}, '${p.imageUrl}', '${p._id}', '${p.category || 'Custom Gift'}')">Buy Now</button>
+            <button class="action-btn buy-now-btn" onclick="window.location.href='customize-product.html?id=${p._id}&action=buynow'" style="background: var(--primary); color: white; margin-bottom: 10px; cursor: pointer;">🎨 Personalize & Buy Now</button>
+            <button class="action-btn add-cart-btn" onclick="window.location.href='customize-product.html?id=${p._id}&action=addcart'" style="border: 2px solid var(--primary); color: var(--primary); background: transparent; cursor: pointer;">Customize & Add to Cart</button>
 
             <div class="secure-transaction">
               🔒 Secure transaction
             </div>
-
-
           </div>
         </div>
       `;
+    }
+
+    let customerPhotosData = [];
+
+    function previewCustomerPhoto(input, index) {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          const base64 = evt.target.result;
+          customerPhotosData[index] = base64;
+          const imgPrev = document.getElementById(`custPhotoPrev_${index}`);
+          if (imgPrev) {
+            imgPrev.src = base64;
+            imgPrev.style.display = 'block';
+          }
+        };
+        reader.readAsDataURL(file);
+      }
     }
 
     function changeImage(src) {

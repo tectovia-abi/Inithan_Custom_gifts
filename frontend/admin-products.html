@@ -256,16 +256,42 @@
                     </select>
                   </div>
                 </div>
+
+                <div class="form-card">
+                  <h3>🎨 Customer Customization Options</h3>
+                  <div class="row-2" style="align-items: center;">
+                    <label class="toggle-label">
+                      <input type="checkbox" id="editAllowCustomText"> <span>Allow Custom Text</span>
+                    </label>
+                    <div class="input-group">
+                      <label style="font-size: 0.8rem;">Text Prompt Label</label>
+                      <input type="text" id="editCustomTextLabel" placeholder="e.g. Custom Name">
+                    </div>
+                  </div>
+                  <div class="row-2" style="align-items: center; margin-top: 10px;">
+                    <label class="toggle-label">
+                      <input type="checkbox" id="editAllowCustomImage"> <span>Allow Photo Uploads</span>
+                    </label>
+                    <div class="input-group">
+                      <label style="font-size: 0.8rem;">Max Photos Allowed</label>
+                      <input type="number" id="editMaxCustomImages" min="1" max="10" placeholder="1">
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div class="form-column">
                 <div class="form-card">
                   <h3>Product Image</h3>
+                  <div class="input-group" style="margin-bottom: 12px;">
+                    <label style="font-weight:600; font-size:0.85rem; color:var(--gray-600);">Upload Image File</label>
+                    <input type="file" id="editProductImageFile" accept="image/*" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; background:#fff; font-size:0.85rem; cursor:pointer;">
+                  </div>
                   <div class="input-group">
-                    <label>Primary Image URL</label>
+                    <label style="font-size:0.8rem; color:var(--gray-500);">Or Image URL / Base64</label>
                     <input type="text" id="editProductImage" placeholder="images/product.png">
                   </div>
-                  <img id="editProductImagePreview" src="images/placeholder_machine.png" alt="Preview" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; margin-top: 10px;">
+                  <img id="editProductImagePreview" src="images/placeholder_machine.png" alt="Preview" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; margin-top: 10px;">
                 </div>
                 
                 <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;">Save Changes</button>

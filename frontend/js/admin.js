@@ -52,10 +52,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 3. Data Fetching
   fetchDashboardData(token);
+  loadCategoriesForDropdowns();
 });
 
 let allProducts = [];
 let allInquiries = [];
+let allCategories = [];
+
+async function loadCategoriesForDropdowns() {
+  const categorySelects = [
+    document.getElementById('p_category'),
+    document.getElementById('editProductCategory'),
+    document.getElementById('filterCategory')
+  ].filter(Boolean);
+
+  if (categorySelects.length === 0) return;
+
+  try {
+    const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : 'http://127.0.0.1:5000';
+    const res = await fetch(`${apiBase}/api/categories`);
+    const data = await res.json();
+    
+    if (data.success && data.categories) {
+      allCategories = data.categories;
+      
+      // Populate #p_category (Add Product page)
+      const pCatSelect = document.getElementById('p_category');
+      const pSubCatSelect = document.getElementById('p_subCategory');
+      
+      if (pCatSelect) {
+        pCatSelect.innerHTML = '<option value="">-- Select Category --</option>' + 
+          allCategories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+        
+        pCatSelect.addEventListener('change', () => {
+          const selectedName = pCatSelect.value;
+          const foundCat = allCategories.find(c => c.name === selectedName);
+          if (pSubCatSelect) {
+            if (foundCat && foundCat.subcategories && foundCat.subcategories.length > 0) {
+              pSubCatSelect.innerHTML = '<option value="">-- Select Sub Category --</option>' + 
+                foundCat.subcategories.map(sub => `<option value="${sub}">${sub}</option>`).join('');
+            } else {
+              pSubCatSelect.innerHTML = '<option value="">No subcategories available</option>';
+            }
+          }
+        });
+      }
+
+      // Populate #filterCategory (Products list filter)
+      const filterCatSelect = document.getElementById('filterCategory');
+      if (filterCatSelect) {
+        filterCatSelect.innerHTML = '<option value="">All Categories</option>' + 
+          allCategories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+      }
+
+      // Populate #editProductCategory (Edit Product modal)
+      const editCatSelect = document.getElementById('editProductCategory');
+      const editSubCatSelect = document.getElementById('editProductSubCategory');
+      if (editCatSelect) {
+        editCatSelect.innerHTML = '<option value="">-- Select Category --</option>' + 
+          allCategories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+        
+        editCatSelect.addEventListener('change', () => {
+          const selectedName = editCatSelect.value;
+          const foundCat = allCategories.find(c => c.name === selectedName);
+          if (editSubCatSelect) {
+            if (foundCat && foundCat.subcategories && foundCat.subcategories.length > 0) {
+              editSubCatSelect.innerHTML = '<option value="">-- Select Sub Category --</option>' + 
+                foundCat.subcategories.map(sub => `<option value="${sub}">${sub}</option>`).join('');
+            } else {
+              editSubCatSelect.innerHTML = '<option value="">No subcategories available</option>';
+            }
+          }
+        });
+      }
+    }
+  } catch (err) {
+    console.error('Error fetching categories for dropdowns:', err);
+  }
+}
 
 async function fetchDashboardData(token) {
   try {
@@ -171,7 +245,7 @@ async function fetchDashboardData(token) {
           category: document.getElementById('p_category').value,
           subCategory: document.getElementById('p_subCategory').value,
           productType: document.getElementById('p_productType').value,
-          status: document.getElementById('p_status').value,
+          status: (document.getElementById('p_status') && document.getElementById('p_status').value) ? document.getElementById('p_status').value : 'Active',
           imageUrl: primaryImageBase64,
           galleryImages: galleryImagesBase64,
           shortDescription: document.getElementById('p_shortDescription').value,
@@ -193,12 +267,15 @@ async function fetchDashboardData(token) {
           metaTitle: document.getElementById('p_metaTitle').value,
           metaDescription: document.getElementById('p_metaDescription').value,
           urlSlug: document.getElementById('p_urlSlug').value,
-          visibility: document.getElementById('p_visibility').value,
           isFeatured: document.getElementById('p_isFeatured').checked,
           isBestSeller: document.getElementById('p_isBestSeller').checked,
           isNewArrival: document.getElementById('p_isNewArrival').checked,
           showOnHomepage: document.getElementById('p_showOnHomepage').checked,
-          allowReviews: document.getElementById('p_allowReviews').checked
+          allowReviews: document.getElementById('p_allowReviews').checked,
+          allowCustomText: document.getElementById('p_allowCustomText') ? document.getElementById('p_allowCustomText').checked : true,
+          customTextLabel: document.getElementById('p_customTextLabel') ? document.getElementById('p_customTextLabel').value : 'Custom Name / Message to Print',
+          allowCustomImage: document.getElementById('p_allowCustomImage') ? document.getElementById('p_allowCustomImage').checked : true,
+          maxCustomImages: document.getElementById('p_maxCustomImages') ? Number(document.getElementById('p_maxCustomImages').value) || 1 : 1
         };
 
         try {
@@ -549,8 +626,15 @@ function editProduct(id) {
   document.getElementById('editProductStock').value = product.stockQuantity !== undefined ? product.stockQuantity : 50;
   document.getElementById('editProductStatus').value = product.status || 'Active';
   document.getElementById('editProductImage').value = product.imageUrl || '';
+  const fileInput = document.getElementById('editProductImageFile');
+  if (fileInput) fileInput.value = '';
   document.getElementById('editProductImagePreview').src = product.imageUrl || 'images/placeholder_machine.png';
   
+  if (document.getElementById('editAllowCustomText')) document.getElementById('editAllowCustomText').checked = product.allowCustomText !== undefined ? !!product.allowCustomText : true;
+  if (document.getElementById('editCustomTextLabel')) document.getElementById('editCustomTextLabel').value = product.customTextLabel || 'Custom Name / Message to Print';
+  if (document.getElementById('editAllowCustomImage')) document.getElementById('editAllowCustomImage').checked = product.allowCustomImage !== undefined ? !!product.allowCustomImage : true;
+  if (document.getElementById('editMaxCustomImages')) document.getElementById('editMaxCustomImages').value = product.maxCustomImages || 1;
+
   openModal('editProductModal');
 }
 
@@ -558,10 +642,30 @@ function editProduct(id) {
 document.addEventListener('DOMContentLoaded', () => {
   const editForm = document.getElementById('editProductForm');
   if (editForm) {
-    // Handle image preview update
-    document.getElementById('editProductImage').addEventListener('input', (e) => {
-      document.getElementById('editProductImagePreview').src = e.target.value || 'images/placeholder_machine.png';
-    });
+    // Handle image URL preview update
+    const editImgInput = document.getElementById('editProductImage');
+    if (editImgInput) {
+      editImgInput.addEventListener('input', (e) => {
+        document.getElementById('editProductImagePreview').src = e.target.value || 'images/placeholder_machine.png';
+      });
+    }
+
+    // Handle image file upload
+    const editImgFile = document.getElementById('editProductImageFile');
+    if (editImgFile) {
+      editImgFile.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            const base64 = evt.target.result;
+            document.getElementById('editProductImage').value = base64;
+            document.getElementById('editProductImagePreview').src = base64;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
     
     editForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -577,24 +681,30 @@ document.addEventListener('DOMContentLoaded', () => {
         shortDescription: document.getElementById('editProductShortDesc').value,
         price: Number(document.getElementById('editProductPrice').value),
         stockQuantity: Number(document.getElementById('editProductStock').value),
-        status: document.getElementById('editProductStatus').value,
+        status: (document.getElementById('editProductStatus') && document.getElementById('editProductStatus').value) ? document.getElementById('editProductStatus').value : 'Active',
         imageUrl: document.getElementById('editProductImage').value,
+        allowCustomText: document.getElementById('editAllowCustomText') ? document.getElementById('editAllowCustomText').checked : true,
+        customTextLabel: document.getElementById('editCustomTextLabel') ? document.getElementById('editCustomTextLabel').value : 'Custom Name / Message to Print',
+        allowCustomImage: document.getElementById('editAllowCustomImage') ? document.getElementById('editAllowCustomImage').checked : true,
+        maxCustomImages: document.getElementById('editMaxCustomImages') ? Number(document.getElementById('editMaxCustomImages').value) || 1 : 1
       };
       
       try {
-        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-        const res = await fetch(\`/api/products/\${id}\`, {
+        const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
+        const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : 'http://127.0.0.1:5000';
+        const res = await fetch(`${apiBase}/api/products/${id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': \`Bearer \${token}\`
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify(data)
         });
         
         if (res.ok) {
           closeModal('editProductModal');
-          fetchAdminData(); // Refresh table
+          alert('Product updated successfully!');
+          window.location.reload();
         } else {
           const err = await res.json();
           alert(err.message || 'Failed to update product');
@@ -614,16 +724,18 @@ async function deleteProduct(id) {
   if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) return;
   
   try {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-    const res = await fetch(\`/api/products/\${id}\`, {
+    const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
+    const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : 'http://127.0.0.1:5000';
+    const res = await fetch(`${apiBase}/api/products/${id}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': \`Bearer \${token}\`
+        'Authorization': `Bearer ${token}`
       }
     });
     
     if (res.ok) {
-      fetchAdminData(); // Refresh table
+      alert('Product deleted successfully!');
+      window.location.reload();
     } else {
       const err = await res.json();
       alert(err.message || 'Failed to delete product');
