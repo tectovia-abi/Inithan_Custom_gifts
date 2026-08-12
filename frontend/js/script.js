@@ -275,8 +275,12 @@ async function loadDatabaseProducts() {
     const res = await fetch(`${apiBase}/api/products`);
     const data = await res.json();
 
-    if (data.success && data.products && data.products.length > 0) {
-      renderProducts(data.products);
+    if (data.success && data.products) {
+      if (data.products.length > 0) {
+        renderProducts(data.products);
+      } else {
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--gray-600); font-size: 1.1rem; font-weight: 500;">No products found. Add products in the admin panel to see them here!</div>';
+      }
     } else {
       renderProducts(fallbackList);
     }
