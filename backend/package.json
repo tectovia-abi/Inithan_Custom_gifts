@@ -17,6 +17,8 @@
   "author": "Inithat Custom Gifts",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1108.0",
+    "@aws-sdk/lib-storage": "^3.1108.0",
     "bcryptjs": "^2.4.3",
     "compression": "^1.8.1",
     "cors": "^2.8.5",
@@ -24,6 +26,7 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.1",
+    "multer": "^2.2.0",
     "nodemailer": "^9.0.3",
     "nodemon": "^3.1.14"
   },

@@ -182,52 +182,92 @@ async function fetchDashboardData(token) {
     // Setup Add Product Form
     const addProductForm = document.getElementById('addProductForm');
     if (addProductForm) {
-      
-      let primaryImageBase64 = "";
-      let galleryImagesBase64 = [];
 
-      // Primary Image Upload Handling
+      let primaryImageS3Url = '';
+      let galleryImagesS3Urls = [];
+
+      // Helper: upload a file to S3 via the backend /api/upload route
+      async function uploadFileToS3(file, endpoint) {
+        const formData = new FormData();
+        formData.append(endpoint === '/api/upload/single' ? 'image' : 'images', file);
+        const res = await fetch(`${API_BASE}${endpoint}`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` },
+          body: formData
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Upload failed');
+        return data.url || data.urls;
+      }
+
+      // Primary Image Upload
       const pImageFile = document.getElementById('p_imageFile');
       const primaryImagePreview = document.getElementById('primaryImagePreview');
 
       if (pImageFile) {
-        pImageFile.addEventListener('change', (e) => {
+        pImageFile.addEventListener('change', async (e) => {
           const file = e.target.files[0];
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-              primaryImageBase64 = evt.target.result;
-              primaryImagePreview.src = primaryImageBase64;
-              primaryImagePreview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
+          if (!file) return;
+
+          // Show local preview instantly
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            primaryImagePreview.src = evt.target.result;
+            primaryImagePreview.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+
+          // Upload to S3 in background
+          pImageFile.disabled = true;
+          primaryImagePreview.style.opacity = '0.5';
+          try {
+            primaryImageS3Url = await uploadFileToS3(file, '/api/upload/single');
+            console.log('✅ Primary image uploaded to S3:', primaryImageS3Url);
+            primaryImagePreview.style.opacity = '1';
+          } catch (err) {
+            alert('Image upload failed: ' + err.message);
+          } finally {
+            pImageFile.disabled = false;
           }
         });
       }
 
-      // Gallery Images Upload Handling
+      // Gallery Images Upload
       const pGalleryFiles = document.getElementById('p_galleryFiles');
       const galleryPreviewContainer = document.getElementById('galleryPreviewContainer');
       const galleryUploadBox = document.getElementById('galleryUploadBox');
 
       if (pGalleryFiles) {
-        pGalleryFiles.addEventListener('change', (e) => {
+        pGalleryFiles.addEventListener('change', async (e) => {
           const files = Array.from(e.target.files);
-          
-          files.forEach(file => {
+
+          for (const file of files) {
+            // Show local preview instantly
             const reader = new FileReader();
-            reader.onload = function(evt) {
-              const base64 = evt.target.result;
-              galleryImagesBase64.push(base64);
-              
-              // Create image element and insert it before the upload box
+            reader.onload = (evt) => {
               const img = document.createElement('img');
-              img.src = base64;
+              img.src = evt.target.result;
               img.className = 'gallery-item';
+              img.style.opacity = '0.5';
+              img.dataset.uploading = 'true';
               galleryPreviewContainer.insertBefore(img, galleryUploadBox);
+
+              // Upload to S3
+              uploadFileToS3(file, '/api/upload/single')
+                .then(url => {
+                  galleryImagesS3Urls.push(url);
+                  img.src = url;
+                  img.style.opacity = '1';
+                  delete img.dataset.uploading;
+                  console.log('✅ Gallery image uploaded to S3:', url);
+                })
+                .catch(err => {
+                  img.style.border = '2px solid red';
+                  console.error('Gallery upload failed:', err);
+                });
             };
             reader.readAsDataURL(file);
-          });
+          }
         });
       }
 
@@ -246,8 +286,8 @@ async function fetchDashboardData(token) {
           subCategory: document.getElementById('p_subCategory').value,
           productType: document.getElementById('p_productType').value,
           status: (document.getElementById('p_status') && document.getElementById('p_status').value) ? document.getElementById('p_status').value : 'Active',
-          imageUrl: primaryImageBase64,
-          galleryImages: galleryImagesBase64,
+          imageUrl: primaryImageS3Url,
+          galleryImages: galleryImagesS3Urls,
           shortDescription: document.getElementById('p_shortDescription').value,
           detailedDescription: document.getElementById('p_detailedDescription').value,
           price: document.getElementById('p_price').value,

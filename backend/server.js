@@ -9,6 +9,7 @@ const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const bulkInquiryRoutes = require('./routes/bulkInquiryRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 const Product = require('./models/Product');
 
 const app = express();
@@ -16,8 +17,8 @@ const app = express();
 // ── Middleware ──────────────────────────────────────────────────────────────
 app.use(compression());
 app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json({ limit: '5mb' }));  // Reduced: images go via S3, not base64
+app.use(express.urlencoded({ limit: '5mb', extended: true }));
 
 // ── Serve frontend static files from ../frontend ────────────────────────────
 const frontendPath = path.join(__dirname, '..', 'frontend');
@@ -28,6 +29,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/bulk-inquiry', bulkInquiryRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // ── Health check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
