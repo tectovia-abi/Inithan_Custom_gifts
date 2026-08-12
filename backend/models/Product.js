@@ -17,7 +17,7 @@ const productSchema = new mongoose.Schema({
   costPrice: { type: Number, default: 0, min: 0 },
 
   // Images & Description
-  imageUrl: { type: String, default: 'images/gift-box.png', trim: true },
+  imageUrl: { type: String, default: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png', trim: true },
   galleryImages: [{ type: String, trim: true }],
   shortDescription: { type: String, default: '', trim: true },
   detailedDescription: { type: String, default: '', trim: true },

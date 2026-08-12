@@ -8,77 +8,77 @@ dotenv.config();
 const predefinedCategories = [
   {
     name: "🎁 Photo Gifts",
-    image: "images/gift-box.png",
+    image: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png",
     subcategories: ["Photo Frames", "Acrylic Photo Frames", "LED Photo Frames", "Wooden Photo Frames", "Collage Frames", "Photo Tiles", "Photo Blocks"]
   },
   {
     name: "☕ Drinkware",
-    image: "images/custom-mug.png",
+    image: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-mug.png",
     subcategories: ["Magic Mug", "White Mug", "Color Handle Mug", "Couple Mug", "Steel Tumbler", "Water Bottle Print", "Sipper Bottle"]
   },
   {
     name: "🪵 Wooden Gifts",
-    image: "images/gift-collection.png",
+    image: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-collection.png",
     subcategories: ["Wooden Engraving", "Wooden Name Board", "Wooden Clock", "Wooden Key Holder", "Wooden Photo Plaque", "Wooden Trophy"]
   },
   {
     name: "✨ Acrylic Gifts",
-    image: "images/hero-gift-showcase.png",
+    image: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/hero-gift-showcase.png",
     subcategories: ["Acrylic Name Plate", "Acrylic Lamp", "Acrylic Photo Stand", "Acrylic Keychain", "Acrylic Calendar", "Acrylic Sign Board"]
   },
   {
     name: "🔑 Keychains & Accessories",
-    image: "images/custom-keychain.png",
+    image: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-keychain.png",
     subcategories: ["Photo Keychain", "Metal Keychain", "Acrylic Keychain", "Leather Keychain", "Couple Keychain"]
   },
   {
     name: "🖼️ Home Decor",
-    image: "images/custom-frame.png",
+    image: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-frame.png",
     subcategories: ["Wall Clock", "LED Name Board", "Canvas Print", "Wall Art", "Door Name Plate"]
   },
   {
     name: "👶 Baby & Kids Gifts",
-    image: "images/gift-box.png",
+    image: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png",
     subcategories: ["Baby Milestone Frame", "Birth Details Frame", "Kids Name Board", "School Photo Gifts"]
   },
   {
     name: "💍 Couple & Wedding Gifts",
-    image: "images/gift-collection.png",
+    image: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-collection.png",
     subcategories: ["Couple Frame", "Wedding Frame", "Anniversary Gifts", "Proposal Gifts", "Wedding Keepsakes"]
   },
   {
     name: "❤️ Hand Casting",
-    image: "images/hero-gift-showcase.png",
+    image: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/hero-gift-showcase.png",
     subcategories: ["Couple Hand Casting", "Family Hand Casting", "Baby Hand Casting"]
   },
   {
     name: "🏆 Awards & Corporate",
-    image: "images/hero.jpeg",
+    image: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/hero.jpeg",
     subcategories: ["Corporate Gifts", "Employee Awards", "Mementos", "Trophies", "Certificates", "Business Name Boards"]
   },
   {
     name: "🎂 Occasion Gifts",
-    image: "images/hero-giftbox.png",
+    image: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/hero-giftbox.png",
     subcategories: ["Birthday Gifts", "Anniversary Gifts", "Wedding Gifts", "Baby Shower Gifts", "Housewarming Gifts", "Valentine's Gifts", "Mother's Day Gifts", "Father's Day Gifts", "Friendship Day Gifts", "Teacher's Day Gifts", "Farewell Gifts", "Retirement Gifts"]
   },
   {
     name: "🎉 Party & Event Items",
-    image: "images/gift-box.png",
+    image: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png",
     subcategories: ["Return Gifts", "Welcome Boards", "Cake Topper", "Event Sign Boards", "Photo Booth Props"]
   },
   {
     name: "🛍️ Personalized Accessories",
-    image: "images/custom-pillow.png",
+    image: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-pillow.png",
     subcategories: ["Mobile Cover Print", "Mouse Pad", "Cushion Print", "T-Shirt Print", "Cap Print", "Puzzle Photo", "Fridge Magnet"]
   },
   {
     name: "🖨️ Printing Services",
-    image: "images/custom-tshirt.png",
+    image: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-tshirt.png",
     subcategories: ["UV Printing", "Fiber Laser Engraving", "CO₂ Laser Cutting & Engraving", "Sublimation Printing", "Custom Branding"]
   },
   {
     name: "📦 Bulk Orders",
-    image: "images/hero.jpeg",
+    image: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/hero.jpeg",
     subcategories: ["Corporate Orders", "School Orders", "College Orders", "Wedding Bulk Orders", "Promotional Gifts"]
   }
 ];

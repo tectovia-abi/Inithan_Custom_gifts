@@ -19,9 +19,11 @@ const BUCKET = process.env.AWS_S3_BUCKET;
  * @param {string} folder - S3 "folder" prefix, e.g. "products" or "gallery"
  * @returns {string} The public S3 URL of the uploaded file.
  */
-async function uploadToS3(buffer, originalName, folder = 'products') {
+async function uploadToS3(buffer, originalName, folder = 'products', keepName = false) {
   const ext = path.extname(originalName) || '.jpg';
-  const uniqueKey = `${folder}/${Date.now()}-${Math.random().toString(36).substring(2, 8)}${ext}`;
+  const uniqueKey = keepName 
+    ? `${folder}/${originalName}`
+    : `${folder}/${Date.now()}-${Math.random().toString(36).substring(2, 8)}${ext}`;
 
   const command = new PutObjectCommand({
     Bucket: BUCKET,

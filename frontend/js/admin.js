@@ -186,20 +186,6 @@ async function fetchDashboardData(token) {
       let primaryImageS3Url = '';
       let galleryImagesS3Urls = [];
 
-      // Helper: upload a file to S3 via the backend /api/upload route
-      async function uploadFileToS3(file, endpoint) {
-        const formData = new FormData();
-        formData.append(endpoint === '/api/upload/single' ? 'image' : 'images', file);
-        const res = await fetch(`${API_BASE}${endpoint}`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}` },
-          body: formData
-        });
-        const data = await res.json();
-        if (!data.success) throw new Error(data.message || 'Upload failed');
-        return data.url || data.urls;
-      }
-
       // Primary Image Upload
       const pImageFile = document.getElementById('p_imageFile');
       const primaryImagePreview = document.getElementById('primaryImagePreview');
@@ -692,17 +678,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle image file upload
     const editImgFile = document.getElementById('editProductImageFile');
+    const editProductImagePreview = document.getElementById('editProductImagePreview');
     if (editImgFile) {
-      editImgFile.addEventListener('change', (e) => {
+      editImgFile.addEventListener('change', async (e) => {
         const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = function(evt) {
-            const base64 = evt.target.result;
-            document.getElementById('editProductImage').value = base64;
-            document.getElementById('editProductImagePreview').src = base64;
-          };
-          reader.readAsDataURL(file);
+        if (!file) return;
+
+        // Show local preview instantly
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          editProductImagePreview.src = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+
+        // Upload to S3 in background
+        editImgFile.disabled = true;
+        editProductImagePreview.style.opacity = '0.5';
+        try {
+          const s3Url = await uploadFileToS3(file, '/api/upload/single');
+          document.getElementById('editProductImage').value = s3Url;
+          editProductImagePreview.src = s3Url;
+          editProductImagePreview.style.opacity = '1';
+          console.log('✅ Edit product image uploaded to S3:', s3Url);
+        } catch (err) {
+          alert('Image upload failed: ' + err.message);
+          editProductImagePreview.style.opacity = '1';
+        } finally {
+          editImgFile.disabled = false;
         }
       });
     }
@@ -784,4 +786,20 @@ async function deleteProduct(id) {
     console.error(error);
     alert('Server error while deleting product');
   }
+}
+
+// Global S3 file upload helper
+async function uploadFileToS3(file, endpoint = '/api/upload/single') {
+  const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
+  const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : 'http://127.0.0.1:8081';
+  const formData = new FormData();
+  formData.append(endpoint === '/api/upload/single' ? 'image' : 'images', file);
+  const res = await fetch(`${apiBase}${endpoint}`, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${token}` },
+    body: formData
+  });
+  const data = await res.json();
+  if (!data.success) throw new Error(data.message || 'Upload failed');
+  return data.url || data.urls;
 }

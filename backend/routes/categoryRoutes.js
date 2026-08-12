@@ -29,7 +29,7 @@ router.post('/', protect, admin, async (req, res) => {
 
     const category = await Category.create({
       name,
-      image: image || 'images/gift-box.png',
+      image: image || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png',
       subcategories: subcategories || []
     });
 

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart | Inithat Custom Gifts</title>
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="icon" type="image/png" href="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png">
   <style>
     body {
       background: var(--gray-100);
@@ -280,7 +280,7 @@
   <!-- Navigation -->
   <nav class="navbar" id="navbar">
     <a href="index.html" class="nav-brand">
-      <img src="images/logo.png" alt="Inithat Custom Gifts Logo"
+      <img src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Inithat Custom Gifts Logo"
         onerror="this.style.background='var(--primary)'; this.alt='I';">
       <div class="nav-brand-text">
         <span class="nav-brand-name">Inithat Custom Gifts</span>
@@ -396,7 +396,7 @@
         subtotal += itemTotal;
         totalItems += qty;
 
-        const img = item.imageUrl || 'images/gift-box.png';
+        const img = item.imageUrl || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png';
         const link = item.productId ? `product-details.html?id=${item.productId}` : '#';
 
         html += `
@@ -404,7 +404,7 @@
             <div class="cart-item-info">
               <a href="${link}" style="display: block; text-decoration: none;">
                 <div class="cart-item-img" style="overflow: hidden; padding: 0;">
-                  <img src="${img}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='images/gift-box.png'">
+                  <img src="${img}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
                 </div>
               </a>
               <div class="cart-item-details">

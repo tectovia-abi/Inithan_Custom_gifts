@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Product Details | Inithat Custom Gifts</title>
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="icon" type="image/png" href="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png">
   <style>
     body {
       background: #ffffff;
@@ -349,7 +349,7 @@
   <!-- Navigation -->
   <nav class="navbar" id="navbar">
     <a href="index.html" class="nav-brand">
-      <img src="images/logo.png" alt="Inithat Custom Gifts Logo"
+      <img src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Inithat Custom Gifts Logo"
         onerror="this.style.background='var(--primary)'; this.alt='I';">
       <div class="nav-brand-text">
         <span class="nav-brand-name">Inithat Custom Gifts</span>
@@ -448,10 +448,10 @@
       const safeName = p.name.replace(/'/g, "\\'");
       const discountPercent = p.costPrice > p.price ? Math.round(((p.costPrice - p.price) / p.costPrice) * 100) : 0;
 
-      let thumbnailsHtml = `<div class="thumbnail active" onclick="changeImage('${p.imageUrl}')"><img src="${p.imageUrl}" onerror="this.src='images/gift-box.png'"></div>`;
+      let thumbnailsHtml = `<div class="thumbnail active" onclick="changeImage('${p.imageUrl}')"><img src="${p.imageUrl}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'"></div>`;
       if (p.galleryImages && p.galleryImages.length > 0) {
         p.galleryImages.forEach(img => {
-          thumbnailsHtml += `<div class="thumbnail" onclick="changeImage('${img}')"><img src="${img}" onerror="this.src='images/gift-box.png'"></div>`;
+          thumbnailsHtml += `<div class="thumbnail" onclick="changeImage('${img}')"><img src="${img}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'"></div>`;
         });
       }
 
@@ -467,7 +467,7 @@
         <!-- Left: Images -->
         <div class="pdp-image-col">
           <div class="main-image-container">
-            <img id="mainProductImg" src="${p.imageUrl}" alt="${p.name}" onerror="this.src='images/gift-box.png'">
+            <img id="mainProductImg" src="${p.imageUrl}" alt="${p.name}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
           </div>
           <div class="thumbnail-gallery">
             ${thumbnailsHtml}

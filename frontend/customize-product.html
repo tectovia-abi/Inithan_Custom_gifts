@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Customize Your Gift | Inithat Custom Gifts</title>
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="icon" type="image/png" href="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png">
   <style>
     :root {
       --cust-bg: #f8fafc;
@@ -427,7 +427,7 @@
   <!-- Standard Navigation Header -->
   <nav class="navbar" id="navbar">
     <a href="index.html" class="nav-brand">
-      <img src="images/logo.png" alt="Inithat Custom Gifts Logo"
+      <img src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Inithat Custom Gifts Logo"
         onerror="this.style.background='var(--pink-primary)'; this.alt='I';">
       <div class="nav-brand-text">
         <span class="nav-brand-name">Inithat Custom Gifts</span>
@@ -507,8 +507,8 @@
 
       <!-- Left Column: Product Summary Card -->
       <div class="product-summary-card">
-        <img id="p_img" src="images/gift-box.png" alt="Product" class="product-img-box"
-          onerror="this.src='images/gift-box.png'">
+        <img id="p_img" src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png" alt="Product" class="product-img-box"
+          onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
         <h2 id="p_name" class="product-title">Custom Gift Item</h2>
         <div id="p_code" class="product-sku">SKU: GIFT-001</div>
         <div id="p_price" class="product-price">₹0</div>
@@ -647,7 +647,7 @@
       document.getElementById('p_name').innerText = p.name;
       document.getElementById('p_code').innerText = `SKU: ${p.code || 'GIFT-001'}`;
       document.getElementById('p_price').innerText = `₹${Number(p.price).toLocaleString('en-IN')}`;
-      document.getElementById('p_img').src = p.imageUrl || 'images/gift-box.png';
+      document.getElementById('p_img').src = p.imageUrl || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png';
 
       // Custom Text Section
       const textSec = document.getElementById('textCardSection');
@@ -777,7 +777,7 @@
         price: Number(currentProduct.price),
         qty: qty,
         addedAt: new Date().toISOString(),
-        imageUrl: currentProduct.imageUrl || 'images/gift-box.png',
+        imageUrl: currentProduct.imageUrl || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png',
         productId: currentProduct._id,
         category: currentProduct.category || 'Custom Gift',
         customText: customText,

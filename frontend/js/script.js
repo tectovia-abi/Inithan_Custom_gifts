@@ -226,7 +226,7 @@ async function loadDatabaseProducts() {
 
   const renderProducts = (productList) => {
     grid.innerHTML = productList.map((p) => {
-      const imgSrc = p.imageUrl || 'images/gift-box.png';
+      const imgSrc = p.imageUrl || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png';
       const kw = (p.keywords || '').toLowerCase();
       let category = 'mugs';
       if (kw.includes('frame') || kw.includes('photo')) category = 'frames';
@@ -239,7 +239,7 @@ async function loadDatabaseProducts() {
         <div class="product-card reveal active" data-category="${category}" style="display: block; opacity: 1; transform: none;">
           <span class="product-badge sale">HOT</span>
           <a href="product-details.html?id=${p._id}" class="product-image" style="display: block;">
-            <img src="${imgSrc}" alt="${p.name}" onerror="this.src='images/gift-box.png'">
+            <img src="${imgSrc}" alt="${p.name}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
           </a>
           <div class="product-info">
             <span class="product-category">${p.code || 'GIFT'}</span>
@@ -263,12 +263,12 @@ async function loadDatabaseProducts() {
   };
 
   const fallbackList = [
-    { name: 'Personalized Photo Mug', code: 'MUG-001', price: 499, keywords: 'mug, photo, ceramic', imageUrl: 'images/custom-mug.png' },
-    { name: 'Engraved Wooden Frame', code: 'FRM-002', price: 899, keywords: 'frame, wooden, photo', imageUrl: 'images/custom-frame.png' },
-    { name: 'Engraved Metal Keychain', code: 'KEY-003', price: 349, keywords: 'keychain, metal, accessory', imageUrl: 'images/custom-keychain.png' },
-    { name: 'Custom Printed Pillow', code: 'PIL-004', price: 699, keywords: 'pillow, cushion, apparel', imageUrl: 'images/custom-pillow.png' },
-    { name: 'Custom Printed T-Shirt', code: 'TSH-005', price: 599, keywords: 'tshirt, apparel, fashion', imageUrl: 'images/custom-tshirt.png' },
-    { name: 'Custom Gold Pendant', code: 'JWL-006', price: 1499, keywords: 'jewelry, pendant, accessory', imageUrl: 'images/custom-jewelry.png' }
+    { name: 'Personalized Photo Mug', code: 'MUG-001', price: 499, keywords: 'mug, photo, ceramic', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-mug.png' },
+    { name: 'Engraved Wooden Frame', code: 'FRM-002', price: 899, keywords: 'frame, wooden, photo', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-frame.png' },
+    { name: 'Engraved Metal Keychain', code: 'KEY-003', price: 349, keywords: 'keychain, metal, accessory', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-keychain.png' },
+    { name: 'Custom Printed Pillow', code: 'PIL-004', price: 699, keywords: 'pillow, cushion, apparel', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-pillow.png' },
+    { name: 'Custom Printed T-Shirt', code: 'TSH-005', price: 599, keywords: 'tshirt, apparel, fashion', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-tshirt.png' },
+    { name: 'Custom Gold Pendant', code: 'JWL-006', price: 1499, keywords: 'jewelry, pendant, accessory', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-jewelry.png' }
   ];
 
   try {
@@ -429,7 +429,7 @@ function addToCart(name, price, imageUrl, productId, category) {
       price, 
       qty, 
       addedAt: new Date().toISOString(),
-      imageUrl: imageUrl || 'images/gift-box.png',
+      imageUrl: imageUrl || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png',
       productId: productId || null,
       category: category || 'Custom Gift',
       customText: customText || '',
@@ -493,7 +493,7 @@ function buyNow(name, price, imageUrl, productId, category) {
     price: Number(price), 
     qty, 
     addedAt: new Date().toISOString(),
-    imageUrl: imageUrl || 'images/gift-box.png',
+    imageUrl: imageUrl || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png',
     productId: productId || null,
     category: category || 'Custom Gift',
     customText: customText || '',

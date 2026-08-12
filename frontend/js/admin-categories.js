@@ -50,7 +50,7 @@ function renderCategories() {
     <div class="acc-item" id="acc-${cat._id}">
       <div class="acc-header" onclick="toggleAccordion('acc-${cat._id}')">
         <div class="acc-title-group">
-          <img src="${cat.image || 'images/gift-box.png'}" alt="Icon" class="acc-img" onerror="this.src='images/gift-box.png'">
+          <img src="${cat.image || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'}" alt="Icon" class="acc-img" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
           <span class="acc-title">${cat.name}</span>
           <span class="acc-count">${cat.subcategories.length} Subcategories</span>
         </div>
@@ -125,7 +125,7 @@ window.saveCategory = async function(e) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({ name, image: image || 'images/gift-box.png' })
+      body: JSON.stringify({ name, image: image || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png' })
     });
 
     const contentType = res.headers.get("content-type");

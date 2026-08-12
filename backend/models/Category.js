@@ -9,7 +9,7 @@ const categorySchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    default: 'images/gift-box.png'
+    default: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'
   },
   subcategories: [{
     type: String,

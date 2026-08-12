@@ -52,7 +52,7 @@ const createProduct = async (req, res) => {
       price: Number(price),
       discountPrice: discountPrice ? Number(discountPrice) : 0,
       costPrice: costPrice ? Number(costPrice) : 0,
-      imageUrl: imageUrl ? imageUrl.trim() : 'images/gift-box.png',
+      imageUrl: imageUrl ? imageUrl.trim() : 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png',
       galleryImages: Array.isArray(galleryImages) ? galleryImages : [],
       shortDescription: shortDescription ? shortDescription.trim() : '',
       detailedDescription: detailedDescription ? detailedDescription.trim() : '',
@@ -116,12 +116,12 @@ const getProducts = async (req, res) => {
         success: true,
         count: 6,
         products: [
-          { name: 'Personalized Photo Mug', code: 'MUG-001', price: 499, keywords: 'mug, photo, ceramic', imageUrl: 'images/custom-mug.png' },
-          { name: 'Engraved Wooden Frame', code: 'FRM-002', price: 899, keywords: 'frame, wooden, photo', imageUrl: 'images/custom-frame.png' },
-          { name: 'Engraved Metal Keychain', code: 'KEY-003', price: 349, keywords: 'keychain, metal, accessory', imageUrl: 'images/custom-keychain.png' },
-          { name: 'Custom Printed Pillow', code: 'PIL-004', price: 699, keywords: 'pillow, cushion, apparel', imageUrl: 'images/custom-pillow.png' },
-          { name: 'Custom Printed T-Shirt', code: 'TSH-005', price: 599, keywords: 'tshirt, apparel, fashion', imageUrl: 'images/custom-tshirt.png' },
-          { name: 'Custom Gold Pendant', code: 'JWL-006', price: 1499, keywords: 'jewelry, pendant, accessory', imageUrl: 'images/custom-jewelry.png' }
+          { name: 'Personalized Photo Mug', code: 'MUG-001', price: 499, keywords: 'mug, photo, ceramic', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-mug.png' },
+          { name: 'Engraved Wooden Frame', code: 'FRM-002', price: 899, keywords: 'frame, wooden, photo', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-frame.png' },
+          { name: 'Engraved Metal Keychain', code: 'KEY-003', price: 349, keywords: 'keychain, metal, accessory', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-keychain.png' },
+          { name: 'Custom Printed Pillow', code: 'PIL-004', price: 699, keywords: 'pillow, cushion, apparel', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-pillow.png' },
+          { name: 'Custom Printed T-Shirt', code: 'TSH-005', price: 599, keywords: 'tshirt, apparel, fashion', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-tshirt.png' },
+          { name: 'Custom Gold Pendant', code: 'JWL-006', price: 1499, keywords: 'jewelry, pendant, accessory', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-jewelry.png' }
         ]
       });
     }
@@ -157,12 +157,12 @@ const getProducts = async (req, res) => {
       success: true,
       count: 6,
       products: [
-        { name: 'Personalized Photo Mug', code: 'MUG-001', price: 499, keywords: 'mug, photo, ceramic', imageUrl: 'images/custom-mug.png' },
-        { name: 'Engraved Wooden Frame', code: 'FRM-002', price: 899, keywords: 'frame, wooden, photo', imageUrl: 'images/custom-frame.png' },
-        { name: 'Engraved Metal Keychain', code: 'KEY-003', price: 349, keywords: 'keychain, metal, accessory', imageUrl: 'images/custom-keychain.png' },
-        { name: 'Custom Printed Pillow', code: 'PIL-004', price: 699, keywords: 'pillow, cushion, apparel', imageUrl: 'images/custom-pillow.png' },
-        { name: 'Custom Printed T-Shirt', code: 'TSH-005', price: 599, keywords: 'tshirt, apparel, fashion', imageUrl: 'images/custom-tshirt.png' },
-        { name: 'Custom Gold Pendant', code: 'JWL-006', price: 1499, keywords: 'jewelry, pendant, accessory', imageUrl: 'images/custom-jewelry.png' }
+        { name: 'Personalized Photo Mug', code: 'MUG-001', price: 499, keywords: 'mug, photo, ceramic', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-mug.png' },
+        { name: 'Engraved Wooden Frame', code: 'FRM-002', price: 899, keywords: 'frame, wooden, photo', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-frame.png' },
+        { name: 'Engraved Metal Keychain', code: 'KEY-003', price: 349, keywords: 'keychain, metal, accessory', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-keychain.png' },
+        { name: 'Custom Printed Pillow', code: 'PIL-004', price: 699, keywords: 'pillow, cushion, apparel', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-pillow.png' },
+        { name: 'Custom Printed T-Shirt', code: 'TSH-005', price: 599, keywords: 'tshirt, apparel, fashion', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-tshirt.png' },
+        { name: 'Custom Gold Pendant', code: 'JWL-006', price: 1499, keywords: 'jewelry, pendant, accessory', imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-jewelry.png' }
       ]
     });
   }

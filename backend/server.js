@@ -138,7 +138,7 @@ app.get('/products/:slug', async (req, res) => {
     const description = product.metaDescription || product.shortDescription || `Buy ${product.name} online at Inithan Custom Gifts. High-quality personalized gift made with love.`;
     const keywords = product.keywords || `${product.name}, custom gift, personalized gift, Inithan`;
     const url = `https://inithancustomgifts.com/products/${product.urlSlug}`;
-    const imageUrl = product.imageUrl ? (product.imageUrl.startsWith('http') ? product.imageUrl : `https://inithancustomgifts.com/${product.imageUrl}`) : 'https://inithancustomgifts.com/images/gift-box.png';
+    const imageUrl = product.imageUrl ? (product.imageUrl.startsWith('http') ? product.imageUrl : `https://inithancustomgifts.com/${product.imageUrl}`) : 'https://inithancustomgifts.com/https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png';
 
     const seoTags = `
   <title>${title}</title>
@@ -188,10 +188,10 @@ app.get('/products/:slug', async (req, res) => {
     // 2. Server-side pre-rendering of product details
     const discountPercent = product.costPrice > product.price ? Math.round(((product.costPrice - product.price) / product.costPrice) * 100) : 0;
     
-    let thumbnailsHtml = `<div class="thumbnail active"><img src="../${product.imageUrl}" onerror="this.src='../images/gift-box.png'"></div>`;
+    let thumbnailsHtml = `<div class="thumbnail active"><img src="../${product.imageUrl}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'"></div>`;
     if (product.galleryImages && product.galleryImages.length > 0) {
       product.galleryImages.forEach(img => {
-        thumbnailsHtml += `<div class="thumbnail"><img src="../${img}" onerror="this.src='../images/gift-box.png'"></div>`;
+        thumbnailsHtml += `<div class="thumbnail"><img src="../${img}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'"></div>`;
       });
     }
 
@@ -208,7 +208,7 @@ app.get('/products/:slug', async (req, res) => {
       <!-- Left: Images -->
       <div class="pdp-image-col">
         <div class="main-image-container">
-          <img id="mainProductImg" src="../${product.imageUrl}" alt="${product.name}" onerror="this.src='../images/gift-box.png'">
+          <img id="mainProductImg" src="../${product.imageUrl}" alt="${product.name}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
         </div>
         <div class="thumbnail-gallery">
           ${thumbnailsHtml}
