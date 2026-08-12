@@ -8,11 +8,12 @@ const {
   deleteInquiry
 } = require('../controllers/bulkInquiryController');
 const { protect, admin } = require('../middleware/authMiddleware');
+const { validateInquiry, validateObjectId } = require('../middleware/validationMiddleware');
 
 // @route   POST /api/bulk-inquiry
 // @desc    Submit a bulk order inquiry
 // @access  Public
-router.post('/', createInquiry);
+router.post('/', validateInquiry, createInquiry);
 
 // @route   GET /api/bulk-inquiry/user/:email
 // @desc    Get all bulk inquiries submitted by a specific user email
@@ -27,11 +28,11 @@ router.get('/', protect, admin, getInquiries);
 // @route   PUT /api/bulk-inquiry/:id/status
 // @desc    Update inquiry status
 // @access  Private / Admin
-router.put('/:id/status', protect, admin, updateInquiryStatus);
+router.put('/:id/status', protect, admin, validateObjectId, updateInquiryStatus);
 
 // @route   DELETE /api/bulk-inquiry/:id
 // @desc    Delete a bulk inquiry
 // @access  Private / Admin
-router.delete('/:id', protect, admin, deleteInquiry);
+router.delete('/:id', protect, admin, validateObjectId, deleteInquiry);
 
 module.exports = router;

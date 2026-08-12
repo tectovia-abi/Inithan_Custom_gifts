@@ -5,6 +5,10 @@ const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
 const compression = require('compression');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const mongoSanitize = require('express-mongo-sanitize');
+
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const bulkInquiryRoutes = require('./routes/bulkInquiryRoutes');
@@ -14,11 +18,78 @@ const Product = require('./models/Product');
 
 const app = express();
 
-// ── Middleware ──────────────────────────────────────────────────────────────
+// ── Trust Proxy for Render ───────────────────────────────────────────────────
+app.set('trust proxy', 1);
+
+// ── Security Headers (Helmet) ────────────────────────────────────────────────
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://*"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com", "https://*.amazonaws.com"],
+      connectSrc: ["'self'", "https://*", "http://127.0.0.1:*", "http://localhost:*"]
+    }
+  }
+}));
+
+// ── CORS Configuration ────────────────────────────────────────────────────────
+const allowedOrigins = [
+  'https://inithancustomgifts.com',
+  'https://www.inithancustomgifts.com',
+  'http://localhost:3000',
+  'http://localhost:8081',
+  'http://127.0.0.1:8081',
+  'http://127.0.0.1:5500',
+  'http://127.0.0.1:3000'
+];
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
+// ── Rate Limiting ────────────────────────────────────────────────────────────
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, message: 'Too many requests, please try again later.' }
+});
+app.use('/api', generalLimiter);
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 15,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, message: 'Too many auth attempts, please try again in 15 minutes.' }
+});
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/signup', authLimiter);
+
+const inquiryLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, message: 'Too many inquiries submitted, please try again in an hour.' }
+});
+app.use('/api/bulk-inquiry', inquiryLimiter);
+
+// ── Body Parser Limits & Sanitization ──────────────────────────────────────────
 app.use(compression());
-app.use(cors());
-app.use(express.json({ limit: '5mb' }));  // Reduced: images go via S3, not base64
-app.use(express.urlencoded({ limit: '5mb', extended: true }));
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ limit: '1mb', extended: true }));
+app.use(mongoSanitize());
 
 // ── Serve frontend static files from ../frontend ────────────────────────────
 const frontendPath = path.join(__dirname, '..', 'frontend');
@@ -308,6 +379,15 @@ app.get('*', (req, res) => {
     return res.status(404).json({ success: false, message: 'API route not found' });
   }
   res.sendFile(path.join(frontendPath, 'index.html'));
+});
+
+// ── Error Handling Middleware ────────────────────────────────────────────────
+app.use((err, req, res, next) => {
+  console.error('❌ Server Error:', err.stack || err.message || err);
+  res.status(err.status || 500).json({
+    success: false,
+    message: 'An unexpected server error occurred. Please try again later.'
+  });
 });
 
 const connectDB = require('./config/db');

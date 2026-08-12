@@ -21,6 +21,7 @@ const createProduct = async (req, res) => {
       stockQuantity, lowStockAlert, skuBarcode, weight, dimensions, shippingType,
       metaTitle, metaDescription, urlSlug, visibility,
       isFeatured, isBestSeller, isNewArrival, allowReviews, showOnHomepage,
+      allowCustomText, customTextLabel, allowCustomImage, maxCustomImages,
       size, color, shape, capacity, otherVariants
     } = req.body;
 
@@ -228,6 +229,7 @@ const updateProduct = async (req, res) => {
       stockQuantity, lowStockAlert, skuBarcode, weight, dimensions, shippingType,
       metaTitle, metaDescription, urlSlug, visibility,
       isFeatured, isBestSeller, isNewArrival, allowReviews, showOnHomepage,
+      allowCustomText, customTextLabel, allowCustomImage, maxCustomImages,
       size, color, shape, capacity, otherVariants
     } = req.body;
 
