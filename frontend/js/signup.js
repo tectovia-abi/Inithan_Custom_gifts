@@ -91,24 +91,14 @@
 
       if (response.ok && data.success) {
         console.log(`%c🎉 [FRONTEND SUCCESS] Account created successfully for ${email}!`, 'color: #22c55e; font-weight: bold; font-size: 13px;');
-        showAlert(data.message || 'Account created successfully!', true);
+        showAlert('Account created successfully! Redirecting to login page...', true);
         btn.textContent = '✓ ACCOUNT CREATED!';
         btn.style.background = '#2D6A4F';
         btn.style.opacity = '1';
 
-        // Save auth token & session
-        if (data.token) {
-          if (typeof saveAuthSession === 'function') {
-            saveAuthSession(data.user, data.token, true);
-          } else {
-            localStorage.setItem('inithat_token', data.token);
-            localStorage.setItem('inithat_user', JSON.stringify(data.user));
-          }
-        }
-
         setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 1500);
+          window.location.href = 'login.html';
+        }, 2000);
       } else {
         if (data.errorType === 'USER_ALREADY_EXISTS') {
           console.error(`%c❌ [FRONTEND ERROR] Account already exists with email: "${email}"`, 'color: #ef4444; font-weight: bold; font-size: 13px;');
