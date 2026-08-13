@@ -7,6 +7,32 @@
 
   let categories = [];
   let currentCatImageBase64 = '';
+  let lastExpandedCatId = '';
+
+  // Beautiful, non-intrusive Toast Notifications
+  function showToast(message, isSuccess = true) {
+    let container = document.getElementById('toastContainer');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'toastContainer';
+      container.className = 'toast-container';
+      document.body.appendChild(container);
+    }
+    
+    const toast = document.createElement('div');
+    toast.className = `toast-message ${isSuccess ? 'success' : 'error'}`;
+    
+    // Icon badge
+    const icon = isSuccess ? '✅' : '❌';
+    toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+    
+    container.appendChild(toast);
+    
+    // Automatically remove after animation finishes (3 seconds total)
+    setTimeout(() => {
+      toast.remove();
+    }, 3000);
+  }
 
   // Close modals helper
   function closeModal(id) {
@@ -20,7 +46,19 @@
   function toggleAccordion(id) {
     const element = document.getElementById(id);
     if (element) {
-      element.classList.toggle('active');
+      const isActive = element.classList.contains('active');
+      
+      // Close other accordions for clean UX
+      document.querySelectorAll('.acc-item').forEach(item => {
+        item.classList.remove('active');
+      });
+
+      if (!isActive) {
+        element.classList.add('active');
+        lastExpandedCatId = id.replace('acc-', '');
+      } else {
+        lastExpandedCatId = '';
+      }
     }
   }
 
@@ -107,6 +145,14 @@
         </div>
       </div>
     `).join('');
+
+    // Auto-expand accordion section if lastExpandedCatId matches
+    if (lastExpandedCatId) {
+      const element = document.getElementById(`acc-${lastExpandedCatId}`);
+      if (element) {
+        element.classList.add('active');
+      }
+    }
   }
 
   // Save main category (Create/Update)
@@ -133,13 +179,16 @@
       const data = await res.json();
       if (data.success) {
         closeModal('catModal');
+        // Auto-expand this category after saving
+        lastExpandedCatId = data.category ? data.category._id : '';
         fetchCategories();
+        showToast(id ? 'Category updated successfully!' : 'Category added successfully!', true);
       } else {
-        alert(data.message || 'Error saving category');
+        showToast(data.message || 'Error saving category', false);
       }
     } catch (error) {
       console.error(error);
-      alert('Failed to save: ' + error.message);
+      showToast('Failed to save category', false);
     }
   }
 
@@ -154,12 +203,17 @@
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
+        if (lastExpandedCatId === id) {
+          lastExpandedCatId = '';
+        }
         fetchCategories();
+        showToast('Category deleted successfully!', true);
       } else {
-        alert('Failed to delete category');
+        showToast('Failed to delete category', false);
       }
     } catch (error) {
       console.error(error);
+      showToast('Error deleting category', false);
     }
   }
 
@@ -182,13 +236,16 @@
       const data = await res.json();
       if (data.success) {
         closeModal('subcatModal');
+        // Keep the current category expanded to show new subcategory
+        lastExpandedCatId = catId;
         fetchCategories();
+        showToast('Subcategory added successfully!', true);
       } else {
-        alert(data.message || 'Error adding subcategory');
+        showToast(data.message || 'Error adding subcategory', false);
       }
     } catch (error) {
       console.error(error);
-      alert('Server error');
+      showToast('Server error while adding subcategory', false);
     }
   }
 
@@ -203,12 +260,15 @@
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
+        lastExpandedCatId = catId;
         fetchCategories();
+        showToast('Subcategory deleted successfully!', true);
       } else {
-        alert('Failed to delete subcategory');
+        showToast('Failed to delete subcategory', false);
       }
     } catch (error) {
       console.error(error);
+      showToast('Error deleting subcategory', false);
     }
   }
 
