@@ -17,6 +17,7 @@ describe('Bulk Inquiry API', () => {
     city: 'New York',
     quantity: 500,
     budgetRange: '$1000 - $2000',
+    productName: 'Custom Mugs',
     productDescription: 'Custom Mugs',
     customization: 'Logo print',
     occasion: 'Corporate Event'
@@ -38,7 +39,7 @@ describe('Bulk Inquiry API', () => {
         .post('/api/bulk-inquiry')
         .send({ email: 'test@example.com' });
 
-      expect(res.statusCode).toBe(500);
+      expect(res.statusCode).toBe(400);
       expect(res.body.success).toBe(false);
     });
   });

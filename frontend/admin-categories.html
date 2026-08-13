@@ -207,7 +207,7 @@
           <div class="section-header" style="display: flex; flex-wrap: wrap; gap: 15px; max-width: 900px; margin: 0 auto 20px auto;">
             <h2>Categories</h2>
             <div style="display: flex; gap: 15px; flex-grow: 1; justify-content: flex-end;">
-              <button class="btn btn-primary" onclick="openCatModal()">+ Add Main Category</button>
+              <button class="btn btn-primary" id="addCatBtn">+ Add Main Category</button>
             </div>
           </div>
 
@@ -224,9 +224,9 @@
     <div class="modal-content" style="max-width: 450px;">
       <div class="modal-header">
         <h3 id="catModalTitle">Add Category</h3>
-        <button type="button" class="close-modal" onclick="closeModal('catModal')">&times;</button>
+        <button type="button" class="close-modal" data-close-modal="catModal">&times;</button>
       </div>
-      <form id="catForm" onsubmit="saveCategory(event)">
+      <form id="catForm">
         <input type="hidden" id="catId">
         <div class="input-group">
           <label>Category Name</label>
@@ -244,7 +244,7 @@
           </div>
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 25px;">
-          <button type="button" class="btn btn-outline" onclick="closeModal('catModal')">Cancel</button>
+          <button type="button" class="btn btn-outline" data-close-modal="catModal">Cancel</button>
           <button type="submit" class="btn btn-primary" style="padding: 8px 15px;">Save</button>
         </div>
       </form>
@@ -256,16 +256,16 @@
     <div class="modal-content" style="max-width: 450px;">
       <div class="modal-header">
         <h3>Add Subcategory</h3>
-        <button type="button" class="close-modal" onclick="closeModal('subcatModal')">&times;</button>
+        <button type="button" class="close-modal" data-close-modal="subcatModal">&times;</button>
       </div>
-      <form id="subcatForm" onsubmit="saveSubcategory(event)">
+      <form id="subcatForm">
         <input type="hidden" id="targetCatId">
         <div class="input-group">
           <label>Subcategory Name</label>
           <input type="text" id="subcatName" required placeholder="e.g. Photo Frames">
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 25px;">
-          <button type="button" class="btn btn-outline" onclick="closeModal('subcatModal')">Cancel</button>
+          <button type="button" class="btn btn-outline" data-close-modal="subcatModal">Cancel</button>
           <button type="submit" class="btn btn-primary" style="padding: 8px 15px;">Save</button>
         </div>
       </form>

@@ -38,16 +38,17 @@ app.use(helmet({
 // ── CORS Configuration ────────────────────────────────────────────────────────
 const allowedOrigins = [
   'https://inithancustomgifts.com',
-  'https://www.inithancustomgifts.com',
-  'http://localhost:3000',
-  'http://localhost:8081',
-  'http://127.0.0.1:8081',
-  'http://127.0.0.1:5500',
-  'http://127.0.0.1:3000'
+  'https://www.inithancustomgifts.com'
 ];
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (
+      !origin || 
+      origin === 'null' || 
+      allowedOrigins.includes(origin) ||
+      /^http:\/\/localhost:\d+$/.test(origin) ||
+      /^http:\/\/127\.0\.0\.1:\d+$/.test(origin)
+    ) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));

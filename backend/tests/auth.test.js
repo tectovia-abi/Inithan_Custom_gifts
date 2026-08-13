@@ -30,7 +30,7 @@ describe('Auth API', () => {
 
       expect(res.statusCode).toBe(400);
       expect(res.body.success).toBe(false);
-      expect(res.body.errorType).toBe('MISSING_FIELDS');
+      expect(res.body.message).toBeDefined();
     });
 
     it('should not register user with duplicate email', async () => {

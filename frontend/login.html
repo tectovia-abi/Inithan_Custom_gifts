@@ -86,7 +86,7 @@
             <p class="login-form-subtitle">Login to continue shopping the perfect gifts.</p>
           </div>
 
-          <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
+          <form class="login-form" id="loginForm" method="POST">
             <!-- Email Address -->
             <div class="form-group">
               <label for="loginEmail" class="form-label">Email Address</label>
@@ -114,7 +114,7 @@
                   </svg>
                 </span>
                 <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password">
-                <button type="button" class="form-toggle-password" onclick="togglePass('loginPassword', 'eyeA', 'eyeOffA')"
+                <button type="button" class="form-toggle-password" data-toggle-pass="loginPassword"
                   aria-label="Toggle password visibility">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round" id="eyeA">
@@ -251,162 +251,11 @@
     </div>
   </section>
 
-  <script src="js/auth.js"></script>
-  <script>
-    // Toggle password visibility
-    function togglePass(inputId, eyeId, eyeOffId) {
-      const input = document.getElementById(inputId);
-      const eye = document.getElementById(eyeId);
-      const eyeOff = document.getElementById(eyeOffId);
-
-      if (input.type === 'password') {
-        input.type = 'text';
-        eye.style.display = 'none';
-        eyeOff.style.display = 'block';
-      } else {
-        input.type = 'password';
-        eye.style.display = 'block';
-        eyeOff.style.display = 'none';
-      }
-    }
-
-    // Helper to show alert messages on form
-    function showAlert(message, isSuccess = false) {
-      const alertDiv = document.getElementById('authAlert');
-      alertDiv.style.display = 'block';
-      if (isSuccess) {
-        alertDiv.style.background = 'rgba(45, 106, 79, 0.12)';
-        alertDiv.style.color = '#2D6A4F';
-        alertDiv.style.border = '1px solid rgba(45, 106, 79, 0.3)';
-      } else {
-        alertDiv.style.background = 'rgba(196, 30, 58, 0.12)';
-        alertDiv.style.color = '#C41E3A';
-        alertDiv.style.border = '1px solid rgba(196, 30, 58, 0.3)';
-      }
-      alertDiv.textContent = message;
-    }
-
-    // Handle login form submission
-    async function handleLogin(event) {
-      event.preventDefault();
-
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      const btn = document.getElementById('loginSubmitBtn');
-      const alertDiv = document.getElementById('authAlert');
-
-      console.log(`%c🔑 [FRONTEND ACTION] Login submitted for email: "${email}"`, 'color: #3b82f6; font-weight: bold; font-size: 13px;');
-
-      alertDiv.style.display = 'none';
-
-      if (!email || !password) {
-        console.warn('%c⚠️ [FRONTEND VALIDATION] Email or password field is empty!', 'color: #f59e0b; font-weight: bold;');
-        showAlert('Please enter both email and password.');
-        return;
-      }
-
-      btn.textContent = 'LOGGING IN...';
-      btn.style.opacity = '0.7';
-      btn.disabled = true;
-
-      try {
-        const response = await fetch(`${API_BASE}/api/auth/login`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ email, password })
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.success) {
-          console.log(`%c✅ [FRONTEND SUCCESS] Login authenticated successfully for ${data.user ? data.user.fullName : email}!`, 'color: #22c55e; font-weight: bold; font-size: 13px;');
-          showAlert(data.message || 'Login successful!', true);
-          btn.textContent = '✓ LOGGED IN!';
-          btn.style.background = '#2D6A4F';
-          btn.style.opacity = '1';
-
-          if (data.token) {
-            const rememberMe = document.getElementById('rememberMe') ? document.getElementById('rememberMe').checked : true;
-            if (typeof saveAuthSession === 'function') {
-              saveAuthSession(data.user, data.token, rememberMe);
-              console.log('%c🔒 [FRONTEND SESSION] Auth token & user profile stored in session/cookies.', 'color: #6366f1; font-weight: bold;');
-            } else {
-              localStorage.setItem('inithat_token', data.token);
-              localStorage.setItem('inithat_user', JSON.stringify(data.user));
-            }
-          }
-
-          setTimeout(() => {
-            if (data.user && data.user.isAdmin) {
-              window.location.href = 'admin-dashboard.html';
-            } else {
-              window.location.href = 'index.html';
-            }
-          }, 1200);
-        } else {
-          // Categorized console logging based on backend response errorType
-          if (data.errorType === 'USER_NOT_FOUND') {
-            console.error(`%c❌ [FRONTEND ERROR] No user exists with email: "${email}"`, 'color: #ef4444; font-weight: bold; font-size: 13px;');
-          } else if (data.errorType === 'INCORRECT_PASSWORD') {
-            console.error(`%c❌ [FRONTEND ERROR] Incorrect password entered for: "${email}"`, 'color: #ef4444; font-weight: bold; font-size: 13px;');
-          } else {
-            console.error(`%c❌ [FRONTEND ERROR] Authentication failed: ${data.message}`, 'color: #ef4444; font-weight: bold;');
-          }
-
-          showAlert(data.message || 'Invalid email or password. Please try again.');
-          btn.textContent = 'LOGIN';
-          btn.style.opacity = '1';
-          btn.disabled = false;
-        }
-      } catch (err) {
-        console.error('%c💥 [FRONTEND NETWORK ERROR] Server connection failed:', 'color: #dc2626; font-weight: bold;', err);
-        showAlert('Unable to connect to server. Please check your internet or try again later.');
-        btn.textContent = 'LOGIN';
-        btn.style.opacity = '1';
-        btn.disabled = false;
-      }
-    }
-
-    // Mobile toggle
-    const mobileToggle = document.getElementById('mobileToggle');
-    const navLinks = document.getElementById('navLinks');
-    if (mobileToggle) {
-      mobileToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-        mobileToggle.classList.toggle('active');
-      });
-    }
-
-    // Navbar scroll effect
-    window.addEventListener('scroll', () => {
-      const navbar = document.getElementById('navbar');
-      if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
-      }
-    });
-
-    // Auto-redirect if already logged in
-    (function () {
-      if (localStorage.getItem('inithat_token')) {
-        const userStr = localStorage.getItem('inithat_user');
-        if (userStr) {
-          try {
-            const user = JSON.parse(userStr);
-            if (user.isAdmin) {
-              window.location.href = 'admin-dashboard.html';
-              return;
-            }
-          } catch(e) {}
-        }
-        window.location.href = 'index.html';
-      }
-    })();
-  </script>
+  <script src="js/auth.js?v=2"></script>
+  <script src="js/login.js?v=2"></script>
+  <!-- All login logic moved to js/login.js for CSP compliance -->
 
 </body>
 
 </html>
+

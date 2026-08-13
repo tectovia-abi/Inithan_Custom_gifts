@@ -30,8 +30,11 @@ function getAuthUser() {
   try {
     const userStr = localStorage.getItem('inithat_user') || sessionStorage.getItem('inithat_user') || getCookie('inithat_user');
     const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token') || getCookie('inithat_token');
-    if (userStr && token) {
-      return JSON.parse(userStr);
+    if (userStr && token && userStr !== 'undefined' && token !== 'undefined') {
+      const user = JSON.parse(userStr);
+      if (user && (user.id || user._id || user.email)) {
+        return user;
+      }
     }
   } catch (e) {
     console.error('Error parsing auth user session:', e);
@@ -131,26 +134,26 @@ function updateNavbar() {
       const initial = firstName.charAt(0).toUpperCase();
 
       userGreet.innerHTML = `
-        <div class="user-avatar-container" style="position: relative; display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="toggleAvatarDropdown(event)">
+        <div class="user-avatar-container" id="userAvatarContainer">
           <div class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: var(--gold, #D4A853); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border: 2px solid white;">
             ${initial}
           </div>
           <span style="color: var(--dark, #1A1A2E); font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 4px;">
             Hi, ${firstName} <span style="font-size: 0.7rem;">▼</span>
           </span>
-          <div id="avatarDropdown" class="avatar-dropdown-menu" style="display: none; position: absolute; right: 0; top: 110%; background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-radius: 8px; width: 220px; z-index: 1000; overflow: hidden; border: 1px solid var(--gray-200, #E8E8E8); text-align: left;">
+          <div id="avatarDropdown" class="avatar-dropdown-menu">
             <div style="padding: 15px; border-bottom: 1px solid var(--gray-200, #E8E8E8); background: var(--off-white, #FFF8F0);">
               <strong style="color: var(--dark, #1A1A2E); font-size: 1rem; display: block;">${user.fullName || 'User'}</strong>
               <span style="color: var(--gray-500, #6B6B6B); font-size: 0.8rem;">${user.email || ''}</span>
             </div>
-            <ul style="list-style: none; margin: 0; padding: 0;">
-              ${user.isAdmin ? `<li><a href="admin-dashboard.html" style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; color: var(--primary, #C41E3A); text-decoration: none; transition: background 0.2s; font-weight: 600;" onmouseover="this.style.background='#f7f7f7'" onmouseout="this.style.background='transparent'">👑 Admin Dashboard</a></li>` : ''}
-              <li><a href="#" style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; color: var(--dark, #1A1A2E); text-decoration: none; transition: background 0.2s; font-weight: 500;" onmouseover="this.style.background='#f7f7f7'" onmouseout="this.style.background='transparent'">📦 My Retail Orders</a></li>
-              <li><a href="my-bulk-orders.html" style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; color: var(--dark, #1A1A2E); text-decoration: none; transition: background 0.2s; font-weight: 500;" onmouseover="this.style.background='#f7f7f7'" onmouseout="this.style.background='transparent'">🏢 My Bulk Inquiries</a></li>
-              <li><a href="cart.html" style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; color: var(--dark, #1A1A2E); text-decoration: none; transition: background 0.2s; font-weight: 500;" onmouseover="this.style.background='#f7f7f7'" onmouseout="this.style.background='transparent'">🛒 My Cart</a></li>
-              <li><a href="#" style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; color: var(--dark, #1A1A2E); text-decoration: none; transition: background 0.2s; font-weight: 500;" onmouseover="this.style.background='#f7f7f7'" onmouseout="this.style.background='transparent'">👤 My Profile</a></li>
-              <li><a href="#" style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; color: var(--dark, #1A1A2E); text-decoration: none; transition: background 0.2s; font-weight: 500;" onmouseover="this.style.background='#f7f7f7'" onmouseout="this.style.background='transparent'">🔒 Change Password</a></li>
-              <li><a href="#" onclick="logout()" style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; color: var(--primary, #C41E3A); text-decoration: none; border-top: 1px solid var(--gray-200, #E8E8E8); transition: background 0.2s; font-weight: 600;" onmouseover="this.style.background='#f7f7f7'" onmouseout="this.style.background='transparent'">🚪 Logout</a></li>
+            <ul>
+              ${user.isAdmin ? `<li><a href="admin-dashboard.html" class="admin-link">👑 Admin Dashboard</a></li>` : ''}
+              <li><a href="#">📦 My Retail Orders</a></li>
+              <li><a href="my-bulk-orders.html">🏢 My Bulk Inquiries</a></li>
+              <li><a href="cart.html">🛒 My Cart</a></li>
+              <li><a href="#">👤 My Profile</a></li>
+              <li><a href="#">🔒 Change Password</a></li>
+              <li><a href="#" data-action="logout" class="logout-link">🚪 Logout</a></li>
             </ul>
           </div>
         </div>
@@ -172,23 +175,33 @@ function updateNavbar() {
   }
 }
 
-// ── Avatar Dropdown Logic ────────────────────────────────────────────────────
-function toggleAvatarDropdown(event) {
-  event.stopPropagation();
-  const dropdown = document.getElementById('avatarDropdown');
-  if (dropdown) {
-    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-  }
-}
-
+// ── Avatar Dropdown & Logout Event Delegation (CSP compliant) ───────────────
 document.addEventListener('click', function (event) {
+  const avatarContainer = event.target.closest('#userAvatarContainer');
   const dropdown = document.getElementById('avatarDropdown');
-  if (dropdown && dropdown.style.display === 'block') {
-    if (!event.target.closest('.user-avatar-container')) {
+  
+  if (avatarContainer) {
+    // Toggle dropdown visibility when clicking the avatar container
+    if (dropdown && !event.target.closest('.avatar-dropdown-menu')) {
+      event.stopPropagation();
+      const isVisible = dropdown.style.display === 'block';
+      dropdown.style.display = isVisible ? 'none' : 'block';
+    }
+  } else {
+    // Clicked outside the avatar container — hide the dropdown
+    if (dropdown) {
       dropdown.style.display = 'none';
     }
   }
+
+  // Handle Logout Action
+  const logoutLink = event.target.closest('[data-action="logout"]');
+  if (logoutLink) {
+    event.preventDefault();
+    logout();
+  }
 });
+
 
 // Run updateNavbar on DOM ready and on load
 document.addEventListener('DOMContentLoaded', updateNavbar);
