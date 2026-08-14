@@ -2,7 +2,7 @@
  * admin.js — Admin Dashboard Logic
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+function initAdmin() {
   // 1. Verify Authentication & Admin Role
   const user = getAuthUser();
   const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
@@ -14,9 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Set Header User Info
-  document.getElementById('adminName').textContent = user.fullName || 'Admin';
-  const initial = user.fullName ? user.fullName.charAt(0).toUpperCase() : 'A';
-  document.getElementById('adminAvatar').textContent = initial;
+  const adminNameEl = document.getElementById('adminName');
+  if (adminNameEl) adminNameEl.textContent = user.fullName || 'Admin';
+  const adminAvatarEl = document.getElementById('adminAvatar');
+  if (adminAvatarEl) {
+    const initial = user.fullName ? user.fullName.charAt(0).toUpperCase() : 'A';
+    adminAvatarEl.textContent = initial;
+  }
 
   // 2. Sidebar Navigation
   const navLinks = document.querySelectorAll('.admin-nav-link[data-target]');
@@ -32,19 +36,21 @@ document.addEventListener('DOMContentLoaded', () => {
       link.classList.add('active');
 
       // Update Header Title
-      headerTitle.textContent = link.textContent.trim();
+      if (headerTitle) headerTitle.textContent = link.textContent.trim();
 
       // Show Target Section
       const targetId = link.getAttribute('data-target');
-      sections.forEach(sec => sec.classList.remove('active'));
-      document.getElementById(targetId).classList.add('active');
+      if (targetId && document.getElementById(targetId)) {
+        sections.forEach(sec => sec.classList.remove('active'));
+        document.getElementById(targetId).classList.add('active');
+      }
     });
   });
 
   // Mobile Menu Toggle
   const menuToggle = document.getElementById('menuToggle');
   const sidebar = document.getElementById('adminSidebar');
-  if (menuToggle) {
+  if (menuToggle && sidebar) {
     menuToggle.addEventListener('click', () => {
       sidebar.classList.toggle('open');
     });
@@ -53,7 +59,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // 3. Data Fetching
   fetchDashboardData(token);
   loadCategoriesForDropdowns();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initAdmin);
+} else {
+  initAdmin();
+}
 
 let allProducts = [];
 let allInquiries = [];
@@ -69,7 +81,7 @@ async function loadCategoriesForDropdowns() {
   if (categorySelects.length === 0) return;
 
   try {
-    const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : 'http://127.0.0.1:5000';
+    const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : window.location.origin;
     const res = await fetch(`${apiBase}/api/categories`);
     const data = await res.json();
     
@@ -132,38 +144,55 @@ async function loadCategoriesForDropdowns() {
 }
 
 async function fetchDashboardData(token) {
+  const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : window.location.origin;
+
+  // 1. Fetch Products
   try {
-    // Fetch Products
-    const prodRes = await fetch(`${API_BASE}/api/products`);
+    const prodRes = await fetch(`${apiBase}/api/products`);
     const prodData = await prodRes.json();
-    allProducts = prodData.success ? prodData.products : [];
-    
-    // Fetch Users
-    const usersRes = await fetch(`${API_BASE}/api/auth/users`, {
+    allProducts = (prodData && prodData.success && Array.isArray(prodData.products)) ? prodData.products : [];
+  } catch (err) {
+    console.error('Error fetching products:', err);
+    allProducts = [];
+  }
+
+  // 2. Fetch Users
+  let users = [];
+  try {
+    const usersRes = await fetch(`${apiBase}/api/auth/users`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     const usersData = await usersRes.json();
-    const users = usersData.success ? usersData.users : [];
+    users = (usersData && usersData.success && Array.isArray(usersData.users)) ? usersData.users : [];
+  } catch (err) {
+    console.error('Error fetching users:', err);
+    users = [];
+  }
 
-    // Fetch Inquiries
-    const inqRes = await fetch(`${API_BASE}/api/bulk-inquiry`, {
+  // 3. Fetch Inquiries
+  try {
+    const inqRes = await fetch(`${apiBase}/api/bulk-inquiry`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     const inqData = await inqRes.json();
-    allInquiries = inqData.success ? inqData.inquiries : [];
+    allInquiries = (inqData && inqData.success && Array.isArray(inqData.inquiries)) ? inqData.inquiries : [];
+  } catch (err) {
+    console.error('Error fetching inquiries:', err);
+    allInquiries = [];
+  }
 
-    // Update Overview Stats
-    const tpEl = document.getElementById('totalProducts');
-    if (tpEl) tpEl.textContent = allProducts.length;
-    const tuEl = document.getElementById('totalUsers');
-    if (tuEl) tuEl.textContent = users.length;
-    const tiEl = document.getElementById('totalInquiries');
-    if (tiEl) tiEl.textContent = allInquiries.length;
+  // Update Overview Stats
+  const tpEl = document.getElementById('totalProducts');
+  if (tpEl) tpEl.textContent = allProducts.length;
+  const tuEl = document.getElementById('totalUsers');
+  if (tuEl) tuEl.textContent = users.length;
+  const tiEl = document.getElementById('totalInquiries');
+  if (tiEl) tiEl.textContent = allInquiries.length;
 
-    // Populate Tables
-    populateProducts(allProducts);
-    populateUsers(users);
-    populateInquiries(allInquiries);
+  // Populate Tables
+  populateProducts(allProducts);
+  populateUsers(users);
+  populateInquiries(allInquiries);
 
     // Setup Smart Search for Products
     const searchInput = document.getElementById('productSearch');
@@ -305,7 +334,7 @@ async function fetchDashboardData(token) {
         };
 
         try {
-          const res = await fetch(`${API_BASE}/api/products`, {
+          const res = await fetch(`${apiBase}/api/products`, {
             method: 'POST',
             headers: { 
               'Content-Type': 'application/json',
@@ -332,9 +361,6 @@ async function fetchDashboardData(token) {
       });
     }
 
-  } catch (error) {
-    console.error('Error fetching admin data:', error);
-  }
 }
 
 function populateProducts(products) {
@@ -401,9 +427,9 @@ function populateProducts(products) {
         <td>₹${p.price}</td>
         <td>
           <div class="action-cell">
-            <button class="action-btn view-btn" title="View" onclick="viewProduct('${p._id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
-            <button class="action-btn edit-btn" title="Edit" onclick="editProduct('${p._id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
-            <button class="action-btn delete-btn" title="Delete" onclick="deleteProduct('${p._id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
+            <button class="action-btn view-btn" title="View" data-action="view-product" data-id="${p._id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+            <button class="action-btn edit-btn" title="Edit" data-action="edit-product" data-id="${p._id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
+            <button class="action-btn delete-btn" title="Delete" data-action="delete-product" data-id="${p._id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
           </div>
         </td>
       </tr>
@@ -453,7 +479,7 @@ function populateInquiries(inquiries) {
         <td>${inq.company ? inq.company + '<br>' : ''}${inq.city}${inq.state ? ', ' + inq.state : ''}</td>
         <td>${(inq.products && inq.products.length) ? inq.products.join(', ') : 'Custom'} <br><strong>Qty: ${inq.quantity}</strong></td>
         <td><span class="badge ${inq.status === 'Completed' || inq.status === 'Resolved' ? 'completed' : 'pending'}">${inq.status || 'New'}</span></td>
-        <td><button class="btn btn-primary" style="padding: 5px 10px; font-size: 0.8rem;" onclick="openInquiryModal(${index})">View Details</button></td>
+        <td><button class="btn btn-primary view-inquiry-btn" data-action="view-inquiry" data-index="${index}" style="padding: 5px 10px; font-size: 0.8rem;">View Details</button></td>
       </tr>
     `).join('');
     tbody.innerHTML = rows;
@@ -549,7 +575,7 @@ function openInquiryModal(index) {
             <option value="Resolved" ${inq.status === 'Resolved' ? 'selected' : ''}>✅ Resolved</option>
             <option value="Cancelled" ${inq.status === 'Cancelled' ? 'selected' : ''}>❌ Cancelled</option>
           </select>
-          <button onclick="updateInquiryStatus('${inq._id}')" class="status-btn">Save Changes</button>
+          <button data-action="update-inquiry-status" data-id="${inq._id}" class="status-btn">Save Changes</button>
         </div>
       </div>
     </div>
@@ -565,7 +591,7 @@ function closeInquiryModal() {
 async function updateInquiryStatus(id) {
   const status = document.getElementById('inquiryStatusSelect').value;
   try {
-    const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : 'http://127.0.0.1:5000';
+    const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : window.location.origin;
     const res = await fetch(`${apiBase}/api/bulk-inquiry/${id}/status`, {
       method: 'PUT',
       headers: {
@@ -733,7 +759,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       try {
         const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
-        const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : 'http://127.0.0.1:5000';
+        const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : window.location.origin;
         const res = await fetch(`${apiBase}/api/products/${id}`, {
           method: 'PUT',
           headers: {
@@ -767,7 +793,7 @@ async function deleteProduct(id) {
   
   try {
     const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
-    const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : 'http://127.0.0.1:5000';
+    const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : window.location.origin;
     const res = await fetch(`${apiBase}/api/products/${id}`, {
       method: 'DELETE',
       headers: {
@@ -788,10 +814,68 @@ async function deleteProduct(id) {
   }
 }
 
+// Global CSP-Compliant Event Delegation Listener
+document.addEventListener('click', (e) => {
+  // View Inquiry Modal
+  const viewInqBtn = e.target.closest('[data-action="view-inquiry"]');
+  if (viewInqBtn) {
+    const index = Number(viewInqBtn.getAttribute('data-index'));
+    openInquiryModal(index);
+    return;
+  }
+
+  // Update Inquiry Status
+  const updateStatusBtn = e.target.closest('[data-action="update-inquiry-status"]');
+  if (updateStatusBtn) {
+    const id = updateStatusBtn.getAttribute('data-id');
+    updateInquiryStatus(id);
+    return;
+  }
+
+  // Close Modal
+  if (e.target.closest('.close-modal') || e.target.classList.contains('close-modal')) {
+    const modal = document.getElementById('inquiryModal');
+    if (modal) modal.style.display = 'none';
+    return;
+  }
+
+  // View Product
+  const viewProdBtn = e.target.closest('[data-action="view-product"]');
+  if (viewProdBtn) {
+    const id = viewProdBtn.getAttribute('data-id');
+    if (typeof viewProduct === 'function') viewProduct(id);
+    return;
+  }
+
+  // Edit Product
+  const editProdBtn = e.target.closest('[data-action="edit-product"]');
+  if (editProdBtn) {
+    const id = editProdBtn.getAttribute('data-id');
+    if (typeof editProduct === 'function') editProduct(id);
+    return;
+  }
+
+  // Delete Product
+  const delProdBtn = e.target.closest('[data-action="delete-product"]');
+  if (delProdBtn) {
+    const id = delProdBtn.getAttribute('data-id');
+    if (typeof deleteProduct === 'function') deleteProduct(id);
+    return;
+  }
+
+  // Logout Link
+  const logoutLink = e.target.closest('.logout-link') || e.target.closest('#adminLogoutBtn');
+  if (logoutLink) {
+    e.preventDefault();
+    if (typeof logout === 'function') logout();
+    return;
+  }
+});
+
 // Global S3 file upload helper
 async function uploadFileToS3(file, endpoint = '/api/upload/single') {
   const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
-  const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : 'http://127.0.0.1:8081';
+  const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : window.location.origin;
   const formData = new FormData();
   formData.append(endpoint === '/api/upload/single' ? 'image' : 'images', file);
   const res = await fetch(`${apiBase}${endpoint}`, {
@@ -803,3 +887,4 @@ async function uploadFileToS3(file, endpoint = '/api/upload/single') {
   if (!data.success) throw new Error(data.message || 'Upload failed');
   return data.url || data.urls;
 }
+

@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initSmoothScroll();
   initParallax();
   initHeartFall();
+  initMobileFooterCollapse();
+  initTestimonialsCarouselSync();
 });
 
 // ============================================
@@ -21,6 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // ============================================
 function initLoader() {
   const loader = document.getElementById('pageLoader');
+  if (!loader) return;
+  
   window.addEventListener('load', () => {
     setTimeout(() => {
       loader.classList.add('hidden');
@@ -79,7 +83,7 @@ function initHeartFall() {
   if (!heroSection) return;
   
   const hearts = ['💕', '❤️', '💖', '💝', '🤍'];
-  const maxHearts = 35; 
+  const maxHearts = window.innerWidth <= 768 ? 12 : 35; 
 
   function createHeart() {
     const currentHearts = heroSection.querySelectorAll('.falling-heart').length;
@@ -132,6 +136,7 @@ function initNavbar() {
   const navbar = document.getElementById('navbar');
   const navLinks = document.querySelectorAll('.nav-links a');
   const sections = document.querySelectorAll('section[id]');
+  if (!navbar) return;
 
   window.addEventListener('scroll', () => {
     // Toggle scrolled class
@@ -165,6 +170,7 @@ function initNavbar() {
 function initMobileMenu() {
   const toggle = document.getElementById('mobileToggle');
   const navLinks = document.getElementById('navLinks');
+  if (!toggle || !navLinks) return;
 
   toggle.addEventListener('click', () => {
     navLinks.classList.toggle('active');
@@ -222,7 +228,7 @@ function initScrollAnimations() {
 async function loadDatabaseProducts() {
   const grid = document.getElementById('productsGrid');
   if (!grid) return;
-  const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : 'http://127.0.0.1:5000';
+  const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : window.location.origin;
 
   const renderProducts = (productList) => {
     grid.innerHTML = productList.map((p) => {
@@ -359,6 +365,9 @@ function initProductTabs() {
 // COUNTDOWN TIMER
 // ============================================
 function initCountdownTimer() {
+  const daysEl = document.getElementById('timerDays');
+  if (!daysEl) return;
+
   // Set target date to 15 days from now
   const targetDate = new Date();
   targetDate.setDate(targetDate.getDate() + 15);
@@ -374,7 +383,7 @@ function initCountdownTimer() {
     const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     const secs = Math.floor((diff % (1000 * 60)) / 1000);
 
-    document.getElementById('timerDays').textContent = String(days).padStart(2, '0');
+    daysEl.textContent = String(days).padStart(2, '0');
     document.getElementById('timerHours').textContent = String(hours).padStart(2, '0');
     document.getElementById('timerMins').textContent = String(mins).padStart(2, '0');
     document.getElementById('timerSecs').textContent = String(secs).padStart(2, '0');
@@ -604,6 +613,7 @@ function handleNewsletter(event) {
 // ============================================
 function initBackToTop() {
   const btn = document.getElementById('backToTop');
+  if (!btn) return;
 
   window.addEventListener('scroll', () => {
     if (window.scrollY > 500) {
@@ -688,3 +698,45 @@ sparkleStyle.textContent = `
   }
 `;
 document.head.appendChild(sparkleStyle);
+
+// ============================================
+// MOBILE FOOTER ACCORDION COLLAPSE
+// ============================================
+function initMobileFooterCollapse() {
+  if (window.innerWidth > 768) return;
+  const headers = document.querySelectorAll('.footer-col h4');
+  headers.forEach(header => {
+    header.addEventListener('click', () => {
+      const list = header.nextElementSibling;
+      if (list && list.tagName === 'UL') {
+        const isOpen = list.style.display === 'block';
+        list.style.display = isOpen ? 'none' : 'block';
+        header.classList.toggle('collapsed-active', !isOpen);
+      }
+    });
+    // Set initial state to collapsed on mobile
+    const list = header.nextElementSibling;
+    if (list && list.tagName === 'UL') {
+      list.style.display = 'none';
+    }
+  });
+}
+
+// ============================================
+// TESTIMONIALS CAROUSEL DOTS SYNC
+// ============================================
+function initTestimonialsCarouselSync() {
+  const carousel = document.querySelector('.testimonials-grid-v2');
+  const dots = document.querySelectorAll('.testi-pagination .dot');
+  if (!carousel || !dots.length) return;
+
+  carousel.addEventListener('scroll', () => {
+    const scrollLeft = carousel.scrollLeft;
+    const width = carousel.clientWidth;
+    const activeIndex = Math.round(scrollLeft / width);
+    
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === activeIndex);
+    });
+  });
+}
