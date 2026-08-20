@@ -108,13 +108,12 @@
   display: none;
   align-items: center;
   gap: 10px;
-  padding: 10px 16px;
-  background: var(--white, #fff);
-  border-bottom: 1px solid var(--gray-200, #e5e7eb);
-  position: sticky;
-  top: var(--navbar-h);
-  z-index: 100;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 8px 14px 10px;
+  background: transparent;
+  position: relative; /* Scrolls naturally with page, NOT fixed/sticky */
+  top: auto;
+  z-index: 10;
+  box-shadow: none;
 }
 .mob-filter-open-btn {
   flex: 1;

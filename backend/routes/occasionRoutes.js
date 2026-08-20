@@ -12,15 +12,9 @@ const defaultOccasions = [
   { name: '🪔 Festive & Diwali', description: 'Traditional & festival gift hampers', status: 'Active', image: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png' }
 ];
 
-// @route   GET /api/occasions
-// @desc    Get all occasions (seeds defaults if empty)
-// @access  Public
 router.get('/', async (req, res) => {
   try {
-    let occasions = await Occasion.find().sort({ createdAt: 1 });
-    if (occasions.length === 0) {
-      occasions = await Occasion.insertMany(defaultOccasions);
-    }
+    const occasions = await Occasion.find().sort({ createdAt: 1 });
     res.json({ success: true, occasions });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

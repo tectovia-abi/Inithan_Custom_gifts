@@ -93,25 +93,25 @@
       padding: 0 var(--space-md);
       display: flex;
       flex-direction: column;
-      gap: 30px;
+      gap: 16px;
     }
 
     .products-search-section {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 0;
     }
     
     .search-wrapper {
       position: relative;
       max-width: 700px;
-      margin: 0 auto 15px auto;
+      margin: 0 auto;
     }
     
     .search-wrapper input {
       width: 100%;
-      padding: 16px 24px 16px 50px;
-      font-size: 1.1rem;
-      border: 2px solid var(--gray-200);
+      padding: 12px 24px 12px 48px;
+      font-size: 0.98rem;
+      border: 1.5px solid var(--gray-200);
       border-radius: 50px;
       outline: none;
       transition: all var(--transition-normal);
@@ -125,48 +125,17 @@
     
     .search-wrapper .search-icon {
       position: absolute;
-      left: 20px;
+      left: 18px;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: var(--gray-400);
-    }
-
-    .trending-tags {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      font-size: 0.9rem;
-    }
-
-    .trending-label {
-      color: var(--gray-500);
-      font-weight: 600;
-    }
-
-    .trending-tag {
-      background: var(--off-white);
-      color: var(--primary);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-weight: 600;
-      cursor: pointer;
-      border: 1px solid rgba(196, 30, 58, 0.1);
-      transition: all var(--transition-fast);
-    }
-
-    .trending-tag:hover {
-      background: var(--primary);
-      color: var(--white);
-      transform: translateY(-2px);
     }
 
     .products-layout {
       display: grid;
       grid-template-columns: 280px 1fr;
-      gap: 40px;
+      gap: 30px;
       align-items: start;
     }
 
@@ -290,21 +259,15 @@
   </nav>
 
   <!-- Products Showcase Section -->
-  <section class="section products" style="padding-top: 120px; min-height: 85vh; background: var(--gray-100);">
+  <section class="section products" style="padding-top: 95px; padding-bottom: 40px; min-height: 85vh; background: var(--gray-100);">
     
     <div class="products-page-container">
       
-      <!-- Top Search & Trending -->
+      <!-- Top Search -->
       <div class="products-search-section reveal active">
         <div class="search-wrapper">
           <span class="search-icon">🔍</span>
           <input type="text" id="mainProductSearch" placeholder="Search gifts, mugs, pillows, birthdays...">
-        </div>
-        <div class="trending-tags" id="trendingTagsContainer">
-          <span class="trending-label">Trending:</span>
-          <span class="trending-tag" data-search="Magic Mug">🔥 Magic Mug</span>
-          <span class="trending-tag" data-search="Birthday">🔥 Birthday Gifts</span>
-          <span class="trending-tag" data-search="Corporate">🔥 Corporate Gifts</span>
         </div>
       </div>
 
@@ -571,20 +534,6 @@
       if (navCart) {
         navCart.addEventListener('click', function() {
           window.location.href = 'cart.html';
-        });
-      }
-      // Trending tags click
-      const trendingContainer = document.getElementById('trendingTagsContainer');
-      if (trendingContainer) {
-        trendingContainer.addEventListener('click', function(e) {
-          const tag = e.target.closest('.trending-tag');
-          if (tag && tag.dataset.search) {
-            const searchInput = document.getElementById('mainProductSearch');
-            if (searchInput) {
-              searchInput.value = tag.dataset.search;
-              searchInput.dispatchEvent(new Event('input'));
-            }
-          }
         });
       }
     });

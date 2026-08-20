@@ -345,10 +345,12 @@
 
     @media (max-width: 768px) {
       .bulk-hero { padding: 110px 20px 60px; }
-      .benefits-section, .form-outer, .who-section { padding-left: 20px; padding-right: 20px; }
-      .stats-strip, .contact-strip { gap: 28px; }
-      .fg2, .fg3 { grid-template-columns: 1fr; }
-      .form-card { padding: 24px 18px; }
+      .benefits-section, .form-outer, .who-section { padding-left: 16px; padding-right: 16px; }
+      .stats-strip, .contact-strip { gap: 20px; padding: 28px 16px; }
+      .fg2, .fg3 { grid-template-columns: 1fr; gap: 14px; }
+      .form-card { padding: 22px 16px; border-radius: 18px; }
+      .prod-checks { gap: 8px; }
+      .prod-check-lbl { padding: 8px 12px; font-size: 0.8rem; }
     }
   </style>
 </head>
@@ -456,6 +458,7 @@
     </div>
 
     <div class="form-card">
+      <div id="bulkUserBanner" style="margin-bottom:20px;"></div>
       <div id="bulkAlert"></div>
       <form id="bulkOrderForm" onsubmit="handleBulkSubmit(event)" novalidate>
 
@@ -656,6 +659,9 @@
               <option>Email</option>
               <option>Phone Call</option>
               <option>WhatsApp Message</option>
+            </select>
+          </div>
+        </div>
         <div class="fg1">
           <div class="fg">
             <label>Any Special Requirements or Questions</label>
@@ -851,24 +857,7 @@
     </div>
   </footer>
 
-  <script src="js/auth.js"></script>
   <script>
-    // Navbar scroll effect
-    window.addEventListener('scroll', () => {
-      const nb = document.getElementById('navbar');
-      nb.classList.toggle('scrolled', window.scrollY > 50);
-    });
-
-    // Mobile Toggle
-    const mobileToggle = document.getElementById('mobileToggle');
-    const navLinks = document.getElementById('navLinks');
-    if (mobileToggle) {
-      mobileToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-        mobileToggle.classList.toggle('active');
-      });
-    }
-
     // Set min delivery date = today + 7 days
     (function() {
       const dateInput = document.getElementById('bDeliveryDate');
@@ -877,39 +866,41 @@
       dateInput.min = d.toISOString().split('T')[0];
     })();
 
-    // Check login status on load
+    // Check login status and populate user banner
     document.addEventListener('DOMContentLoaded', () => {
-      // Use isLoggedIn from auth.js
-      if (typeof isLoggedIn === 'function') {
-        if (!isLoggedIn()) {
-          const formCard = document.querySelector('.form-card');
-          if (formCard) {
-            formCard.innerHTML = `
-              <div style="text-align:center; padding:40px 20px;">
-                <div style="font-size:3.5rem; margin-bottom:20px;">🔒</div>
-                <h3 style="font-family:'Playfair Display', serif; font-size:1.8rem; color:var(--dark); margin-bottom:14px; font-weight:800;">Login Required</h3>
-                <p style="color:var(--gray); margin-bottom:32px; font-size:1.05rem;">You need to be logged in to submit a bulk order inquiry.</p>
-                <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
-                  <a href="login.html" class="bulk-btn" style="text-decoration:none; display:inline-flex; justify-content:center; align-items:center; max-width:200px; padding:12px 30px;">Login to Account</a>
-                  <a href="signup.html" class="bulk-btn" style="text-decoration:none; display:inline-flex; justify-content:center; align-items:center; max-width:200px; padding:12px 30px; background:linear-gradient(135deg, var(--dark) 0%, #2d1a2e 100%);">Create Account</a>
-                </div>
+      const banner = document.getElementById('bulkUserBanner');
+      const user = typeof getAuthUser === 'function' ? getAuthUser() : null;
+
+      if (user) {
+        if (banner) {
+          banner.innerHTML = `
+            <div style="background: rgba(45,106,79,0.08); border: 1.5px solid rgba(45,106,79,0.3); border-radius: 12px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 0.88rem;">
+              <div style="color: #2D6A4F; font-weight: 600;">
+                👋 Logged in as <strong>${user.fullName || user.email}</strong>
               </div>
-            `;
-          }
-        } else {
-          // Prepopulate user info if logged in
-          const user = typeof getAuthUser === 'function' ? getAuthUser() : null;
-          if (user) {
-            if (document.getElementById('bName') && user.fullName) {
-              document.getElementById('bName').value = user.fullName;
-            }
-            if (document.getElementById('bEmail') && user.email) {
-              document.getElementById('bEmail').value = user.email;
-            }
-            if (document.getElementById('bPhone') && user.phone) {
-              document.getElementById('bPhone').value = user.phone;
-            }
-          }
+              <a href="my-bulk-orders.html" style="background: #2D6A4F; color: #fff; padding: 7px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(45,106,79,0.25);">
+                📋 View Past Inquiries →
+              </a>
+            </div>
+          `;
+        }
+        if (document.getElementById('bName') && user.fullName) {
+          document.getElementById('bName').value = user.fullName;
+        }
+        if (document.getElementById('bEmail') && user.email) {
+          document.getElementById('bEmail').value = user.email;
+        }
+        if (document.getElementById('bPhone') && user.phone) {
+          document.getElementById('bPhone').value = user.phone;
+        }
+      } else {
+        if (banner) {
+          banner.innerHTML = `
+            <div style="background: rgba(196,30,58,0.05); border: 1.5px dashed rgba(196,30,58,0.25); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 0.85rem; color: var(--dark);">
+              <span>💡 <strong>Tip:</strong> Log in to track your past inquiries and get instant status updates.</span>
+              <a href="login.html" style="color: var(--primary); font-weight: 700; text-decoration: underline;">Login / Sign Up →</a>
+            </div>
+          `;
         }
       }
     });

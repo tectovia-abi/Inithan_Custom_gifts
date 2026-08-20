@@ -77,21 +77,9 @@ const computeOfferStatus = (offer) => {
 };
 
 // @route   GET /api/offers
-// @desc    Get all offers for Admin
-// @access  Private / Admin
 const getOffers = async (req, res) => {
   try {
-    let offers = await Offer.find().populate('products.productId').sort({ priority: 1, createdAt: -1 });
-
-    // Seed defaults if empty
-    if (offers.length === 0) {
-      try {
-        await Offer.insertMany(defaultSeedOffers);
-        offers = await Offer.find().populate('products.productId').sort({ priority: 1, createdAt: -1 });
-      } catch (seedErr) {
-        console.warn('⚠️ Could not seed default offers:', seedErr.message);
-      }
-    }
+    const offers = await Offer.find().populate('products.productId').sort({ priority: 1, createdAt: -1 });
 
     const formatted = offers.map(o => {
       const plain = o.toObject();
@@ -184,10 +172,15 @@ const getActiveOffers = async (req, res) => {
       return offerObj;
     });
 
+    // Only return offers that actually have at least 1 active product attached
+    const offersWithProducts = activeOffers.filter(
+      offer => Array.isArray(offer.resolvedProducts) && offer.resolvedProducts.length > 0
+    );
+
     return res.status(200).json({
       success: true,
-      count: activeOffers.length,
-      offers: activeOffers
+      count: offersWithProducts.length,
+      offers: offersWithProducts
     });
   } catch (error) {
     console.error('❌ [OFFERS BACKEND] Get Active Offers Error:', error.message);
