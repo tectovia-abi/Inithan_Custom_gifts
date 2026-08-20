@@ -59,6 +59,7 @@ function initAdmin() {
   // 3. Data Fetching
   fetchDashboardData(token);
   loadCategoriesForDropdowns();
+  loadOccasionsForDropdowns();
 }
 
 if (document.readyState === 'loading') {
@@ -70,6 +71,7 @@ if (document.readyState === 'loading') {
 let allProducts = [];
 let allInquiries = [];
 let allCategories = [];
+let allOccasions = [];
 
 async function loadCategoriesForDropdowns() {
   const categorySelects = [
@@ -212,6 +214,9 @@ async function fetchDashboardData(token) {
     const addProductForm = document.getElementById('addProductForm');
     if (addProductForm) {
 
+      // Setup Real-time Pricing Auto-Calculation
+      setupPricingAutoCalc('p_price', 'p_offerPercentage', 'p_discountPrice');
+
       let primaryImageS3Url = '';
       let galleryImagesS3Urls = [];
 
@@ -293,12 +298,15 @@ async function fetchDashboardData(token) {
         saveBtn.disabled = true;
         saveBtn.textContent = 'Saving...';
 
+        const selectedOccasions = addProductOccasionPicker ? addProductOccasionPicker.getSelected() : [];
+
         const payload = {
           name: document.getElementById('p_name').value,
           code: document.getElementById('p_code').value,
           brand: document.getElementById('p_brand').value,
           category: document.getElementById('p_category').value,
           subCategory: document.getElementById('p_subCategory').value,
+          occasions: selectedOccasions,
           productType: document.getElementById('p_productType').value,
           status: (document.getElementById('p_status') && document.getElementById('p_status').value) ? document.getElementById('p_status').value : 'Active',
           imageUrl: primaryImageS3Url,
@@ -306,18 +314,21 @@ async function fetchDashboardData(token) {
           shortDescription: document.getElementById('p_shortDescription').value,
           detailedDescription: document.getElementById('p_detailedDescription').value,
           price: document.getElementById('p_price').value,
+          offerPercentage: document.getElementById('p_offerPercentage') ? document.getElementById('p_offerPercentage').value : 0,
           discountPrice: document.getElementById('p_discountPrice').value,
-          costPrice: document.getElementById('p_costPrice').value,
-          stockQuantity: document.getElementById('p_stockQuantity').value,
-          lowStockAlert: document.getElementById('p_lowStockAlert').value,
-          skuBarcode: document.getElementById('p_skuBarcode').value,
-          weight: document.getElementById('p_weight').value,
+          costPrice: document.getElementById('p_costPrice') ? document.getElementById('p_costPrice').value : 0,
+          stockQuantity: document.getElementById('p_stockQuantity') ? document.getElementById('p_stockQuantity').value : 50,
+          lowStockAlert: document.getElementById('p_lowStockAlert') ? document.getElementById('p_lowStockAlert').value : 5,
+          skuBarcode: document.getElementById('p_skuBarcode') ? document.getElementById('p_skuBarcode').value : '',
+          weight: document.getElementById('p_weight') ? document.getElementById('p_weight').value : 0.5,
           dimensions: {
-            length: document.getElementById('p_dim_l').value,
-            width: document.getElementById('p_dim_w').value,
-            height: document.getElementById('p_dim_h').value
+            length: document.getElementById('p_dim_l') ? document.getElementById('p_dim_l').value : 0,
+            width: document.getElementById('p_dim_w') ? document.getElementById('p_dim_w').value : 0,
+            height: document.getElementById('p_dim_h') ? document.getElementById('p_dim_h').value : 0,
+            unit: document.getElementById('p_dim_unit') ? document.getElementById('p_dim_unit').value : 'cm',
+            description: document.getElementById('p_dim_description') ? document.getElementById('p_dim_description').value : ''
           },
-          shippingType: document.getElementById('p_shippingType').value,
+          shippingType: document.getElementById('p_shippingType') ? document.getElementById('p_shippingType').value : 'Standard Delivery',
           keywords: document.getElementById('p_keywords').value,
           metaTitle: document.getElementById('p_metaTitle').value,
           metaDescription: document.getElementById('p_metaDescription').value,
@@ -675,6 +686,21 @@ function editProduct(id) {
   document.getElementById('editProductCategory').value = product.category || 'Custom Gifts';
   document.getElementById('editProductShortDesc').value = product.shortDescription || '';
   document.getElementById('editProductPrice').value = product.price;
+  
+  const editOfferPct = document.getElementById('editProductOfferPercentage');
+  const editDiscountPrice = document.getElementById('editProductDiscountPrice');
+  if (editDiscountPrice) editDiscountPrice.value = (product.discountPrice !== undefined && product.discountPrice !== null) ? product.discountPrice : '';
+  if (editOfferPct) {
+    if (product.offerPercentage !== undefined && product.offerPercentage !== null && Number(product.offerPercentage) > 0) {
+      editOfferPct.value = product.offerPercentage;
+    } else if (product.price && product.discountPrice && Number(product.price) > Number(product.discountPrice)) {
+      const computedPct = ((Number(product.price) - Number(product.discountPrice)) / Number(product.price)) * 100;
+      editOfferPct.value = (Math.round(computedPct * 100) / 100).toFixed(2);
+    } else {
+      editOfferPct.value = '0';
+    }
+  }
+
   document.getElementById('editProductStock').value = product.stockQuantity !== undefined ? product.stockQuantity : 50;
   document.getElementById('editProductStatus').value = product.status || 'Active';
   document.getElementById('editProductImage').value = product.imageUrl || '';
@@ -687,11 +713,17 @@ function editProduct(id) {
   if (document.getElementById('editAllowCustomImage')) document.getElementById('editAllowCustomImage').checked = product.allowCustomImage !== undefined ? !!product.allowCustomImage : true;
   if (document.getElementById('editMaxCustomImages')) document.getElementById('editMaxCustomImages').value = product.maxCustomImages || 1;
 
+  if (editProductOccasionPicker) {
+    editProductOccasionPicker.setSelected(product.occasions || []);
+  }
+
   openModal('editProductModal');
 }
 
 // Handle Edit Form Submission
 document.addEventListener('DOMContentLoaded', () => {
+  setupPricingAutoCalc('editProductPrice', 'editProductOfferPercentage', 'editProductDiscountPrice');
+
   const editForm = document.getElementById('editProductForm');
   if (editForm) {
     // Handle image URL preview update
@@ -741,13 +773,18 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.disabled = true;
       btn.textContent = 'Saving...';
       
+      const selectedEditOccasions = editProductOccasionPicker ? editProductOccasionPicker.getSelected() : [];
+
       const id = document.getElementById('editProductId').value;
       const data = {
         name: document.getElementById('editProductName').value,
         code: document.getElementById('editProductCode').value,
         category: document.getElementById('editProductCategory').value,
+        occasions: selectedEditOccasions,
         shortDescription: document.getElementById('editProductShortDesc').value,
         price: Number(document.getElementById('editProductPrice').value),
+        offerPercentage: document.getElementById('editProductOfferPercentage') ? Number(document.getElementById('editProductOfferPercentage').value) : 0,
+        discountPrice: document.getElementById('editProductDiscountPrice') ? Number(document.getElementById('editProductDiscountPrice').value) : 0,
         stockQuantity: Number(document.getElementById('editProductStock').value),
         status: (document.getElementById('editProductStatus') && document.getElementById('editProductStatus').value) ? document.getElementById('editProductStatus').value : 'Active',
         imageUrl: document.getElementById('editProductImage').value,
@@ -886,5 +923,181 @@ async function uploadFileToS3(file, endpoint = '/api/upload/single') {
   const data = await res.json();
   if (!data.success) throw new Error(data.message || 'Upload failed');
   return data.url || data.urls;
+}
+
+/**
+ * Setup Real-time Pricing Auto Calculation (Selling Price, Offer %, Discount Price)
+ */
+function setupPricingAutoCalc(priceId, offerPctId, discountPriceId) {
+  const priceInput = document.getElementById(priceId);
+  const offerPctInput = document.getElementById(offerPctId);
+  const discountPriceInput = document.getElementById(discountPriceId);
+
+  if (!priceInput || !offerPctInput || !discountPriceInput) return;
+
+  function calcFromPriceOrOffer() {
+    const price = parseFloat(priceInput.value) || 0;
+    const pct = parseFloat(offerPctInput.value) || 0;
+
+    if (price > 0 && pct >= 0) {
+      const discountPrice = price - (price * (pct / 100));
+      discountPriceInput.value = discountPrice >= 0 ? discountPrice.toFixed(2) : '0.00';
+    } else if (price > 0 && (offerPctInput.value === '' || pct === 0)) {
+      discountPriceInput.value = price.toFixed(2);
+    }
+  }
+
+  function calcFromDiscountPrice() {
+    const price = parseFloat(priceInput.value) || 0;
+    const discountPrice = parseFloat(discountPriceInput.value) || 0;
+
+    if (price > 0) {
+      if (discountPrice >= price || discountPrice <= 0) {
+        offerPctInput.value = '0';
+      } else {
+        const pct = ((price - discountPrice) / price) * 100;
+        offerPctInput.value = (Math.round(pct * 100) / 100).toFixed(2);
+      }
+    }
+  }
+
+  priceInput.addEventListener('input', () => {
+    if (offerPctInput.value !== '' && parseFloat(offerPctInput.value) > 0) {
+      calcFromPriceOrOffer();
+    } else if (discountPriceInput.value !== '' && parseFloat(discountPriceInput.value) > 0) {
+      calcFromDiscountPrice();
+    }
+  });
+
+  offerPctInput.addEventListener('input', calcFromPriceOrOffer);
+  discountPriceInput.addEventListener('input', calcFromDiscountPrice);
+}
+
+/**
+ * Searchable Multi-Select Occasion Picker Class
+ */
+class SearchableOccasionPicker {
+  constructor(searchId, tagsId, listId) {
+    this.searchEl = document.getElementById(searchId);
+    this.tagsEl = document.getElementById(tagsId);
+    this.listEl = document.getElementById(listId);
+    this.selected = new Set();
+    
+    if (this.searchEl) {
+      this.searchEl.addEventListener('input', () => this.renderList());
+    }
+  }
+
+  setSelected(list = []) {
+    this.selected = new Set((list || []).map(s => String(s).trim()).filter(Boolean));
+    this.render();
+  }
+
+  getSelected() {
+    return Array.from(this.selected);
+  }
+
+  toggle(name) {
+    if (!name) return;
+    if (this.selected.has(name)) {
+      this.selected.delete(name);
+    } else {
+      this.selected.add(name);
+    }
+    this.render();
+  }
+
+  render() {
+    this.renderTags();
+    this.renderList();
+  }
+
+  renderTags() {
+    if (!this.tagsEl) return;
+    const arr = this.getSelected();
+    if (arr.length === 0) {
+      this.tagsEl.innerHTML = '<span style="color: #94a3b8; font-size: 0.8rem; font-style: italic;">No occasions selected yet</span>';
+      return;
+    }
+
+    this.tagsEl.innerHTML = arr.map(name => `
+      <span style="display: inline-flex; align-items: center; gap: 6px; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 0.82rem; font-weight: 600; padding: 4px 10px; border-radius: 16px;">
+        ${name}
+        <span class="remove-occ-tag" data-occ="${name.replace(/"/g, '&quot;')}" style="cursor: pointer; font-size: 0.9rem; color: #0284c7; font-weight: bold;">✕</span>
+      </span>
+    `).join('');
+
+    this.tagsEl.querySelectorAll('.remove-occ-tag').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const occName = btn.getAttribute('data-occ');
+        this.toggle(occName);
+      });
+    });
+  }
+
+  renderList() {
+    if (!this.listEl) return;
+    if (!allOccasions || allOccasions.length === 0) {
+      this.listEl.innerHTML = '<span style="color: #64748b; font-size: 0.85rem; padding: 4px;">No occasions available.</span>';
+      return;
+    }
+
+    const query = (this.searchEl ? this.searchEl.value : '').toLowerCase().trim();
+    const filtered = allOccasions.filter(o => (o.name || '').toLowerCase().includes(query));
+
+    if (filtered.length === 0) {
+      this.listEl.innerHTML = '<span style="color: #94a3b8; font-size: 0.82rem; padding: 4px;">No matching occasions found</span>';
+      return;
+    }
+
+    this.listEl.innerHTML = filtered.map(occ => {
+      const isSel = this.selected.has(occ.name);
+      return `
+        <div class="occ-option-item" data-occ="${occ.name.replace(/"/g, '&quot;')}" style="padding: 6px 10px; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; background: ${isSel ? '#f0fdf4' : 'transparent'}; color: ${isSel ? '#166534' : '#334155'}; border: 1px solid ${isSel ? '#bbf7d0' : 'transparent'}; transition: background 0.15s;">
+          <span style="font-weight: ${isSel ? '600' : '500'};">${occ.name}</span>
+          <span style="font-size: 0.78rem; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: ${isSel ? '#dcfce7' : '#f1f5f9'}; color: ${isSel ? '#15803d' : '#64748b'};">${isSel ? '✓ Selected' : '+ Add'}</span>
+        </div>
+      `;
+    }).join('');
+
+    this.listEl.querySelectorAll('.occ-option-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const occName = item.getAttribute('data-occ');
+        this.toggle(occName);
+      });
+    });
+  }
+}
+
+let addProductOccasionPicker = null;
+let editProductOccasionPicker = null;
+
+async function loadOccasionsForDropdowns() {
+  const widgetAdd = document.getElementById('p_occ_widget');
+  const widgetEdit = document.getElementById('edit_p_occ_widget');
+
+  if (!widgetAdd && !widgetEdit) return;
+
+  try {
+    const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : window.location.origin;
+    const res = await fetch(`${apiBase}/api/occasions`);
+    const data = await res.json();
+    if (data.success && Array.isArray(data.occasions)) {
+      allOccasions = data.occasions;
+
+      if (widgetAdd && !addProductOccasionPicker) {
+        addProductOccasionPicker = new SearchableOccasionPicker('p_occ_search', 'p_occ_selected_tags', 'p_occ_options_list');
+      }
+      if (addProductOccasionPicker) addProductOccasionPicker.render();
+
+      if (widgetEdit && !editProductOccasionPicker) {
+        editProductOccasionPicker = new SearchableOccasionPicker('edit_p_occ_search', 'edit_p_occ_selected_tags', 'edit_p_occ_options_list');
+      }
+      if (editProductOccasionPicker) editProductOccasionPicker.render();
+    }
+  } catch (err) {
+    console.error('Error fetching occasions for picker:', err);
+  }
 }
 

@@ -183,4 +183,153 @@ const getUsers = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, getUsers };
+// @desc    Get current user profile
+// @route   GET /api/auth/profile
+// @access  Private
+const getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('-password');
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User profile not found.'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        phone: user.phone,
+        isAdmin: !!user.isAdmin,
+        createdAt: user.createdAt
+      }
+    });
+  } catch (error) {
+    console.error('❌ [AUTH BACKEND] Get Profile Error:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error fetching profile details.'
+    });
+  }
+};
+
+// @desc    Update user profile (name, phone)
+// @route   PUT /api/auth/profile
+// @access  Private
+const updateProfile = async (req, res) => {
+  try {
+    const { fullName, phone } = req.body;
+
+    if (!fullName || !fullName.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Full name is required.'
+      });
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found.'
+      });
+    }
+
+    user.fullName = fullName.trim();
+    if (phone && phone.trim()) {
+      user.phone = phone.trim();
+    }
+
+    const updatedUser = await user.save();
+
+    console.log(`✅ [AUTH BACKEND] Profile updated for: ${updatedUser.email}`);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Profile updated successfully!',
+      user: {
+        id: updatedUser._id,
+        fullName: updatedUser.fullName,
+        email: updatedUser.email,
+        phone: updatedUser.phone,
+        isAdmin: !!updatedUser.isAdmin,
+        createdAt: updatedUser.createdAt
+      }
+    });
+  } catch (error) {
+    console.error('❌ [AUTH BACKEND] Update Profile Error:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Server error updating profile.'
+    });
+  }
+};
+
+// @desc    Change user password
+// @route   PUT /api/auth/change-password
+// @access  Private
+const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide both current and new password.'
+      });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: 'New password must be at least 6 characters long.'
+      });
+    }
+
+    if (confirmPassword && newPassword !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'New passwords do not match.'
+      });
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found.'
+      });
+    }
+
+    // Verify old password
+    const isMatch = await user.comparePassword(currentPassword);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: 'Current password is incorrect.'
+      });
+    }
+
+    // Set new password (pre('save') hook handles hashing)
+    user.password = newPassword;
+    await user.save();
+
+    console.log(`🔒 [AUTH BACKEND] Password changed successfully for: ${user.email}`);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Password changed successfully!'
+    });
+  } catch (error) {
+    console.error('❌ [AUTH BACKEND] Change Password Error:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Server error changing password.'
+    });
+  }
+};
+
+module.exports = { signup, login, getUsers, getProfile, updateProfile, changePassword };

@@ -1,15 +1,17 @@
 (function () {
-  // ── admin-categories.js — CSP-safe admin category controller ─────────────────
+  // ── admin-categories.js — CSP-safe admin category & occasion controller ─────────────────
 
   const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port !== '8081'
     ? 'http://127.0.0.1:8081'
     : window.location.origin;
 
   let categories = [];
+  let occasions = [];
   let currentCatImageBase64 = '';
+  let currentOccImageBase64 = '';
   let lastExpandedCatId = '';
 
-  // Beautiful, non-intrusive Toast Notifications
+  // Toast Notifications
   function showToast(message, isSuccess = true) {
     let container = document.getElementById('toastContainer');
     if (!container) {
@@ -22,13 +24,11 @@
     const toast = document.createElement('div');
     toast.className = `toast-message ${isSuccess ? 'success' : 'error'}`;
     
-    // Icon badge
     const icon = isSuccess ? '✅' : '❌';
     toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
     
     container.appendChild(toast);
     
-    // Automatically remove after animation finishes (3 seconds total)
     setTimeout(() => {
       toast.remove();
     }, 3000);
@@ -48,7 +48,6 @@
     if (element) {
       const isActive = element.classList.contains('active');
       
-      // Close other accordions for clean UX
       document.querySelectorAll('.acc-item').forEach(item => {
         item.classList.remove('active');
       });
@@ -89,7 +88,7 @@
     document.getElementById('subcatModal').style.display = 'flex';
   }
 
-  // Fetch all categories from DB
+  // ── Categories Logic ────────────────────────────────────────────────────────
   async function fetchCategories() {
     try {
       const res = await fetch(`${API_BASE}/api/categories`);
@@ -104,7 +103,6 @@
     }
   }
 
-  // Render categories HTML template
   function renderCategories() {
     const container = document.getElementById('categoriesContainer');
     if (!container) return;
@@ -120,7 +118,7 @@
           <div class="acc-title-group" style="pointer-events: none;">
             <img src="${cat.image || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'}" alt="Icon" class="acc-img" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
             <span class="acc-title">${cat.name}</span>
-            <span class="acc-count">${cat.subcategories.length} Subcategories</span>
+            <span class="acc-count">${cat.subcategories ? cat.subcategories.length : 0} Subcategories</span>
           </div>
           <div class="acc-toggle-icon" style="pointer-events: none;">▼</div>
         </div>
@@ -133,7 +131,7 @@
             
             <h4 style="margin-bottom: 15px; color: #555;">Subcategories</h4>
             <div class="subcat-grid">
-              ${cat.subcategories.map(sub => `
+              ${(cat.subcategories || []).map(sub => `
                 <span class="subcat-pill">
                   ${sub}
                   <span class="del-subcat" data-action="delete-sub" data-cat-id="${cat._id}" data-sub-name="${sub.replace(/"/g, '&quot;')}">×</span>
@@ -146,7 +144,6 @@
       </div>
     `).join('');
 
-    // Auto-expand accordion section if lastExpandedCatId matches
     if (lastExpandedCatId) {
       const element = document.getElementById(`acc-${lastExpandedCatId}`);
       if (element) {
@@ -155,7 +152,6 @@
     }
   }
 
-  // Save main category (Create/Update)
   async function saveCategory(e) {
     e.preventDefault();
     const id = document.getElementById('catId').value;
@@ -179,7 +175,6 @@
       const data = await res.json();
       if (data.success) {
         closeModal('catModal');
-        // Auto-expand this category after saving
         lastExpandedCatId = data.category ? data.category._id : '';
         fetchCategories();
         showToast(id ? 'Category updated successfully!' : 'Category added successfully!', true);
@@ -192,7 +187,6 @@
     }
   }
 
-  // Delete main category
   async function deleteCategory(id) {
     if (!confirm('Are you sure you want to delete this category completely?')) return;
     const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
@@ -200,43 +194,42 @@
     try {
       const res = await fetch(`${API_BASE}/api/categories/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (res.ok) {
-        if (lastExpandedCatId === id) {
-          lastExpandedCatId = '';
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
+      });
+      const data = await res.json();
+      if (data.success) {
         fetchCategories();
         showToast('Category deleted successfully!', true);
       } else {
-        showToast('Failed to delete category', false);
+        showToast(data.message || 'Error deleting category', false);
       }
     } catch (error) {
       console.error(error);
-      showToast('Error deleting category', false);
+      showToast('Failed to delete category', false);
     }
   }
 
-  // Save subcategory
   async function saveSubcategory(e) {
     e.preventDefault();
     const catId = document.getElementById('targetCatId').value;
-    const subName = document.getElementById('subcatName').value;
+    const subcatName = document.getElementById('subcatName').value;
     const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
 
     try {
-      const res = await fetch(`${API_BASE}/api/categories/${catId}/sub`, {
+      const res = await fetch(`${API_BASE}/api/categories/${catId}/subcategories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ subName })
+        body: JSON.stringify({ name: subcatName })
       });
+
       const data = await res.json();
       if (data.success) {
         closeModal('subcatModal');
-        // Keep the current category expanded to show new subcategory
         lastExpandedCatId = catId;
         fetchCategories();
         showToast('Subcategory added successfully!', true);
@@ -245,62 +238,223 @@
       }
     } catch (error) {
       console.error(error);
-      showToast('Server error while adding subcategory', false);
+      showToast('Failed to add subcategory', false);
     }
   }
 
-  // Delete subcategory
   async function deleteSubcategory(catId, subName) {
     if (!confirm(`Delete subcategory "${subName}"?`)) return;
     const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
 
     try {
-      const res = await fetch(`${API_BASE}/api/categories/${catId}/sub/${encodeURIComponent(subName)}`, {
+      const res = await fetch(`${API_BASE}/api/categories/${catId}/subcategories/${encodeURIComponent(subName)}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
-      if (res.ok) {
+      const data = await res.json();
+      if (data.success) {
         lastExpandedCatId = catId;
         fetchCategories();
         showToast('Subcategory deleted successfully!', true);
       } else {
-        showToast('Failed to delete subcategory', false);
+        showToast(data.message || 'Error deleting subcategory', false);
       }
     } catch (error) {
       console.error(error);
-      showToast('Error deleting subcategory', false);
+      showToast('Failed to delete subcategory', false);
     }
   }
 
-  // Main initialization routine
-  function init() {
-    const user = getAuthUser();
-    const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
+  // ── Occasions Logic ────────────────────────────────────────────────────────
+  async function fetchOccasions() {
+    try {
+      const res = await fetch(`${API_BASE}/api/occasions`);
+      const data = await res.json();
+      if (data.success) {
+        occasions = data.occasions;
+        renderOccasions();
+      }
+    } catch (error) {
+      console.error('Error fetching occasions:', error);
+      const container = document.getElementById('occasionsContainer');
+      if (container) container.innerHTML = '<p class="text-center" style="color:red;">Failed to load occasions.</p>';
+    }
+  }
 
-    // Admin Route Protection
-    if (!user || !token || !user.isAdmin) {
-      window.location.href = 'index.html';
+  function renderOccasions() {
+    const container = document.getElementById('occasionsContainer');
+    if (!container) return;
+
+    if (occasions.length === 0) {
+      container.innerHTML = '<p class="text-center" style="padding: 40px; color: #666;">No occasions found. Click "+ Add New Occasion" to add one!</p>';
       return;
     }
 
-    document.getElementById('adminName').textContent = user.fullName || 'Admin';
-    const initial = user.fullName ? user.fullName.charAt(0).toUpperCase() : 'A';
-    document.getElementById('adminAvatar').textContent = initial;
+    container.innerHTML = `
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+        ${occasions.map(occ => `
+          <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+            <div>
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <img src="${occ.image || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'}" alt="${occ.name}" style="width: 48px; height: 48px; border-radius: 10px; object-fit: cover; border: 1px solid #eee;" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
+                  <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;">${occ.name}</h3>
+                </div>
+                <span style="font-size: 0.75rem; font-weight: 600; padding: 3px 10px; border-radius: 12px; background: ${occ.status === 'Active' ? '#dcfce7' : '#f1f5f9'}; color: ${occ.status === 'Active' ? '#15803d' : '#64748b'};">${occ.status || 'Active'}</span>
+              </div>
+              <p style="font-size: 0.85rem; color: #64748b; margin: 0 0 15px 0; line-height: 1.4;">${occ.description || 'No description provided.'}</p>
+            </div>
+            
+            <div style="display: flex; gap: 10px; padding-top: 12px; border-top: 1px dashed #e2e8f0;">
+              <button class="btn-action btn-edit" style="flex:1;" data-action="edit-occ" data-id="${occ._id}" data-name="${occ.name.replace(/"/g, '&quot;')}" data-desc="${(occ.description || '').replace(/"/g, '&quot;')}" data-status="${occ.status || 'Active'}" data-image="${occ.image || ''}">✎ Edit</button>
+              <button class="btn-action btn-delete" style="flex:1;" data-action="delete-occ" data-id="${occ._id}">🗑️ Delete</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
 
-    // Mobile Menu Toggle
-    const menuToggle = document.getElementById('menuToggle');
-    const sidebar = document.getElementById('adminSidebar');
-    if (menuToggle && sidebar) {
-      menuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('open');
-      });
+  function openOccModal(id = '', name = '', description = '', status = 'Active', image = '') {
+    document.getElementById('occId').value = id;
+    document.getElementById('occName').value = name;
+    document.getElementById('occDescription').value = description;
+    document.getElementById('occStatus').value = status || 'Active';
+    
+    const preview = document.getElementById('occImagePreview');
+    if (image && image !== 'undefined') {
+      currentOccImageBase64 = image;
+      preview.src = image;
+      preview.style.display = 'block';
+    } else {
+      currentOccImageBase64 = '';
+      preview.src = '';
+      preview.style.display = 'none';
     }
 
-    // Static click bindings
+    document.getElementById('occModalTitle').textContent = id ? 'Edit Occasion' : 'Add Occasion';
+    document.getElementById('occModal').style.display = 'flex';
+  }
+
+  async function saveOccasion(e) {
+    e.preventDefault();
+    const id = document.getElementById('occId').value;
+    const name = document.getElementById('occName').value;
+    const description = document.getElementById('occDescription').value;
+    const status = document.getElementById('occStatus').value;
+    const image = currentOccImageBase64;
+    const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
+
+    try {
+      const method = id ? 'PUT' : 'POST';
+      const url = id ? `${API_BASE}/api/occasions/${id}` : `${API_BASE}/api/occasions`;
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ 
+          name, 
+          description, 
+          status, 
+          image: image || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png' 
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        closeModal('occModal');
+        fetchOccasions();
+        showToast(id ? 'Occasion updated successfully!' : 'Occasion added successfully!', true);
+      } else {
+        showToast(data.message || 'Error saving occasion', false);
+      }
+    } catch (error) {
+      console.error(error);
+      showToast('Failed to save occasion', false);
+    }
+  }
+
+  async function deleteOccasion(id) {
+    if (!confirm('Are you sure you want to delete this occasion?')) return;
+    const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
+
+    try {
+      const res = await fetch(`${API_BASE}/api/occasions/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      if (data.success) {
+        fetchOccasions();
+        showToast('Occasion deleted successfully!', true);
+      } else {
+        showToast(data.message || 'Error deleting occasion', false);
+      }
+    } catch (error) {
+      console.error(error);
+      showToast('Failed to delete occasion', false);
+    }
+  }
+
+  // ── DOM Initialization ──────────────────────────────────────────────────────
+  function init() {
+    // Add Category button
     const addCatBtn = document.getElementById('addCatBtn');
     if (addCatBtn) {
       addCatBtn.addEventListener('click', () => openCatModal());
     }
+
+    // Add Occasion button
+    const addOccBtn = document.getElementById('addOccBtn');
+    if (addOccBtn) {
+      addOccBtn.addEventListener('click', () => openOccModal());
+    }
+
+    // Tab Switcher (Categories vs Occasions)
+    const tabCatBtn = document.getElementById('tabCatBtn');
+    const tabOccBtn = document.getElementById('tabOccBtn');
+    const catSection = document.getElementById('categoriesSection');
+    const occSection = document.getElementById('occasionsSection');
+    const headerTitle = document.getElementById('headerTitle');
+
+    function switchToCategories() {
+      if (tabCatBtn) {
+        tabCatBtn.style.borderBottomColor = 'var(--primary, #C41E3A)';
+        tabCatBtn.style.color = 'var(--primary, #C41E3A)';
+      }
+      if (tabOccBtn) {
+        tabOccBtn.style.borderBottomColor = 'transparent';
+        tabOccBtn.style.color = '#64748b';
+      }
+      if (catSection) catSection.style.display = 'block';
+      if (occSection) occSection.style.display = 'none';
+      if (headerTitle) headerTitle.textContent = 'Manage Categories';
+    }
+
+    function switchToOccasions() {
+      if (tabOccBtn) {
+        tabOccBtn.style.borderBottomColor = 'var(--primary, #C41E3A)';
+        tabOccBtn.style.color = 'var(--primary, #C41E3A)';
+      }
+      if (tabCatBtn) {
+        tabCatBtn.style.borderBottomColor = 'transparent';
+        tabCatBtn.style.color = '#64748b';
+      }
+      if (occSection) occSection.style.display = 'block';
+      if (catSection) catSection.style.display = 'none';
+      if (headerTitle) headerTitle.textContent = 'Manage Occasions';
+      fetchOccasions();
+    }
+
+    if (tabCatBtn) tabCatBtn.addEventListener('click', switchToCategories);
+    if (tabOccBtn) tabOccBtn.addEventListener('click', switchToOccasions);
 
     // Global Modal Close listener delegation
     document.addEventListener('click', (e) => {
@@ -321,7 +475,12 @@
       subcatForm.addEventListener('submit', saveSubcategory);
     }
 
-    // Image Upload listener
+    const occForm = document.getElementById('occForm');
+    if (occForm) {
+      occForm.addEventListener('submit', saveOccasion);
+    }
+
+    // Image Upload listeners
     const catImageFile = document.getElementById('catImageFile');
     const catImagePreview = document.getElementById('catImagePreview');
     if (catImageFile && catImagePreview) {
@@ -339,18 +498,33 @@
       });
     }
 
-    // Event Delegation for dynamic Accordion Container elements
+    const occImageFile = document.getElementById('occImageFile');
+    const occImagePreview = document.getElementById('occImagePreview');
+    if (occImageFile && occImagePreview) {
+      occImageFile.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            currentOccImageBase64 = evt.target.result;
+            occImagePreview.src = currentOccImageBase64;
+            occImagePreview.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    // Event Delegation for Categories Container
     const categoriesContainer = document.getElementById('categoriesContainer');
     if (categoriesContainer) {
       categoriesContainer.addEventListener('click', (e) => {
-        // 1. Accordion Toggle
         const header = e.target.closest('[data-toggle-accordion]');
         if (header) {
           toggleAccordion(header.getAttribute('data-toggle-accordion'));
           return;
         }
 
-        // 2. Edit Category
         const editBtn = e.target.closest('[data-action="edit-cat"]');
         if (editBtn) {
           openCatModal(
@@ -361,21 +535,18 @@
           return;
         }
 
-        // 3. Delete Category
         const deleteBtn = e.target.closest('[data-action="delete-cat"]');
         if (deleteBtn) {
           deleteCategory(deleteBtn.getAttribute('data-id'));
           return;
         }
 
-        // 4. Add Subcategory
         const addSubBtn = e.target.closest('[data-action="add-sub"]');
         if (addSubBtn) {
           openSubcatModal(addSubBtn.getAttribute('data-cat-id'));
           return;
         }
 
-        // 5. Delete Subcategory
         const delSubBtn = e.target.closest('[data-action="delete-sub"]');
         if (delSubBtn) {
           deleteSubcategory(
@@ -387,8 +558,38 @@
       });
     }
 
-    // Fetch initial list of categories
+    // Event Delegation for Occasions Container
+    const occasionsContainer = document.getElementById('occasionsContainer');
+    if (occasionsContainer) {
+      occasionsContainer.addEventListener('click', (e) => {
+        const editBtn = e.target.closest('[data-action="edit-occ"]');
+        if (editBtn) {
+          openOccModal(
+            editBtn.getAttribute('data-id'),
+            editBtn.getAttribute('data-name'),
+            editBtn.getAttribute('data-desc'),
+            editBtn.getAttribute('data-status'),
+            editBtn.getAttribute('data-image')
+          );
+          return;
+        }
+
+        const deleteBtn = e.target.closest('[data-action="delete-occ"]');
+        if (deleteBtn) {
+          deleteOccasion(deleteBtn.getAttribute('data-id'));
+          return;
+        }
+      });
+    }
+
+    // Fetch initial list of categories and occasions
     fetchCategories();
+    fetchOccasions();
+
+    // Check URL hash if user clicked direct link to #occasions
+    if (window.location.hash === '#occasions' || window.location.pathname.includes('admin-occasions.html')) {
+      switchToOccasions();
+    }
   }
 
   // Wait for document DOM parsing

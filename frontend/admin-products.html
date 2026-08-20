@@ -29,8 +29,11 @@
           <a href="admin-products.html" class="admin-nav-link active">
             <span>🛍️</span> Products
           </a>
+          <a href="admin-offers.html" class="admin-nav-link">
+            <span>🏷️</span> Occasion Offers
+          </a>
           <a href="admin-categories.html" class="admin-nav-link">
-            <span>🗂️</span> Categories
+            <span>🗂️</span> Categories & Occasions
           </a>
           <a href="admin-users.html" class="admin-nav-link">
             <span>👥</span> Users
@@ -233,14 +236,36 @@
                     <label>Short Description</label>
                     <textarea id="editProductShortDesc" rows="2"></textarea>
                   </div>
+                  <div class="input-group" style="margin-top: 15px;">
+                    <label style="font-weight: 600;">Target Occasions (Search and click to add multiple)</label>
+                    <div id="edit_p_occ_widget" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
+                      <input type="text" id="edit_p_occ_search" placeholder="🔍 Search occasions..." style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; width: 100%; outline: none;">
+                      <div id="edit_p_occ_selected_tags" style="display: flex; flex-wrap: wrap; gap: 6px; min-height: 32px; padding: 6px; background: #f8fafc; border-radius: 6px; border: 1px dashed #cbd5e1; align-items: center;">
+                        <span style="color: #94a3b8; font-size: 0.8rem; font-style: italic;">No occasions selected yet</span>
+                      </div>
+                      <div id="edit_p_occ_options_list" style="max-height: 120px; overflow-y: auto; display: flex; flex-direction: column; gap: 3px; border-top: 1px solid #f1f5f9; padding-top: 6px;">
+                        <span style="color: #64748b; font-size: 0.85rem;">Loading occasions...</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="form-card">
                   <h3>Pricing & Inventory</h3>
                   <div class="row-2">
                     <div class="input-group">
-                      <label>Price (₹) *</label>
-                      <input type="number" id="editProductPrice" min="0" required>
+                      <label>Selling Price (₹) *</label>
+                      <input type="number" step="0.01" id="editProductPrice" min="0" required placeholder="0.00">
+                    </div>
+                    <div class="input-group">
+                      <label>Offer Percentage (%)</label>
+                      <input type="number" step="0.01" id="editProductOfferPercentage" min="0" max="100" placeholder="0%">
+                    </div>
+                  </div>
+                  <div class="row-2">
+                    <div class="input-group">
+                      <label>Discount Price (₹)</label>
+                      <input type="number" step="0.01" id="editProductDiscountPrice" min="0" placeholder="0.00">
                     </div>
                     <div class="input-group">
                       <label>Stock Quantity</label>

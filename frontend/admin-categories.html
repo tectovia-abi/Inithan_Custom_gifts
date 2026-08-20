@@ -170,8 +170,11 @@
         <a href="admin-products.html" class="admin-nav-link">
           <span>🛍️</span> Products
         </a>
+        <a href="admin-offers.html" class="admin-nav-link">
+          <span>🏷️</span> Occasion Offers
+        </a>
         <a href="admin-categories.html" class="admin-nav-link active">
-          <span>🗂️</span> Categories
+          <span>🗂️</span> Categories & Occasions
         </a>
         <a href="admin-users.html" class="admin-nav-link">
           <span>👥</span> Users
@@ -195,7 +198,7 @@
     <main class="admin-main">
       <header class="admin-header">
         <button class="menu-toggle" id="menuToggle">☰</button>
-        <div class="header-title" id="headerTitle">Manage Categories</div>
+        <div class="header-title" id="headerTitle">Manage Categories & Occasions</div>
         <div class="header-user">
           <span id="adminName">Admin User</span>
           <div class="admin-avatar" id="adminAvatar">A</div>
@@ -203,7 +206,15 @@
       </header>
 
       <div class="admin-content">
-        <section class="admin-section active">
+        
+        <!-- Tab Bar for Categories vs Occasions -->
+        <div class="admin-tabs-bar" style="display: flex; gap: 10px; max-width: 900px; margin: 0 auto 20px auto; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+          <button class="tab-btn active" id="tabCatBtn" style="padding: 10px 20px; font-weight: 600; font-size: 1rem; border: none; background: transparent; cursor: pointer; border-bottom: 3px solid var(--primary, #C41E3A); color: var(--primary, #C41E3A);">🗂️ Categories</button>
+          <button class="tab-btn" id="tabOccBtn" style="padding: 10px 20px; font-weight: 600; font-size: 1rem; border: none; background: transparent; cursor: pointer; border-bottom: 3px solid transparent; color: #64748b;">🎉 Occasions</button>
+        </div>
+
+        <!-- Categories Section -->
+        <section id="categoriesSection" class="admin-section active">
           <div class="section-header" style="display: flex; flex-wrap: wrap; gap: 15px; max-width: 900px; margin: 0 auto 20px auto;">
             <h2>Categories</h2>
             <div style="display: flex; gap: 15px; flex-grow: 1; justify-content: flex-end;">
@@ -215,6 +226,24 @@
             <p class="text-center" style="padding: 40px; color: #666;">Loading categories...</p>
           </div>
         </section>
+
+        <!-- Occasions Section -->
+        <section id="occasionsSection" class="admin-section" style="display: none;">
+          <div class="section-header" style="display: flex; flex-wrap: wrap; gap: 15px; max-width: 900px; margin: 0 auto 20px auto;">
+            <div>
+              <h2 style="margin: 0;">Occasions</h2>
+              <span style="color: #64748b; font-size: 0.85rem;">Manage event & occasion tags (Birthdays, Weddings, Corporate, etc.)</span>
+            </div>
+            <div style="display: flex; gap: 15px; flex-grow: 1; justify-content: flex-end;">
+              <button class="btn btn-primary" id="addOccBtn">+ Add New Occasion</button>
+            </div>
+          </div>
+
+          <div class="accordion-container" id="occasionsContainer">
+            <p class="text-center" style="padding: 40px; color: #666;">Loading occasions...</p>
+          </div>
+        </section>
+
       </div>
     </main>
   </div>
@@ -267,6 +296,49 @@
         <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 25px;">
           <button type="button" class="btn btn-outline" data-close-modal="subcatModal">Cancel</button>
           <button type="submit" class="btn btn-primary" style="padding: 8px 15px;">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Occasion Modal -->
+  <div class="modal" id="occModal" style="display: none;">
+    <div class="modal-content" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 id="occModalTitle">Add Occasion</h3>
+        <button type="button" class="close-modal" data-close-modal="occModal">&times;</button>
+      </div>
+      <form id="occForm">
+        <input type="hidden" id="occId">
+        <div class="input-group">
+          <label>Occasion Name *</label>
+          <input type="text" id="occName" required placeholder="e.g. 🎂 Birthday Gifts">
+        </div>
+        <div class="input-group">
+          <label>Description</label>
+          <textarea id="occDescription" rows="2" placeholder="e.g. Special gifts for birthdays"></textarea>
+        </div>
+        <div class="input-group">
+          <label>Status</label>
+          <select id="occStatus">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 20px;">
+          <label style="display:block; font-weight:600; margin-bottom:10px; font-size:0.9rem; color:var(--gray-600);">Image / Icon (Optional)</label>
+          <div class="modern-upload-box" id="occUploadBox">
+            <input type="file" id="occImageFile" accept="image/*">
+            <div class="modern-upload-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            </div>
+            <div class="modern-upload-label">Upload<br>Photo</div>
+            <img src="" class="modern-image-preview" id="occImagePreview">
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 25px;">
+          <button type="button" class="btn btn-outline" data-close-modal="occModal">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="padding: 8px 20px;">Save Occasion</button>
         </div>
       </form>
     </div>

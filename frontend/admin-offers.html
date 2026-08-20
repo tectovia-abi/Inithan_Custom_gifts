@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Occasion Offers Manager | Admin Panel | Inithat Custom Gifts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="icon" type="image/png" href="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png">
+  <style>
+    .offers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 22px;
+      margin-top: 20px;
+    }
+    .offer-admin-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .offer-admin-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.07);
+    }
+    .offer-card-banner {
+      height: 140px;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: flex-end;
+      padding: 14px 18px;
+    }
+    .offer-card-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.75) 100%);
+    }
+    .offer-banner-content {
+      position: relative;
+      z-index: 2;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      width: 100%;
+    }
+    .offer-occasion-tag {
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(8px);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .offer-discount-pill {
+      background: #C41E3A;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .offer-card-body {
+      padding: 18px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .offer-card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 0 0 6px 0;
+      line-height: 1.35;
+    }
+    .offer-card-subtitle {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin: 0 0 16px 0;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .offer-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: #f8fafc;
+      border-radius: 10px;
+      margin-bottom: 14px;
+      font-size: 0.82rem;
+    }
+    .offer-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+    }
+    .status-live { background: #dcfce7; color: #166534; }
+    .status-upcoming { background: #fef9c3; color: #854d0e; }
+    .status-expired { background: #f1f5f9; color: #64748b; }
+    .status-paused { background: #fee2e2; color: #991b1b; }
+    .offer-card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid #f1f5f9;
+    }
+    .btn-manage-prods {
+      flex: 1;
+      background: #0f172a;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn-manage-prods:hover { background: #1e293b; }
+    .btn-icon-action {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #475569;
+      border-radius: 8px;
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-icon-action:hover {
+      background: #fee2e2;
+      color: #C41E3A;
+      border-color: #fecaca;
+    }
+
+    /* Modal styling */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-content {
+      background: #fff;
+      border-radius: 16px;
+      max-width: 1040px;
+      width: 100%;
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 24px 28px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 20px;
+    }
+    .modal-header h3 {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      color: #94a3b8;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+    }
+    .close-btn:hover { color: #0f172a; }
+
+    .modal-grid-2col {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .modal-grid-2col { grid-template-columns: 1fr; }
+    }
+
+    .form-section-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 18px 0 10px 0;
+      padding-bottom: 4px;
+      border-bottom: 1.5px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 5px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      outline: none;
+      box-sizing: border-box;
+      transition: all 0.2s;
+    }
+    .form-control:focus {
+      border-color: #C41E3A;
+      box-shadow: 0 0 0 3px rgba(196,30,58,0.1);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 550px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+    .preset-chip {
+      display: inline-block;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 5px 10px;
+      border-radius: 16px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      margin: 2px 4px 4px 0;
+      transition: all 0.2s;
+      user-select: none;
+      font-weight: 600;
+    }
+    .preset-chip:hover {
+      background: #C41E3A;
+      color: #fff;
+      border-color: #C41E3A;
+    }
+
+    /* Live Storefront Hero Preview Box */
+    .hero-preview-wrapper {
+      background: #0f172a;
+      border-radius: 14px;
+      padding: 16px;
+      position: sticky;
+      top: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      color: #ffffff;
+    }
+    .hero-preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.8rem;
+      color: #94a3b8;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .live-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #22c55e;
+      margin-right: 4px;
+    }
+    .hero-preview-card {
+      border-radius: 12px;
+      padding: 20px 18px;
+      background: linear-gradient(135deg, #C41E3A 0%, #1e1b4b 100%);
+      transition: background 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .preview-badge-pill {
+      display: inline-block;
+      background: rgba(255,255,255,0.22);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 10px;
+    }
+    .preview-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      line-height: 1.25;
+      margin: 0 0 8px 0;
+      color: #ffffff;
+    }
+    .preview-subtitle {
+      font-size: 0.8rem;
+      line-height: 1.4;
+      color: rgba(255,255,255,0.9);
+      margin: 0 0 14px 0;
+    }
+    .preview-timer-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .preview-timer-box {
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px;
+      padding: 4px 6px;
+      text-align: center;
+      min-width: 44px;
+    }
+    .preview-timer-num {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #fbbf24;
+      line-height: 1;
+    }
+    .preview-timer-lbl {
+      display: block;
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.7);
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .preview-buttons-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .preview-btn-gold {
+      background: #fbbf24;
+      color: #0f172a;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      display: inline-block;
+      text-decoration: none;
+    }
+    .preview-btn-secondary {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      color: #fff;
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: inline-block;
+      text-decoration: none;
+    }
+    .preview-img-box {
+      margin-top: 12px;
+      width: 100%;
+      height: 110px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.2);
+    }
+    .preview-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-brand">
+        <img src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Logo" class="admin-logo" onerror="this.style.display='none'">
+        <div class="admin-brand-text">
+          <h2>Inithat Gifts</h2>
+          <span>Admin Panel</span>
+        </div>
+      </div>
+      
+      <nav class="admin-nav">
+        <a href="admin-dashboard.html" class="admin-nav-link">
+          <span>📊</span> Dashboard
+        </a>
+        <a href="admin-products.html" class="admin-nav-link">
+          <span>🛍️</span> Products
+        </a>
+        <a href="admin-offers.html" class="admin-nav-link active">
+          <span>🏷️</span> Occasion Offers
+        </a>
+        <a href="admin-categories.html" class="admin-nav-link">
+          <span>🗂️</span> Categories & Occasions
+        </a>
+        <a href="admin-users.html" class="admin-nav-link">
+          <span>👥</span> Users
+        </a>
+        <a href="admin-inquiries.html" class="admin-nav-link">
+          <span>📝</span> Bulk Inquiries
+        </a>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <a href="index.html" class="admin-nav-link">
+          <span class="icon">🏠</span> Back to Store
+        </a>
+        <a href="#" class="admin-nav-link logout-link" id="adminLogoutLink">
+          <span class="icon">🚪</span> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <header class="admin-header">
+        <button class="menu-toggle" id="menuToggle" type="button" aria-label="Toggle Navigation">☰</button>
+        <div class="header-title" id="headerTitle">Special Occasion Promotions</div>
+        <div class="header-user">
+          <span id="adminName">Admin User</span>
+          <div class="admin-avatar" id="adminAvatar">A</div>
+        </div>
+      </header>
+
+      <div class="admin-content" style="padding: 24px 30px;">
+        <!-- Page Header -->
+        <div class="page-header-container" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:24px;">
+          <div>
+            <h2 class="page-title" style="font-size:1.75rem; font-weight:800; color:#0f172a; margin:0 0 6px 0;">Occasion Offers Manager</h2>
+            <p class="page-subtitle" style="color:#64748b; margin:0; font-size:0.95rem;">Configure and control dynamic storefront promotions, hero banners, countdown timers, and discount campaigns.</p>
+          </div>
+          <button class="btn btn-primary" id="btnOpenCreateOffer" type="button" style="background:var(--primary, #C41E3A); color:#fff; border:none; padding:12px 20px; border-radius:10px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+            <span>✨</span> + Create Occasion Offer
+          </button>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="stats-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-bottom:24px;">
+          <div class="stat-card" style="background:#fff; padding:18px; border-radius:14px; border:1px solid #e2e8f0; display:flex; align-items:center; gap:14px;">
+            <div style="font-size:2rem; background:#dcfce7; width:52px; height:52px; border-radius:12px; display:flex; align-items:center; justify-content:center;">🟢</div>
+            <div>
+              <span style="font-size:0.8rem; color:#64748b; font-weight:600; text-transform:uppercase;">Live Campaigns</span>
+              <div id="statLiveCount" style="font-size:1.6rem; font-weight:800; color:#0f172a;">-</div>
+            </div>
+          </div>
+          <div class="stat-card" style="background:#fff; padding:18px; border-radius:14px; border:1px solid #e2e8f0; display:flex; align-items:center; gap:14px;">
+            <div style="font-size:2rem; background:#fef9c3; width:52px; height:52px; border-radius:12px; display:flex; align-items:center; justify-content:center;">⏳</div>
+            <div>
+              <span style="font-size:0.8rem; color:#64748b; font-weight:600; text-transform:uppercase;">Scheduled / Upcoming</span>
+              <div id="statUpcomingCount" style="font-size:1.6rem; font-weight:800; color:#0f172a;">-</div>
+            </div>
+          </div>
+          <div class="stat-card" style="background:#fff; padding:18px; border-radius:14px; border:1px solid #e2e8f0; display:flex; align-items:center; gap:14px;">
+            <div style="font-size:2rem; background:#eff6ff; width:52px; height:52px; border-radius:12px; display:flex; align-items:center; justify-content:center;">🎁</div>
+            <div>
+              <span style="font-size:0.8rem; color:#64748b; font-weight:600; text-transform:uppercase;">Products on Offer</span>
+              <div id="statProductsOnOffer" style="font-size:1.6rem; font-weight:800; color:#0f172a;">-</div>
+            </div>
+          </div>
+          <div class="stat-card" style="background:#fff; padding:18px; border-radius:14px; border:1px solid #e2e8f0; display:flex; align-items:center; gap:14px;">
+            <div style="font-size:2rem; background:#fee2e2; width:52px; height:52px; border-radius:12px; display:flex; align-items:center; justify-content:center;">🏷️</div>
+            <div>
+              <span style="font-size:0.8rem; color:#64748b; font-weight:600; text-transform:uppercase;">Max Live Discount</span>
+              <div id="statMaxDiscount" style="font-size:1.6rem; font-weight:800; color:#0f172a;">-</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:18px; flex-wrap:wrap;">
+          <input type="text" id="searchOffersInput" placeholder="🔍 Search promotions by name or occasion..." style="flex:1; min-width:260px; padding:10px 14px; border:1px solid #cbd5e1; border-radius:8px; font-size:0.9rem;">
+          <select id="filterStatusSelect" style="padding:10px 14px; border:1px solid #cbd5e1; border-radius:8px; font-size:0.9rem; background:#fff;">
+            <option value="">All Statuses</option>
+            <option value="Live">🟢 Live Now</option>
+            <option value="Upcoming">🟡 Scheduled / Upcoming</option>
+            <option value="Paused">⏸️ Paused (Force Inactive)</option>
+            <option value="Expired">⚪ Expired</option>
+          </select>
+        </div>
+
+        <!-- Offers Container -->
+        <div id="offersContainer" class="offers-grid">
+          <div style="grid-column:1/-1; text-align:center; padding:60px; color:#64748b;">Loading occasion offers...</div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- CREATE / EDIT OFFER MODAL (WITH LIVE PREVIEW) -->
+  <div class="modal-overlay" id="offerModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="offerModalTitle">Configure Occasion Offer</h3>
+        <button class="close-btn" id="btnCloseOfferModal" type="button">&times;</button>
+      </div>
+
+      <div class="modal-grid-2col">
+        <!-- Left: Form Controls -->
+        <form id="offerForm">
+          <input type="hidden" id="offerId">
+
+          <!-- Presets -->
+          <div class="form-group">
+            <label>Quick Presets</label>
+            <div id="occasionPresets">
+              <span class="preset-chip" data-preset="Mother's Day">🌸 Mother's Day</span>
+              <span class="preset-chip" data-preset="Father's Day">👔 Father's Day</span>
+              <span class="preset-chip" data-preset="Valentine's Day">❤️ Valentine's Day</span>
+              <span class="preset-chip" data-preset="Diwali">🪔 Diwali Bonanza</span>
+              <span class="preset-chip" data-preset="Christmas">🎄 Christmas</span>
+              <span class="preset-chip" data-preset="New Year">🎉 New Year</span>
+              <span class="preset-chip" data-preset="Raksha Bandhan">🎁 Rakhi</span>
+              <span class="preset-chip" data-preset="Birthday">🎂 Birthday</span>
+              <span class="preset-chip" data-preset="Anniversary">💍 Anniversary</span>
+            </div>
+          </div>
+
+          <!-- Section 1: Campaign Identity -->
+          <div class="form-section-title"><span>🏷️</span> Campaign Basics</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Offer Name *</label>
+              <input type="text" id="offerName" class="form-control" required placeholder="e.g. Mother's Day Special">
+            </div>
+            <div class="form-group">
+              <label>Occasion Type *</label>
+              <select id="offerOccasionType" class="form-control" required>
+                <option value="Mother's Day">Mother's Day</option>
+                <option value="Father's Day">Father's Day</option>
+                <option value="Valentine's Day">Valentine's Day</option>
+                <option value="Diwali">Diwali</option>
+                <option value="Christmas">Christmas</option>
+                <option value="New Year">New Year</option>
+                <option value="Raksha Bandhan">Raksha Bandhan</option>
+                <option value="Women's Day">Women's Day</option>
+                <option value="Birthday">Birthday</option>
+                <option value="Anniversary">Anniversary</option>
+                <option value="Custom">Custom</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Section 2: Hero Content -->
+          <div class="form-section-title"><span>🎨</span> Hero Banner Content (Storefront)</div>
+          
+          <div class="form-group">
+            <label>Hero Offer Badge Text *</label>
+            <input type="text" id="offerBadgeText" class="form-control" required placeholder="e.g. Mother's Day SPL">
+          </div>
+
+          <div class="form-group">
+            <label>Hero Offer Title (Headline) *</label>
+            <input type="text" id="offerTitle" class="form-control" required placeholder="e.g. Celebrate Mom with Handcrafted Personalized Treasures 🌸">
+          </div>
+
+          <div class="form-group">
+            <label>Hero Offer Subtitle (Description)</label>
+            <textarea id="offerSubtitle" class="form-control" rows="2" placeholder="e.g. Make her feel cherished with custom photo frames, engraved jewelry, and personalized mugs at up to 35% OFF!"></textarea>
+          </div>
+
+          <!-- Section 3: Buttons & Call-to-Actions -->
+          <div class="form-section-title"><span>🔘</span> Hero Call-to-Action Buttons</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Primary CTA Button Text</label>
+              <input type="text" id="offerCtaText" class="form-control" placeholder="e.g. Explore Deals Below ↓">
+            </div>
+            <div class="form-group">
+              <label>Primary CTA Button Link</label>
+              <input type="text" id="offerCtaLink" class="form-control" placeholder="e.g. #offerProductsSection">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Secondary Button Text</label>
+              <input type="text" id="offerSecondaryText" class="form-control" placeholder="e.g. View Full Catalog →">
+            </div>
+            <div class="form-group">
+              <label>Secondary Button Link</label>
+              <input type="text" id="offerSecondaryLink" class="form-control" placeholder="e.g. products.html">
+            </div>
+          </div>
+
+          <!-- Section 4: Schedule & Timer -->
+          <div class="form-section-title"><span>⏰</span> Countdown Target & Schedule</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Start Date & Time *</label>
+              <input type="datetime-local" id="offerStartDate" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Countdown Target End Date & Time *</label>
+              <input type="datetime-local" id="offerEndDate" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>General Campaign Discount (%) *</label>
+              <input type="number" id="offerDiscount" class="form-control" min="1" max="100" required placeholder="25">
+            </div>
+            <div class="form-group">
+              <label>Activation Schedule Mode</label>
+              <select id="offerOverrideStatus" class="form-control">
+                <option value="Auto">⏰ Automatic (Live between Start & End)</option>
+                <option value="Force Active">🟢 Force Active (Live immediately)</option>
+                <option value="Force Inactive">⏸️ Force Inactive (Paused)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Section 5: Media & Theme -->
+          <div class="form-section-title"><span>🖼️</span> Hero Image & Theme Color</div>
+          <div class="form-row">
+            <div class="form-group" style="flex:1;">
+              <label>Banner Image URL</label>
+              <input type="text" id="offerBannerImage" class="form-control" placeholder="https://.../custom-frame.png">
+            </div>
+            <div class="form-group" style="max-width:110px;">
+              <label>Accent Color</label>
+              <input type="color" id="offerThemeColor" class="form-control" value="#C41E3A" style="height:38px; padding:2px;">
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:20px; border-top:1px solid #f1f5f9; padding-top:16px;">
+            <button type="button" class="btn" id="btnCancelOfferModal" style="background:#f1f5f9; color:#475569; padding:10px 18px; border-radius:8px; border:none; cursor:pointer;">Cancel</button>
+            <button type="submit" id="saveOfferBtn" class="btn btn-primary" style="background:#C41E3A; color:#fff; padding:10px 22px; border-radius:8px; border:none; font-weight:700; cursor:pointer;">Save Occasion Offer</button>
+          </div>
+        </form>
+
+        <!-- Right: Live Storefront Hero Preview -->
+        <div class="hero-preview-wrapper">
+          <div class="hero-preview-header">
+            <span><span class="live-dot"></span> Live Storefront Hero Preview</span>
+            <span id="previewStatusTag" style="color:#22c55e;">LIVE NOW</span>
+          </div>
+
+          <div class="hero-preview-card" id="heroPreviewCard">
+            <div>
+              <span class="preview-badge-pill" id="previewBadge">🌸 Mother's Day SPL</span>
+            </div>
+            <h3 class="preview-title" id="previewTitle">Celebrate Mom with Handcrafted Personalized Treasures 🌸</h3>
+            <p class="preview-subtitle" id="previewSubtitle">Make her feel cherished with custom photo frames, engraved jewelry, and personalized mugs at up to 35% OFF!</p>
+
+            <div class="preview-timer-row">
+              <div class="preview-timer-box">
+                <span class="preview-timer-num" id="prevDays">11</span>
+                <span class="preview-timer-lbl">Days</span>
+              </div>
+              <div class="preview-timer-box">
+                <span class="preview-timer-num" id="prevHours">16</span>
+                <span class="preview-timer-lbl">Hours</span>
+              </div>
+              <div class="preview-timer-box">
+                <span class="preview-timer-num" id="prevMins">01</span>
+                <span class="preview-timer-lbl">Mins</span>
+              </div>
+              <div class="preview-timer-box">
+                <span class="preview-timer-num" id="prevSecs">57</span>
+                <span class="preview-timer-lbl">Secs</span>
+              </div>
+            </div>
+
+            <div class="preview-buttons-row">
+              <a href="#" class="preview-btn-gold" id="prevCtaBtn">Explore Deals Below ↓</a>
+              <a href="#" class="preview-btn-secondary" id="prevSecBtn">View Full Catalog →</a>
+            </div>
+
+            <div class="preview-img-box">
+              <img id="prevHeroImage" src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-frame.png" alt="Preview Image" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANAGE PRODUCTS IN OFFER MODAL -->
+  <div class="modal-overlay" id="manageProductsModal">
+    <div class="modal-content" style="max-width:760px;">
+      <div class="modal-header">
+        <div>
+          <h3 id="manageOfferTitle">Manage Products on Offer</h3>
+          <span id="manageOfferSubtitle" style="font-size:0.85rem; color:#64748b;"></span>
+        </div>
+        <button class="close-btn" id="btnCloseManageModal" type="button">&times;</button>
+      </div>
+
+      <!-- Add Product Section -->
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:16px; margin-bottom:20px;">
+        <h4 style="margin:0 0 12px 0; font-size:0.95rem; color:#0f172a;">➕ Add Product to this Offer</h4>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:8px;">
+            <label>Select Product from Catalog *</label>
+            <select id="addProductSelect" class="form-control">
+              <option value="">-- Choose a product --</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:8px;">
+            <label>Original Price</label>
+            <input type="text" id="addProdOriginalPrice" class="form-control" readonly placeholder="₹0" style="background:#f1f5f9;">
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:8px;">
+          <div class="form-group" style="margin-bottom:8px;">
+            <label>Offer Price (₹) *</label>
+            <input type="number" id="addProdOfferPrice" class="form-control" placeholder="e.g. 399">
+          </div>
+          <div class="form-group" style="margin-bottom:8px;">
+            <label>Custom Badge Text</label>
+            <input type="text" id="addProdBadge" class="form-control" placeholder="e.g. Mom Special">
+          </div>
+        </div>
+        <div style="display:flex; justify-content:flex-end; margin-top:12px;">
+          <button type="button" class="btn btn-primary" id="btnAddProdToOfferBtn" style="background:#C41E3A; color:#fff; border:none; padding:8px 18px; border-radius:8px; font-weight:700; cursor:pointer;">
+            + Add to Offer
+          </button>
+        </div>
+      </div>
+
+      <!-- Products Currently in Offer Table -->
+      <h4 style="margin:0 0 10px 0; font-size:0.95rem; color:#0f172a;">Products Included (<span id="includedProdsCount">0</span>)</h4>
+      <div style="max-height:280px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:10px;">
+        <table style="width:100%; border-collapse:collapse; font-size:0.85rem; text-align:left;">
+          <thead style="background:#f8fafc; border-bottom:1px solid #e2e8f0; color:#475569;">
+            <tr>
+              <th style="padding:10px 14px;">Product</th>
+              <th style="padding:10px 14px;">Original</th>
+              <th style="padding:10px 14px;">Offer Price</th>
+              <th style="padding:10px 14px;">Discount</th>
+              <th style="padding:10px 14px;">Badge</th>
+              <th style="padding:10px 14px; text-align:center;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="includedProductsTableBody">
+            <tr><td colspan="6" style="text-align:center; padding:24px; color:#94a3b8;">No products assigned yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; margin-top:18px;">
+        <button type="button" class="btn" id="btnDoneManageModal" style="background:#0f172a; color:#fff; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; font-weight:600;">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    const appApiBase = typeof window.API_BASE !== 'undefined' ? window.API_BASE : window.location.origin;
+    let allOffers = [];
+    let allCatalogProducts = [];
+    let currentManagingOffer = null;
+
+    function getAuthHeaders() {
+      const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      return headers;
+    }
+
+    function toLocalDatetimeInputString(dateInput) {
+      if (!dateInput) return '';
+      const d = new Date(dateInput);
+      if (isNaN(d.getTime())) return '';
+      const pad = n => String(n).padStart(2, '0');
+      const year = d.getFullYear();
+      const month = pad(d.getMonth() + 1);
+      const day = pad(d.getDate());
+      const hours = pad(d.getHours());
+      const minutes = pad(d.getMinutes());
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+
+    // Presets dictionary
+    const OCCASION_PRESETS = {
+      "Mother's Day": {
+        name: "Mother's Day Special",
+        title: "Celebrate Mom with Handcrafted Personalized Treasures 🌸",
+        subtitle: "Make her feel cherished with custom photo frames, engraved jewelry, and personalized mugs at up to 35% OFF!",
+        badge: "Mother's Day SPL",
+        discount: 25,
+        color: "#C41E3A",
+        ctaText: "Explore Deals Below ↓",
+        ctaLink: "#offerProductsSection",
+        secText: "View Full Catalog →",
+        secLink: "products.html",
+        banner: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-frame.png"
+      },
+      "Father's Day": {
+        name: "Father's Day Collection",
+        title: "Honor Dad with Personalized Keepsakes & Engraved Accessories 👔",
+        subtitle: "Custom metal keychains, personalized desk organizers, and custom photo mugs designed for dad.",
+        badge: "Father's Day Deal",
+        discount: 20,
+        color: "#1E3A8A",
+        ctaText: "Explore Deals Below ↓",
+        ctaLink: "#offerProductsSection",
+        secText: "View Full Catalog →",
+        secLink: "products.html",
+        banner: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-mug.png"
+      },
+      "Valentine's Day": {
+        name: "Valentine's Day Bonanza",
+        title: "Express Your Love with Romantic Custom Gifts ❤️",
+        subtitle: "Couple pillows, romantic music plaques, and wooden keepsakes crafted with affection.",
+        badge: "Valentine Special",
+        discount: 30,
+        color: "#E11D48",
+        ctaText: "Explore Deals Below ↓",
+        ctaLink: "#offerProductsSection",
+        secText: "View Full Catalog →",
+        secLink: "products.html",
+        banner: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-pillow.png"
+      },
+      "Diwali": {
+        name: "Diwali Festive Bonanza",
+        title: "Light Up Celebrations with Festive Corporate & Family Gifts 🪔",
+        subtitle: "Custom gift hampers, brass trophies, and personalized dry fruit boxes for auspicious moments.",
+        badge: "Diwali Mega Sale",
+        discount: 20,
+        color: "#D97706",
+        ctaText: "Explore Deals Below ↓",
+        ctaLink: "#offerProductsSection",
+        secText: "View Full Catalog →",
+        secLink: "products.html",
+        banner: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png"
+      },
+      "Christmas": {
+        name: "Christmas & Holiday Deals",
+        title: "Spread Warm Holiday Cheer with Custom Christmas Surprises 🎄",
+        subtitle: "Customized ornaments, personalized photo cushions, and winter holiday gift boxes.",
+        badge: "Christmas SPL",
+        discount: 25,
+        color: "#15803D",
+        ctaText: "Explore Deals Below ↓",
+        ctaLink: "#offerProductsSection",
+        secText: "View Full Catalog →",
+        secLink: "products.html",
+        banner: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png"
+      },
+      "New Year": {
+        name: "New Year Mega Sale",
+        title: "Start the New Year with Meaningful Custom Keepsakes 🎉",
+        subtitle: "Custom calendars, executive diaries, and personalized drinkware for fresh beginnings.",
+        badge: "New Year 2026",
+        discount: 20,
+        color: "#7C3AED",
+        ctaText: "Explore Deals Below ↓",
+        ctaLink: "#offerProductsSection",
+        secText: "View Full Catalog →",
+        secLink: "products.html",
+        banner: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-mug.png"
+      },
+      "Raksha Bandhan": {
+        name: "Rakhi Special Surprises",
+        title: "Celebrate Sibling Love with Custom Rakhi Gifts 🎁",
+        subtitle: "Personalized sibling caricature frames, mugs, and customized hampers.",
+        badge: "Rakhi SPL",
+        discount: 25,
+        color: "#B45309",
+        ctaText: "Explore Deals Below ↓",
+        ctaLink: "#offerProductsSection",
+        secText: "View Full Catalog →",
+        secLink: "products.html",
+        banner: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-frame.png"
+      },
+      "Birthday": {
+        name: "Birthday Surprise Deals",
+        title: "Make Birthdays Truly Unforgettable 🎂",
+        subtitle: "Photo mugs, neon lamps, and customized acrylic LED frames.",
+        badge: "Birthday Deal",
+        discount: 15,
+        color: "#0891B2",
+        ctaText: "Explore Deals Below ↓",
+        ctaLink: "#offerProductsSection",
+        secText: "View Full Catalog →",
+        secLink: "products.html",
+        banner: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png"
+      },
+      "Anniversary": {
+        name: "Anniversary Keepsakes",
+        title: "Cherish Years of Togetherness with Timeless Gifts 💍",
+        subtitle: "Handmade wooden photo plaques and personalized gold-plated jewelry.",
+        badge: "Anniversary SPL",
+        discount: 20,
+        color: "#9333EA",
+        ctaText: "Explore Deals Below ↓",
+        ctaLink: "#offerProductsSection",
+        secText: "View Full Catalog →",
+        secLink: "products.html",
+        banner: "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-frame.png"
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 1. Mobile Menu Toggle
+      const menuToggle = document.getElementById('menuToggle');
+      const sidebar = document.getElementById('adminSidebar');
+      if (menuToggle && sidebar) {
+        menuToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('open');
+        });
+      }
+
+      // 2. Admin Header User Info
+      const user = typeof getAuthUser === 'function' ? getAuthUser() : null;
+      if (user && user.fullName) {
+        const nameEl = document.getElementById('adminName');
+        const avatarEl = document.getElementById('adminAvatar');
+        if (nameEl) nameEl.textContent = user.fullName;
+        if (avatarEl) avatarEl.textContent = user.fullName[0].toUpperCase();
+      }
+
+      // 3. Logout Link
+      const logoutLink = document.getElementById('adminLogoutLink');
+      if (logoutLink) {
+        logoutLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (typeof logout === 'function') logout();
+        });
+      }
+
+      // 4. Modal Triggers
+      const btnOpenCreate = document.getElementById('btnOpenCreateOffer');
+      if (btnOpenCreate) {
+        btnOpenCreate.addEventListener('click', openCreateOfferModal);
+      }
+
+      const btnCloseOffer = document.getElementById('btnCloseOfferModal');
+      const btnCancelOffer = document.getElementById('btnCancelOfferModal');
+      if (btnCloseOffer) btnCloseOffer.addEventListener('click', closeOfferModal);
+      if (btnCancelOffer) btnCancelOffer.addEventListener('click', closeOfferModal);
+
+      const btnCloseManage = document.getElementById('btnCloseManageModal');
+      const btnDoneManage = document.getElementById('btnDoneManageModal');
+      if (btnCloseManage) btnCloseManage.addEventListener('click', closeManageProductsModal);
+      if (btnDoneManage) btnDoneManage.addEventListener('click', closeManageProductsModal);
+
+      // Close modal on outside backdrop click
+      const offerModal = document.getElementById('offerModal');
+      const manageModal = document.getElementById('manageProductsModal');
+      if (offerModal) {
+        offerModal.addEventListener('click', (e) => {
+          if (e.target === offerModal) closeOfferModal();
+        });
+      }
+      if (manageModal) {
+        manageModal.addEventListener('click', (e) => {
+          if (e.target === manageModal) closeManageProductsModal();
+        });
+      }
+
+      // 5. Preset Chips Event Delegation
+      const presetContainer = document.getElementById('occasionPresets');
+      if (presetContainer) {
+        presetContainer.addEventListener('click', (e) => {
+          const chip = e.target.closest('.preset-chip');
+          if (chip && chip.dataset.preset) {
+            applyPreset(chip.dataset.preset);
+          }
+        });
+      }
+
+      // 6. Live Preview Input Listeners
+      const previewInputs = [
+        'offerBadgeText', 'offerTitle', 'offerSubtitle', 'offerCtaText', 'offerCtaLink',
+        'offerSecondaryText', 'offerSecondaryLink', 'offerEndDate', 'offerBannerImage', 'offerThemeColor'
+      ];
+      previewInputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('input', updateLiveHeroPreview);
+          el.addEventListener('change', updateLiveHeroPreview);
+        }
+      });
+
+      // 7. Form Submission
+      const offerForm = document.getElementById('offerForm');
+      if (offerForm) {
+        offerForm.addEventListener('submit', handleSaveOffer);
+      }
+
+      // 8. Manage Products Form
+      const addProductSelect = document.getElementById('addProductSelect');
+      if (addProductSelect) {
+        addProductSelect.addEventListener('change', onProductSelectedForOffer);
+      }
+
+      const btnAddProd = document.getElementById('btnAddProdToOfferBtn');
+      if (btnAddProd) {
+        btnAddProd.addEventListener('click', handleAddProductToOffer);
+      }
+
+      // 9. Search & Filter Inputs
+      const searchInput = document.getElementById('searchOffersInput');
+      const statusSelect = document.getElementById('filterStatusSelect');
+      if (searchInput) searchInput.addEventListener('input', filterOffersGrid);
+      if (statusSelect) statusSelect.addEventListener('change', filterOffersGrid);
+
+      // 10. Card Grid Event Delegation
+      const offersContainer = document.getElementById('offersContainer');
+      if (offersContainer) {
+        offersContainer.addEventListener('click', (e) => {
+          const btn = e.target.closest('button[data-action]');
+          if (!btn) return;
+          const action = btn.dataset.action;
+          const id = btn.dataset.id;
+          if (action === 'manage-prods') {
+            openManageProductsModal(id);
+          } else if (action === 'edit-offer') {
+            openEditOfferModal(id);
+          } else if (action === 'delete-offer') {
+            handleDeleteOffer(id);
+          }
+        });
+      }
+
+      // 11. Initial Data Load
+      await loadOffers();
+      await loadCatalogProducts();
+    });
+
+    async function loadOffers() {
+      try {
+        const res = await fetch(`${appApiBase}/api/offers`);
+        const data = await res.json();
+        if (data.success && Array.isArray(data.offers)) {
+          allOffers = data.offers;
+          updateStats();
+          renderOffersGrid(allOffers);
+        }
+      } catch (err) {
+        console.error('Error fetching offers:', err);
+        const container = document.getElementById('offersContainer');
+        if (container) container.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:#dc2626;">Error loading offers.</div>';
+      }
+    }
+
+    async function loadCatalogProducts() {
+      try {
+        const res = await fetch(`${appApiBase}/api/products`);
+        const data = await res.json();
+        if (data.success && Array.isArray(data.products)) {
+          allCatalogProducts = data.products.filter(p => (p.status || 'Active') === 'Active');
+        }
+      } catch (err) {
+        console.error('Error loading products for offers:', err);
+      }
+    }
+
+    function updateStats() {
+      const live = allOffers.filter(o => o.computedStatus === 'Live');
+      const upcoming = allOffers.filter(o => o.computedStatus === 'Upcoming');
+      
+      let totalProds = 0;
+      let maxDisc = 0;
+      allOffers.forEach(o => {
+        totalProds += (o.productsCount || (o.products ? o.products.length : 0));
+        if (o.computedStatus === 'Live' && o.discountPercentage > maxDisc) {
+          maxDisc = o.discountPercentage;
+        }
+      });
+
+      const liveEl = document.getElementById('statLiveCount');
+      const upcomingEl = document.getElementById('statUpcomingCount');
+      const prodsEl = document.getElementById('statProductsOnOffer');
+      const discEl = document.getElementById('statMaxDiscount');
+
+      if (liveEl) liveEl.textContent = live.length;
+      if (upcomingEl) upcomingEl.textContent = upcoming.length;
+      if (prodsEl) prodsEl.textContent = totalProds;
+      if (discEl) discEl.textContent = maxDisc > 0 ? `${maxDisc}% OFF` : 'N/A';
+    }
+
+    function renderOffersGrid(offers) {
+      const container = document.getElementById('offersContainer');
+      if (!container) return;
+
+      if (!offers || offers.length === 0) {
+        container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:60px 20px; color:#64748b;">No occasion offers found. Click <strong>+ Create Occasion Offer</strong> to get started!</div>';
+        return;
+      }
+
+      container.innerHTML = offers.map(offer => {
+        const statusClass = offer.computedStatus === 'Live' ? 'status-live' :
+                            offer.computedStatus === 'Upcoming' ? 'status-upcoming' :
+                            offer.computedStatus === 'Paused' ? 'status-paused' : 'status-expired';
+        
+        const statusIcon = offer.computedStatus === 'Live' ? '🟢' :
+                           offer.computedStatus === 'Upcoming' ? '⏳' :
+                           offer.computedStatus === 'Paused' ? '⏸️' : '⚪';
+
+        const startDateFormatted = new Date(offer.startDate).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+        const endDateFormatted = new Date(offer.endDate).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
+        const prodsCount = offer.productsCount || (offer.products ? offer.products.length : 0);
+
+        return `
+          <div class="offer-admin-card">
+            <div class="offer-card-banner" style="background-image: url('${offer.bannerImage || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'}');">
+              <div class="offer-banner-content">
+                <span class="offer-occasion-tag">${offer.occasionType || 'Special'}</span>
+                <span class="offer-discount-pill" style="background:${offer.themeColor || '#C41E3A'};">${offer.discountPercentage}% OFF</span>
+              </div>
+            </div>
+            <div class="offer-card-body">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+                <h3 class="offer-card-title">${offer.name}</h3>
+                <span class="offer-status-badge ${statusClass}">${statusIcon} ${offer.computedStatus}</span>
+              </div>
+              <p class="offer-card-subtitle">${offer.title}</p>
+              
+              <div class="offer-meta-row">
+                <div>
+                  <span style="color:#64748b; font-size:0.75rem; display:block;">SCHEDULE</span>
+                  <strong>📅 ${startDateFormatted} – ${endDateFormatted}</strong>
+                </div>
+                <div style="text-align:right;">
+                  <span style="color:#64748b; font-size:0.75rem; display:block;">CONTROL</span>
+                  <span style="font-weight:600; color:#334155;">${offer.overrideStatus === 'Auto' ? '⏰ Auto' : offer.overrideStatus === 'Force Active' ? '🟢 Override Live' : '⏸️ Paused'}</span>
+                </div>
+              </div>
+
+              <div class="offer-card-actions">
+                <button class="btn-manage-prods" type="button" data-action="manage-prods" data-id="${offer._id}">
+                  <span>🛍️</span> Products (${prodsCount})
+                </button>
+                <button class="btn-icon-action" type="button" title="Edit Offer" data-action="edit-offer" data-id="${offer._id}">
+                  ✏️
+                </button>
+                <button class="btn-icon-action" type="button" title="Delete Offer" data-action="delete-offer" data-id="${offer._id}">
+                  🗑️
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterOffersGrid() {
+      const q = (document.getElementById('searchOffersInput')?.value || '').toLowerCase().trim();
+      const statusFilter = document.getElementById('filterStatusSelect')?.value || '';
+
+      const filtered = allOffers.filter(o => {
+        const matchesQ = !q || o.name.toLowerCase().includes(q) || (o.occasionType || '').toLowerCase().includes(q) || o.title.toLowerCase().includes(q);
+        const matchesStatus = !statusFilter || o.computedStatus === statusFilter;
+        return matchesQ && matchesStatus;
+      });
+
+      renderOffersGrid(filtered);
+    }
+
+    // Apply Occasion Preset
+    function applyPreset(presetKey) {
+      const preset = OCCASION_PRESETS[presetKey];
+      if (!preset) return;
+
+      document.getElementById('offerName').value = preset.name;
+      document.getElementById('offerOccasionType').value = presetKey;
+      document.getElementById('offerTitle').value = preset.title;
+      document.getElementById('offerSubtitle').value = preset.subtitle;
+      document.getElementById('offerBadgeText').value = preset.badge;
+      document.getElementById('offerDiscount').value = preset.discount;
+      document.getElementById('offerThemeColor').value = preset.color;
+      document.getElementById('offerBannerImage').value = preset.banner;
+      document.getElementById('offerCtaText').value = preset.ctaText || 'Explore Deals Below ↓';
+      document.getElementById('offerCtaLink').value = preset.ctaLink || '#offerProductsSection';
+      document.getElementById('offerSecondaryText').value = preset.secText || 'View Full Catalog →';
+      document.getElementById('offerSecondaryLink').value = preset.secLink || 'products.html';
+
+      updateLiveHeroPreview();
+    }
+
+    // Real-Time Live Hero Preview Updater
+    function updateLiveHeroPreview() {
+      const badge = document.getElementById('offerBadgeText').value.trim() || "🌸 Special Offer";
+      const title = document.getElementById('offerTitle').value.trim() || "Special Occasion Gift Deals! 🎁";
+      const subtitle = document.getElementById('offerSubtitle').value.trim() || "Handcrafted personalized treasures made with love and care.";
+      const themeColor = document.getElementById('offerThemeColor').value || "#C41E3A";
+      const ctaText = document.getElementById('offerCtaText').value.trim() || "Explore Deals Below ↓";
+      const secText = document.getElementById('offerSecondaryText').value.trim() || "View Full Catalog →";
+      const banner = document.getElementById('offerBannerImage').value.trim() || "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/custom-frame.png";
+      const endDateVal = document.getElementById('offerEndDate').value;
+
+      document.getElementById('previewBadge').textContent = badge;
+      document.getElementById('previewTitle').textContent = title;
+      document.getElementById('previewSubtitle').textContent = subtitle;
+      document.getElementById('prevCtaBtn').textContent = ctaText;
+      document.getElementById('prevSecBtn').textContent = secText;
+      document.getElementById('prevHeroImage').src = banner;
+
+      // Update gradient card theme
+      document.getElementById('heroPreviewCard').style.background = `linear-gradient(135deg, ${themeColor} 0%, #1e1b4b 100%)`;
+
+      // Calculate preview countdown
+      if (endDateVal) {
+        const diff = new Date(endDateVal) - new Date();
+        if (diff > 0) {
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+          document.getElementById('prevDays').textContent = String(days).padStart(2, '0');
+          document.getElementById('prevHours').textContent = String(hours).padStart(2, '0');
+          document.getElementById('prevMins').textContent = String(mins).padStart(2, '0');
+          document.getElementById('prevSecs').textContent = String(secs).padStart(2, '0');
+        } else {
+          document.getElementById('prevDays').textContent = '00';
+          document.getElementById('prevHours').textContent = '00';
+          document.getElementById('prevMins').textContent = '00';
+          document.getElementById('prevSecs').textContent = '00';
+        }
+      }
+    }
+
+    // Modal Handlers
+    function openCreateOfferModal() {
+      document.getElementById('offerModalTitle').textContent = 'Create Occasion Offer';
+      document.getElementById('offerForm').reset();
+      document.getElementById('offerId').value = '';
+      
+      const now = new Date();
+      const endDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+      document.getElementById('offerStartDate').value = toLocalDatetimeInputString(now);
+      document.getElementById('offerEndDate').value = toLocalDatetimeInputString(endDate);
+
+      applyPreset("Mother's Day");
+      document.getElementById('offerModal').classList.add('active');
+      updateLiveHeroPreview();
+    }
+
+    function openEditOfferModal(offerId) {
+      const offer = allOffers.find(o => o._id === offerId);
+      if (!offer) return;
+
+      document.getElementById('offerModalTitle').textContent = `Edit: ${offer.name}`;
+      document.getElementById('offerId').value = offer._id;
+      document.getElementById('offerName').value = offer.name;
+      document.getElementById('offerOccasionType').value = offer.occasionType || 'Custom';
+      document.getElementById('offerTitle').value = offer.title;
+      document.getElementById('offerSubtitle').value = offer.subtitle || '';
+      document.getElementById('offerBadgeText').value = offer.badgeText || '';
+      document.getElementById('offerDiscount').value = offer.discountPercentage;
+      document.getElementById('offerOverrideStatus').value = offer.overrideStatus || 'Auto';
+      document.getElementById('offerThemeColor').value = offer.themeColor || '#C41E3A';
+      document.getElementById('offerBannerImage').value = offer.bannerImage || '';
+      document.getElementById('offerCtaText').value = offer.ctaButtonText || 'Explore Deals Below ↓';
+      document.getElementById('offerCtaLink').value = offer.ctaButtonLink || '#offerProductsSection';
+      document.getElementById('offerSecondaryText').value = offer.secondaryButtonText || 'View Full Catalog →';
+      document.getElementById('offerSecondaryLink').value = offer.secondaryButtonLink || 'products.html';
+      
+      if (offer.startDate) document.getElementById('offerStartDate').value = toLocalDatetimeInputString(offer.startDate);
+      if (offer.endDate) document.getElementById('offerEndDate').value = toLocalDatetimeInputString(offer.endDate);
+
+      document.getElementById('offerModal').classList.add('active');
+      updateLiveHeroPreview();
+    }
+
+    function closeOfferModal() {
+      document.getElementById('offerModal').classList.remove('active');
+    }
+
+    async function handleSaveOffer(e) {
+      if (e) e.preventDefault();
+      
+      // Validation: End date > Start date
+      const startDateVal = document.getElementById('offerStartDate').value;
+      const endDateVal = document.getElementById('offerEndDate').value;
+      if (new Date(endDateVal) <= new Date(startDateVal)) {
+        alert('Validation Error: Countdown Target End Date must be after the Start Date.');
+        return;
+      }
+
+      const btn = document.getElementById('saveOfferBtn');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+      }
+
+      const offerId = document.getElementById('offerId').value;
+      const payload = {
+        name: document.getElementById('offerName').value.trim(),
+        occasionType: document.getElementById('offerOccasionType').value,
+        title: document.getElementById('offerTitle').value.trim(),
+        subtitle: document.getElementById('offerSubtitle').value.trim(),
+        badgeText: document.getElementById('offerBadgeText').value.trim(),
+        discountPercentage: Number(document.getElementById('offerDiscount').value),
+        startDate: new Date(startDateVal).toISOString(),
+        endDate: new Date(endDateVal).toISOString(),
+        overrideStatus: document.getElementById('offerOverrideStatus').value,
+        themeColor: document.getElementById('offerThemeColor').value,
+        bannerImage: document.getElementById('offerBannerImage').value.trim(),
+        ctaButtonText: document.getElementById('offerCtaText').value.trim(),
+        ctaButtonLink: document.getElementById('offerCtaLink').value.trim(),
+        secondaryButtonText: document.getElementById('offerSecondaryText').value.trim(),
+        secondaryButtonLink: document.getElementById('offerSecondaryLink').value.trim()
+      };
+
+      try {
+        const url = offerId ? `${appApiBase}/api/offers/${offerId}` : `${appApiBase}/api/offers`;
+        const method = offerId ? 'PUT' : 'POST';
+        const res = await fetch(url, {
+          method,
+          headers: getAuthHeaders(),
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        if (result.success) {
+          closeOfferModal();
+          await loadOffers();
+          alert('✅ Occasion offer saved successfully! Storefront (offers.html) has been updated.');
+        } else {
+          alert('Error saving offer: ' + (result.message || 'Unknown error'));
+        }
+      } catch (err) {
+        console.error('Error saving offer:', err);
+        alert('Server error saving offer.');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Save Occasion Offer';
+        }
+      }
+    }
+
+    async function handleDeleteOffer(id) {
+      const offer = allOffers.find(o => o._id === id);
+      const name = offer ? offer.name : 'this offer';
+      if (!confirm(`Are you sure you want to delete "${name}"? Products attached will revert to standard pricing.`)) return;
+      
+      try {
+        const res = await fetch(`${appApiBase}/api/offers/${id}`, { 
+          method: 'DELETE',
+          headers: getAuthHeaders()
+        });
+        const result = await res.json();
+        if (result.success) {
+          await loadOffers();
+        } else {
+          alert(result.message || 'Error deleting offer.');
+        }
+      } catch (err) {
+        console.error('Error deleting offer:', err);
+      }
+    }
+
+    // MANAGE PRODUCTS MODAL
+    async function openManageProductsModal(offerId) {
+      const offer = allOffers.find(o => o._id === offerId);
+      if (!offer) return;
+      currentManagingOffer = offer;
+
+      document.getElementById('manageOfferTitle').textContent = `Manage: ${offer.name}`;
+      document.getElementById('manageOfferSubtitle').textContent = `General Discount: ${offer.discountPercentage}% OFF • Default Badge: "${offer.badgeText || 'Special Offer'}"`;
+
+      // Populate product select dropdown
+      const sel = document.getElementById('addProductSelect');
+      sel.innerHTML = '<option value="">-- Choose a product from catalog --</option>' + 
+        allCatalogProducts.map(p => `<option value="${p._id}" data-price="${p.price}">${p.name} (₹${p.price})</option>`).join('');
+
+      document.getElementById('addProdOriginalPrice').value = '₹0';
+      document.getElementById('addProdOfferPrice').value = '';
+      document.getElementById('addProdBadge').value = offer.badgeText || `${offer.name} SPL`;
+
+      renderIncludedProductsTable();
+      document.getElementById('manageProductsModal').classList.add('active');
+    }
+
+    function closeManageProductsModal() {
+      document.getElementById('manageProductsModal').classList.remove('active');
+      currentManagingOffer = null;
+    }
+
+    function onProductSelectedForOffer() {
+      const sel = document.getElementById('addProductSelect');
+      const opt = sel.options[sel.selectedIndex];
+      if (!opt || !opt.value) {
+        document.getElementById('addProdOriginalPrice').value = '₹0';
+        document.getElementById('addProdOfferPrice').value = '';
+        return;
+      }
+
+      const originalPrice = Number(opt.dataset.price) || 0;
+      document.getElementById('addProdOriginalPrice').value = `₹${originalPrice}`;
+
+      const discPct = currentManagingOffer ? (currentManagingOffer.discountPercentage || 20) : 20;
+      const calculatedOfferPrice = Math.round(originalPrice * (1 - discPct / 100));
+      document.getElementById('addProdOfferPrice').value = calculatedOfferPrice;
+    }
+
+    async function handleAddProductToOffer() {
+      const sel = document.getElementById('addProductSelect');
+      const productId = sel.value;
+      if (!productId) {
+        alert('Please choose a product from the catalog dropdown.');
+        return;
+      }
+
+      if (!currentManagingOffer || !currentManagingOffer._id) {
+        alert('No offer is currently selected.');
+        return;
+      }
+
+      const managingOfferId = currentManagingOffer._id;
+      const offerPrice = document.getElementById('addProdOfferPrice').value;
+      const badge = document.getElementById('addProdBadge').value.trim();
+
+      const payload = {
+        productId,
+        customOfferPrice: offerPrice ? Number(offerPrice) : null,
+        badge
+      };
+
+      try {
+        const res = await fetch(`${appApiBase}/api/offers/${managingOfferId}/products`, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        if (result.success) {
+          await loadOffers();
+          currentManagingOffer = allOffers.find(o => String(o._id) === String(managingOfferId)) || result.offer;
+          renderIncludedProductsTable();
+          sel.value = '';
+          document.getElementById('addProdOriginalPrice').value = '₹0';
+          document.getElementById('addProdOfferPrice').value = '';
+        } else {
+          alert('Error adding product: ' + (result.message || 'Unknown error'));
+        }
+      } catch (err) {
+        console.error('Error adding product to offer:', err);
+        alert('Network error adding product. Please try again.');
+      }
+    }
+
+    async function handleRemoveProductFromOffer(productId) {
+      if (!productId) {
+        alert('Product identifier missing.');
+        return;
+      }
+
+      if (!currentManagingOffer || !currentManagingOffer._id) {
+        alert('No offer is currently selected.');
+        return;
+      }
+
+      if (!confirm('Remove this product from this offer? Normal pricing will be restored.')) return;
+      
+      const managingOfferId = currentManagingOffer._id;
+
+      try {
+        const res = await fetch(`${appApiBase}/api/offers/${managingOfferId}/products/${productId}`, {
+          method: 'DELETE',
+          headers: getAuthHeaders()
+        });
+        const result = await res.json();
+        if (result.success) {
+          await loadOffers();
+          currentManagingOffer = allOffers.find(o => String(o._id) === String(managingOfferId)) || result.offer;
+          renderIncludedProductsTable();
+        } else {
+          alert('Error removing product: ' + (result.message || 'Unknown error'));
+        }
+      } catch (err) {
+        console.error('Error removing product:', err);
+        alert('Network error removing product. Please try again.');
+      }
+    }
+
+    function renderIncludedProductsTable() {
+      const tbody = document.getElementById('includedProductsTableBody');
+      const prods = currentManagingOffer && Array.isArray(currentManagingOffer.products) ? currentManagingOffer.products : [];
+      document.getElementById('includedProdsCount').textContent = prods.length;
+
+      if (prods.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:24px; color:#94a3b8;">No products assigned yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = prods.map((item, idx) => {
+        const prod = (item.productId && typeof item.productId === 'object') ? item.productId : {};
+        const pId = prod._id || (typeof item.productId === 'string' ? item.productId : '') || item._id || '';
+        const name = prod.name || item.name || `Product #${idx + 1}`;
+        const origPrice = Number(prod.price || item.originalPrice) || 0;
+        const generalDiscount = currentManagingOffer ? (currentManagingOffer.discountPercentage || 0) : 0;
+        const offerPrice = Number(item.customOfferPrice) || (origPrice > 0 ? Math.round(origPrice * (1 - generalDiscount / 100)) : 0);
+        const discPct = item.customDiscountPercentage || (origPrice > 0 && offerPrice < origPrice ? Math.round(((origPrice - offerPrice) / origPrice) * 100) : generalDiscount);
+        const badge = item.badge || (currentManagingOffer ? currentManagingOffer.badgeText : '') || 'Special Offer';
+        const img = prod.imageUrl || item.imageUrl || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png';
+
+        return `
+          <tr style="border-bottom:1px solid #f1f5f9;">
+            <td style="padding:10px 14px; font-weight:600; color:#1e293b;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <img src="${img}" style="width:32px; height:32px; border-radius:6px; object-fit:cover;" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
+                <span>${name}</span>
+              </div>
+            </td>
+            <td style="padding:10px 14px; color:#64748b;">₹${origPrice}</td>
+            <td style="padding:10px 14px; font-weight:700; color:#C41E3A;">₹${offerPrice}</td>
+            <td style="padding:10px 14px;"><span style="background:#fee2e2; color:#C41E3A; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">${discPct}% OFF</span></td>
+            <td style="padding:10px 14px; font-size:0.8rem; color:#475569;">${badge}</td>
+            <td style="padding:10px 14px; text-align:center;">
+              <button onclick="handleRemoveProductFromOffer('${pId}')" type="button" style="background:#fee2e2; color:#dc2626; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:0.75rem; font-weight:600;">Remove</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Expose all handlers to window object for bulletproof global availability
+    window.openCreateOfferModal = openCreateOfferModal;
+    window.openEditOfferModal = openEditOfferModal;
+    window.closeOfferModal = closeOfferModal;
+    window.openManageProductsModal = openManageProductsModal;
+    window.closeManageProductsModal = closeManageProductsModal;
+    window.handleDeleteOffer = handleDeleteOffer;
+    window.handleAddProductToOffer = handleAddProductToOffer;
+    window.handleRemoveProductFromOffer = handleRemoveProductFromOffer;
+    window.applyPreset = applyPreset;
+    window.filterOffersGrid = filterOffersGrid;
+    window.updateLiveHeroPreview = updateLiveHeroPreview;
+  </script>
+</body>
+</html>

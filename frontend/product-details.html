@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Product Details | Inithat Custom Gifts</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/mobile.css">
   <link rel="icon" type="image/png" href="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png">
   <style>
     body {
@@ -349,8 +350,7 @@
   <!-- Navigation -->
   <nav class="navbar" id="navbar">
     <a href="index.html" class="nav-brand">
-      <img src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Inithat Custom Gifts Logo"
-        onerror="this.style.background='var(--primary)'; this.alt='I';">
+      <img id="navLogoImg" src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Inithat Custom Gifts Logo">
       <div class="nav-brand-text">
         <span class="nav-brand-name">Inithat Custom Gifts</span>
         <span class="nav-brand-tagline">Made with Love</span>
@@ -369,7 +369,7 @@
       <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
       <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
       <span id="navUserGreet" style="display:none; color:var(--gold); font-weight:600; font-size:0.85rem;"></span>
-      <button onclick="logout()" class="nav-auth-btn login-btn" id="navLogoutBtn"
+      <button class="nav-auth-btn login-btn" id="navLogoutBtn"
         style="display:none; cursor:pointer; border:none;">LOGOUT</button>
       <div class="nav-cart" id="navCart">
         <span class="cart-icon">🛒</span>
@@ -386,8 +386,26 @@
     <!-- Rendered via JS -->
   </div>
 
-  <script src="js/auth.js"></script>
-  <script src="js/script.js"></script>
+  <script src="js/auth.js?v=1.0.1"></script>
+  <script src="js/script.js?v=1.0.1"></script>
+  <script>
+    // Attach nav logo fallback and logout button after DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      const navLogoImg = document.getElementById('navLogoImg');
+      if (navLogoImg) {
+        navLogoImg.addEventListener('error', function() {
+          this.style.background = 'var(--primary)';
+          this.alt = 'I';
+        });
+      }
+      const navLogoutBtn = document.getElementById('navLogoutBtn');
+      if (navLogoutBtn) {
+        navLogoutBtn.addEventListener('click', function() {
+          if (typeof logout === 'function') logout();
+        });
+      }
+    });
+  </script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       // If product is already preloaded by server-side rendering (SSR), hydrate/initialize immediately
@@ -448,10 +466,11 @@
       const safeName = p.name.replace(/'/g, "\\'");
       const discountPercent = p.costPrice > p.price ? Math.round(((p.costPrice - p.price) / p.costPrice) * 100) : 0;
 
-      let thumbnailsHtml = `<div class="thumbnail active" onclick="changeImage('${p.imageUrl}')"><img src="${p.imageUrl}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'"></div>`;
+      const FALLBACK_IMG = 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png';
+      let thumbnailsHtml = `<div class="thumbnail active" data-img="${p.imageUrl}"><img src="${p.imageUrl}"></div>`;
       if (p.galleryImages && p.galleryImages.length > 0) {
         p.galleryImages.forEach(img => {
-          thumbnailsHtml += `<div class="thumbnail" onclick="changeImage('${img}')"><img src="${img}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'"></div>`;
+          thumbnailsHtml += `<div class="thumbnail" data-img="${img}"><img src="${img}"></div>`;
         });
       }
 
@@ -467,7 +486,7 @@
         <!-- Left: Images -->
         <div class="pdp-image-col">
           <div class="main-image-container">
-            <img id="mainProductImg" src="${p.imageUrl}" alt="${p.name}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
+            <img id="mainProductImg" src="${p.imageUrl}" alt="${p.name}">
           </div>
           <div class="thumbnail-gallery">
             ${thumbnailsHtml}
@@ -500,6 +519,46 @@
             </ul>
             <p style="margin-top: 15px; color: var(--gray-600); line-height: 1.6;">${p.shortDescription || 'Experience the perfect blend of personalization and quality with our uniquely crafted gifts. Designed to leave a lasting impression on your loved ones or corporate clients.'}</p>
           </div>
+
+          <!-- Specs & Dimensions Grid -->
+          <div class="specs-box" style="margin-top: 25px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px;">
+            <h3 style="font-size: 1.05rem; margin-top: 0; margin-bottom: 15px; color: var(--dark); display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 1.2rem;">📐</span> Size & Specifications
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px;">
+              <!-- Length -->
+              <div style="background: #ffffff; border: 1px solid #f1f5f9; border-radius: 8px; padding: 10px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">Length</div>
+                <div style="font-size: 1.1rem; font-weight: 800; color: var(--dark);">${(p.dimensions && p.dimensions.length) ? p.dimensions.length : '--'} <span style="font-size: 0.8rem; font-weight: 500; color: #94a3b8;">${(p.dimensions && p.dimensions.unit) ? p.dimensions.unit : 'cm'}</span></div>
+              </div>
+              <!-- Width -->
+              <div style="background: #ffffff; border: 1px solid #f1f5f9; border-radius: 8px; padding: 10px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">Width</div>
+                <div style="font-size: 1.1rem; font-weight: 800; color: var(--dark);">${(p.dimensions && p.dimensions.width) ? p.dimensions.width : '--'} <span style="font-size: 0.8rem; font-weight: 500; color: #94a3b8;">${(p.dimensions && p.dimensions.unit) ? p.dimensions.unit : 'cm'}</span></div>
+              </div>
+              <!-- Height -->
+              <div style="background: #ffffff; border: 1px solid #f1f5f9; border-radius: 8px; padding: 10px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">Height</div>
+                <div style="font-size: 1.1rem; font-weight: 800; color: var(--dark);">${(p.dimensions && p.dimensions.height) ? p.dimensions.height : '--'} <span style="font-size: 0.8rem; font-weight: 500; color: #94a3b8;">${(p.dimensions && p.dimensions.unit) ? p.dimensions.unit : 'cm'}</span></div>
+              </div>
+              <!-- Weight -->
+              <div style="background: #ffffff; border: 1px solid #f1f5f9; border-radius: 8px; padding: 10px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">Weight</div>
+                <div style="font-size: 1.1rem; font-weight: 800; color: var(--dark);">${p.weight ? p.weight : '--'} <span style="font-size: 0.8rem; font-weight: 500; color: #94a3b8;">kg</span></div>
+              </div>
+            </div>
+
+            ${(p.dimensions && p.dimensions.description) ? `
+              <div style="margin-top: 12px; background: #ffffff; border: 1px solid #f1f5f9; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.1rem;">📝</span>
+                <div>
+                  <div style="font-weight: 700; font-size: 0.75rem; color: #64748b; text-transform: uppercase; margin-bottom: 2px;">Dimensions Note</div>
+                  <div style="font-size: 0.88rem; font-weight: 600; color: var(--dark);">${p.dimensions.description}</div>
+                </div>
+              </div>
+            ` : ''}
+          </div>
         </div>
 
         <!-- Right: Buy Box -->
@@ -512,8 +571,8 @@
                 <span style="font-size: 1.1rem;">📍</span> Check Delivery Time
               </div>
               <div style="display: flex; gap: 8px; width: 100%;">
-                <input type="text" id="pincodeInput" placeholder="Enter Pincode" maxlength="6" style="flex: 1; min-width: 0; box-sizing: border-box; padding: 10px; border: 1px solid var(--gray-300); border-radius: 6px; font-family: var(--font-body); font-size: 0.95rem; outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--gray-300)'">
-                <button onclick="updateDelivery()" style="flex-shrink: 0; box-sizing: border-box; padding: 10px 15px; background: var(--dark); color: white; border: none; border-radius: 6px; cursor: pointer; font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.background='var(--primary)'" onmouseout="this.style.background='var(--dark)'">Check</button>
+                <input type="text" id="pincodeInput" placeholder="Enter Pincode" maxlength="6" style="flex: 1; min-width: 0; box-sizing: border-box; padding: 10px; border: 1px solid var(--gray-300); border-radius: 6px; font-family: var(--font-body); font-size: 0.95rem; outline:none;">
+                <button id="checkDeliveryBtn" style="flex-shrink: 0; box-sizing: border-box; padding: 10px 15px; background: var(--dark); color: white; border: none; border-radius: 6px; cursor: pointer; font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; transition: background 0.2s;">Check</button>
               </div>
               <div id="deliveryEstimation" style="margin-top: 12px; font-size: 0.95rem; line-height: 1.4; display: none; color: var(--dark); padding-top: 10px; border-top: 1px solid var(--gray-200);">
                 Estimated delivery: <strong id="deliveryDateStr" style="color: var(--green); font-size: 1.05rem;"></strong>
@@ -529,8 +588,8 @@
               <span style="font-size: 0.8rem; color: var(--gray-600);">Upload your photo(s) and custom text on the form before checkout.</span>
             </div>
 
-            <button class="action-btn buy-now-btn" onclick="window.location.href=\'customize-product.html?id=${p._id}&action=buynow\'" style="background: var(--primary); color: white; margin-bottom: 10px; cursor: pointer;">🎨 Personalize & Buy Now</button>
-            <button class="action-btn add-cart-btn" onclick="window.location.href=\'customize-product.html?id=${p._id}&action=addcart\'" style="border: 2px solid var(--primary); color: var(--primary); background: transparent; cursor: pointer;">Customize & Add to Cart</button>
+            <button class="action-btn buy-now-btn" id="buyNowBtn" data-id="${p._id}" style="background: var(--primary); color: white; margin-bottom: 10px; cursor: pointer;">🎨 Personalize & Buy Now</button>
+            <button class="action-btn add-cart-btn" id="addCartBtn" data-id="${p._id}" style="border: 2px solid var(--primary); color: var(--primary); background: transparent; cursor: pointer;">Customize & Add to Cart</button>
 
             <div class="secure-transaction">
               🔒 Secure transaction
@@ -538,6 +597,62 @@
           </div>
         </div>
       `;
+
+      // Attach event listeners AFTER innerHTML is set (no inline handlers needed)
+
+      // Fallback images
+      document.getElementById('mainProductImg').addEventListener('error', function() {
+        this.src = FALLBACK_IMG;
+      });
+      document.querySelectorAll('.thumbnail img').forEach(img => {
+        img.addEventListener('error', function() {
+          this.src = FALLBACK_IMG;
+        });
+      });
+
+      // Thumbnail click → change main image
+      document.querySelectorAll('.thumbnail').forEach(thumb => {
+        thumb.addEventListener('click', function() {
+          changeImage(this.dataset.img, this);
+        });
+      });
+
+      // Pincode input focus/blur styles
+      const pincodeInput = document.getElementById('pincodeInput');
+      if (pincodeInput) {
+        pincodeInput.addEventListener('focus', function() {
+          this.style.borderColor = 'var(--primary)';
+        });
+        pincodeInput.addEventListener('blur', function() {
+          this.style.borderColor = 'var(--gray-300)';
+        });
+      }
+
+      // Check delivery button
+      const checkBtn = document.getElementById('checkDeliveryBtn');
+      if (checkBtn) {
+        checkBtn.addEventListener('click', updateDelivery);
+        checkBtn.addEventListener('mouseover', function() {
+          this.style.background = 'var(--primary)';
+        });
+        checkBtn.addEventListener('mouseout', function() {
+          this.style.background = 'var(--dark)';
+        });
+      }
+
+      // Buy now & Add to cart buttons
+      const buyNowBtn = document.getElementById('buyNowBtn');
+      if (buyNowBtn) {
+        buyNowBtn.addEventListener('click', function() {
+          window.location.href = 'customize-product.html?id=' + this.dataset.id + '&action=buynow';
+        });
+      }
+      const addCartBtn = document.getElementById('addCartBtn');
+      if (addCartBtn) {
+        addCartBtn.addEventListener('click', function() {
+          window.location.href = 'customize-product.html?id=' + this.dataset.id + '&action=addcart';
+        });
+      }
     }
 
     let customerPhotosData = [];
@@ -559,10 +674,10 @@
       }
     }
 
-    function changeImage(src) {
+    function changeImage(src, thumbEl) {
       document.getElementById('mainProductImg').src = src;
       document.querySelectorAll('.thumbnail').forEach(el => el.classList.remove('active'));
-      event.currentTarget.classList.add('active');
+      if (thumbEl) thumbEl.classList.add('active');
     }
 
     function updateDelivery() {
@@ -601,6 +716,29 @@
       qtyInput.value = newVal;
     }
   </script>
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="index.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🏠</span>
+      <span class="mob-nav-label">Home</span>
+    </a>
+    <a href="products.html" class="mob-nav-item active">
+      <span class="mob-nav-icon">🛍️</span>
+      <span class="mob-nav-label">Products</span>
+    </a>
+    <a href="bulk-retail.html" class="mob-nav-item">
+      <span class="mob-nav-icon">📦</span>
+      <span class="mob-nav-label">Bulk</span>
+    </a>
+    <a href="offers.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🏷️</span>
+      <span class="mob-nav-label">Offers</span>
+    </a>
+    <a href="cart.html" class="mob-nav-item mob-cart-link" id="mobCartLink">
+      <span class="mob-nav-icon">🛒</span>
+      <span class="mob-nav-label">Cart</span>
+      <span class="mob-cart-badge" id="mobCartBadge" style="display:none;">0</span>
+    </a>
+  </nav>
 </body>
 
 </html>

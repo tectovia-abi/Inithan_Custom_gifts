@@ -13,6 +13,8 @@ const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const bulkInquiryRoutes = require('./routes/bulkInquiryRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
+const occasionRoutes = require('./routes/occasionRoutes');
+const offerRoutes = require('./routes/offerRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const Product = require('./models/Product');
 
@@ -101,6 +103,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/bulk-inquiry', bulkInquiryRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/occasions', occasionRoutes);
+app.use('/api/offers', offerRoutes);
 app.use('/api/upload', uploadRoutes);
 
 // ── Health check ─────────────────────────────────────────────────────────────

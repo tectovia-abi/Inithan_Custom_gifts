@@ -11,6 +11,7 @@
   <title>Login | Inithat Custom Gifts - Made With Love</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/login.css">
+  <link rel="stylesheet" href="css/mobile.css">
   <link rel="icon" type="image/png" href="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png">
 </head>
 
@@ -251,11 +252,34 @@
     </div>
   </section>
 
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="index.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🏠</span>
+      <span class="mob-nav-label">Home</span>
+    </a>
+    <a href="products.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🛍️</span>
+      <span class="mob-nav-label">Products</span>
+    </a>
+    <a href="bulk-retail.html" class="mob-nav-item">
+      <span class="mob-nav-icon">📦</span>
+      <span class="mob-nav-label">Bulk</span>
+    </a>
+    <a href="offers.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🏷️</span>
+      <span class="mob-nav-label">Offers</span>
+    </a>
+    <a href="cart.html" class="mob-nav-item mob-cart-link" id="mobCartLink">
+      <span class="mob-nav-icon">🛒</span>
+      <span class="mob-nav-label">Cart</span>
+      <span class="mob-cart-badge" id="mobCartBadge" style="display:none;">0</span>
+    </a>
+  </nav>
+
   <script src="js/auth.js?v=2"></script>
   <script src="js/login.js?v=2"></script>
-  <!-- All login logic moved to js/login.js for CSP compliance -->
-
+  <script src="js/script.js"></script>
 </body>
 
 </html>
-

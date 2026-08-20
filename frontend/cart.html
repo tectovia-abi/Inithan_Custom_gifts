@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart | Inithat Custom Gifts</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/mobile.css">
   <link rel="icon" type="image/png" href="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png">
   <style>
     body {
@@ -280,8 +281,7 @@
   <!-- Navigation -->
   <nav class="navbar" id="navbar">
     <a href="index.html" class="nav-brand">
-      <img src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Inithat Custom Gifts Logo"
-        onerror="this.style.background='var(--primary)'; this.alt='I';">
+      <img id="navLogoImg" src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Inithat Custom Gifts Logo">
       <div class="nav-brand-text">
         <span class="nav-brand-name">Inithat Custom Gifts</span>
         <span class="nav-brand-tagline">Made with Love</span>
@@ -300,9 +300,9 @@
       <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
       <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
       <span id="navUserGreet" style="display:none; color:var(--gold); font-weight:600; font-size:0.85rem;"></span>
-      <button onclick="logout()" class="nav-auth-btn login-btn" id="navLogoutBtn"
+      <button class="nav-auth-btn login-btn" id="navLogoutBtn"
         style="display:none; cursor:pointer; border:none;">LOGOUT</button>
-      <div class="nav-cart" id="navCart" style="cursor: pointer;" onclick="window.location.href='cart.html'">
+      <div class="nav-cart" id="navCart" style="cursor: pointer;">
         <span class="cart-icon">🛒</span>
         <span>CART</span>
         <span class="cart-count" id="cartCount">0</span>
@@ -339,13 +339,78 @@
         <span id="totalAmt">₹0</span>
       </div>
 
-      <button class="proceed-btn" id="checkoutBtn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+      <button class="proceed-btn" id="checkoutBtn">Proceed to Checkout</button>
       <a href="products.html" class="continue-shopping">Continue Shopping</a>
     </div>
   </div>
 
   <script src="js/auth.js"></script>
   <script src="js/script.js"></script>
+  <script>
+    // Static element listeners (CSP-safe)
+    document.addEventListener('DOMContentLoaded', function() {
+      // Nav logo fallback
+      const navLogo = document.getElementById('navLogoImg');
+      if (navLogo) {
+        navLogo.addEventListener('error', function() {
+          this.style.background = 'var(--primary)';
+          this.alt = 'I';
+        });
+      }
+      // Logout button
+      const logoutBtn = document.getElementById('navLogoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function() {
+          if (typeof logout === 'function') logout();
+        });
+      }
+      // Nav cart
+      const navCart = document.getElementById('navCart');
+      if (navCart) {
+        navCart.addEventListener('click', function() {
+          window.location.href = 'cart.html';
+        });
+      }
+      // Checkout button
+      const checkoutBtn = document.getElementById('checkoutBtn');
+      if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', proceedToCheckout);
+      }
+      // Lightbox modal
+      const modal = document.getElementById('globalPhotoModal');
+      const modalInner = document.getElementById('globalPhotoModalInner');
+      const modalClose = document.getElementById('globalPhotoModalClose');
+      if (modal) modal.addEventListener('click', closePhotoModal);
+      if (modalInner) modalInner.addEventListener('click', function(e) { e.stopPropagation(); });
+      if (modalClose) modalClose.addEventListener('click', closePhotoModal);
+      // Event delegation for dynamically rendered cart items
+      const cartContainer = document.getElementById('cartItemsContainer');
+      if (cartContainer) {
+        cartContainer.addEventListener('click', function(e) {
+          // Qty decrease
+          const decBtn = e.target.closest('.qty-dec-btn');
+          if (decBtn) { updateItemQty(parseInt(decBtn.dataset.index), -1); return; }
+          // Qty increase
+          const incBtn = e.target.closest('.qty-inc-btn');
+          if (incBtn) { updateItemQty(parseInt(incBtn.dataset.index), 1); return; }
+          // Remove item
+          const removeBtn = e.target.closest('.remove-btn');
+          if (removeBtn) { removeItem(parseInt(removeBtn.dataset.index)); return; }
+          // Photo thumbnail
+          const photoThumb = e.target.closest('.cart-photo-thumb');
+          if (photoThumb) { openPhotoModal(photoThumb.dataset.img); return; }
+        });
+        cartContainer.addEventListener('mouseover', function(e) {
+          const h3 = e.target.closest('.cart-item-name');
+          if (h3) h3.style.color = 'var(--primary)';
+        });
+        cartContainer.addEventListener('mouseout', function(e) {
+          const h3 = e.target.closest('.cart-item-name');
+          if (h3) h3.style.color = 'var(--dark)';
+        });
+      }
+    });
+  </script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       renderCart();
@@ -399,17 +464,18 @@
         const img = item.imageUrl || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png';
         const link = item.productId ? `product-details.html?id=${item.productId}` : '#';
 
+        const FALLBACK = 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png';
         html += `
           <div class="cart-item">
             <div class="cart-item-info">
               <a href="${link}" style="display: block; text-decoration: none;">
                 <div class="cart-item-img" style="overflow: hidden; padding: 0;">
-                  <img src="${img}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
+                  <img src="${img}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;" data-fallback="${FALLBACK}">
                 </div>
               </a>
               <div class="cart-item-details">
                 <a href="${link}" style="text-decoration: none; color: inherit;">
-                  <h3 style="transition: color 0.2s; margin-bottom: 5px;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--dark)'">${item.name}</h3>
+                  <h3 class="cart-item-name" style="transition: color 0.2s; margin-bottom: 5px;">${item.name}</h3>
                 </a>
                 <span style="display: block; font-size: 0.85rem; color: #666; margin-bottom: 5px;">${item.category || 'Custom Gift'}</span>
                 ${item.customText ? `<div style="font-size:0.85rem; background:#fff1f2; color:#be123c; padding:6px 10px; border-radius:6px; margin:6px 0; border:1px solid #fecdd3; display:inline-block;">✏️ <strong>Custom Text:</strong> "${item.customText}"</div>` : ''}
@@ -418,9 +484,9 @@
                   <div style="margin:8px 0;">
                     <span style="font-size:0.8rem; font-weight:600; color:#475569; display:block; margin-bottom:4px;">🖼️ Uploaded Photos (click to expand):</span>
                     <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                      ${item.customImages.map(img => `
-                        <div style="position:relative; cursor:pointer;" onclick="openPhotoModal('${img.replace(/'/g, "\\'")}')">
-                          <img src="${img}" style="width:46px; height:46px; border-radius:6px; object-fit:cover; border:2px solid var(--primary); transition:transform 0.2s;" title="Click to view full photo">
+                      ${item.customImages.map(src => `
+                        <div class="cart-photo-thumb" data-img="${src}" style="position:relative; cursor:pointer;">
+                          <img src="${src}" style="width:46px; height:46px; border-radius:6px; object-fit:cover; border:2px solid var(--primary); transition:transform 0.2s;" title="Click to view full photo">
                         </div>
                       `).join('')}
                     </div>
@@ -431,11 +497,11 @@
             </div>
             <div class="cart-item-actions">
               <div class="qty-control">
-                <button class="qty-btn" onclick="updateItemQty(${index}, -1)">-</button>
+                <button class="qty-btn qty-dec-btn" data-index="${index}">-</button>
                 <input type="text" class="qty-input" value="${qty}" readonly>
-                <button class="qty-btn" onclick="updateItemQty(${index}, 1)">+</button>
+                <button class="qty-btn qty-inc-btn" data-index="${index}">+</button>
               </div>
-              <button class="remove-btn" onclick="removeItem(${index})" title="Remove item">🗑️</button>
+              <button class="remove-btn" data-index="${index}" title="Remove item">🗑️</button>
             </div>
           </div>
         `;
@@ -449,6 +515,13 @@
       checkoutBtn.disabled = false;
       checkoutBtn.style.opacity = '1';
       checkoutBtn.style.cursor = 'pointer';
+
+      // Attach onerror fallback via JS for dynamically rendered product images
+      itemsContainer.querySelectorAll('img[data-fallback]').forEach(img => {
+        img.addEventListener('error', function() {
+          this.src = this.dataset.fallback;
+        });
+      });
     }
 
     function updateItemQty(index, change) {
@@ -503,12 +576,40 @@
   </script>
 
   <!-- Global Photo View Lightbox Modal -->
-  <div id="globalPhotoModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; justify-content:center; align-items:center; backdrop-filter:blur(4px);" onclick="closePhotoModal()">
-    <div style="position:relative; max-width:90%; max-height:90%; text-align:center;" onclick="event.stopPropagation()">
-      <span onclick="closePhotoModal()" style="position:absolute; top:-40px; right:0; color:white; font-size:1.8rem; cursor:pointer; font-weight:bold; background:rgba(0,0,0,0.5); padding:2px 10px; border-radius:4px;">✕ Close</span>
+  <div id="globalPhotoModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
+    <div id="globalPhotoModalInner" style="position:relative; max-width:90%; max-height:90%; text-align:center;">
+      <span id="globalPhotoModalClose" style="position:absolute; top:-40px; right:0; color:white; font-size:1.8rem; cursor:pointer; font-weight:bold; background:rgba(0,0,0,0.5); padding:2px 10px; border-radius:4px;">✕ Close</span>
       <img id="globalPhotoModalImg" src="" style="max-width:100%; max-height:80vh; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5); border:3px solid white;">
     </div>
   </div>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="index.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🏠</span>
+      <span class="mob-nav-label">Home</span>
+    </a>
+    <a href="products.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🛍️</span>
+      <span class="mob-nav-label">Products</span>
+    </a>
+    <a href="bulk-retail.html" class="mob-nav-item">
+      <span class="mob-nav-icon">📦</span>
+      <span class="mob-nav-label">Bulk</span>
+    </a>
+    <a href="offers.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🏷️</span>
+      <span class="mob-nav-label">Offers</span>
+    </a>
+    <a href="cart.html" class="mob-nav-item mob-cart-link active" id="mobCartLink">
+      <span class="mob-nav-icon">🛒</span>
+      <span class="mob-nav-label">Cart</span>
+      <span class="mob-cart-badge" id="mobCartBadge" style="display:none;">0</span>
+    </a>
+  </nav>
+
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
 </body>
 
 </html>

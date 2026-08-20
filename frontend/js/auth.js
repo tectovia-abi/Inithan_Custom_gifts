@@ -4,9 +4,9 @@
  * and user-specific shopping cart management.
  */
 
-const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port !== '8081'
+window.API_BASE = window.API_BASE || ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port !== '8081'
   ? 'http://127.0.0.1:8081'
-  : window.location.origin;
+  : window.location.origin);
 
 // ── Cookie Helper Functions (Professional Session Fallback) ──────────────────
 function setCookie(name, value, days = 7) {
@@ -148,11 +148,10 @@ function updateNavbar() {
             </div>
             <ul>
               ${user.isAdmin ? `<li><a href="admin-dashboard.html" class="admin-link">👑 Admin Dashboard</a></li>` : ''}
-              <li><a href="#">📦 My Retail Orders</a></li>
+              <li><a href="my-profile.html">👤 My Profile</a></li>
               <li><a href="my-bulk-orders.html">🏢 My Bulk Inquiries</a></li>
               <li><a href="cart.html">🛒 My Cart</a></li>
-              <li><a href="#">👤 My Profile</a></li>
-              <li><a href="#">🔒 Change Password</a></li>
+              <li><a href="my-profile.html#security">🔒 Change Password</a></li>
               <li><a href="#" data-action="logout" class="logout-link">🚪 Logout</a></li>
             </ul>
           </div>

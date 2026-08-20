@@ -6,6 +6,7 @@ const productSchema = new mongoose.Schema({
   code: { type: String, required: [true, 'Product code is required'], unique: true, uppercase: true, trim: true },
   category: { type: String, default: 'Custom Gifts', trim: true },
   subCategory: { type: String, default: '', trim: true },
+  occasions: [{ type: String, trim: true }],
   brand: { type: String, default: 'Inithat Custom Gifts', trim: true },
   productType: { type: String, default: 'Physical', trim: true },
   keywords: { type: String, default: '', trim: true },
@@ -14,7 +15,14 @@ const productSchema = new mongoose.Schema({
   // Pricing
   price: { type: Number, required: [true, 'Selling price is required'], min: 0 },
   discountPrice: { type: Number, default: 0, min: 0 },
+  offerPercentage: { type: Number, default: 0, min: 0, max: 100 },
   costPrice: { type: Number, default: 0, min: 0 },
+
+  // Special Occasion Offer Link
+  offerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Offer', default: null },
+  offerPrice: { type: Number, default: null, min: 0 },
+  offerDiscountPercent: { type: Number, default: null, min: 0, max: 100 },
+  offerBadge: { type: String, default: '', trim: true },
 
   // Images & Description
   imageUrl: { type: String, default: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png', trim: true },
@@ -30,7 +38,9 @@ const productSchema = new mongoose.Schema({
   dimensions: {
     length: { type: Number, default: 0 },
     width: { type: Number, default: 0 },
-    height: { type: Number, default: 0 }
+    height: { type: Number, default: 0 },
+    unit: { type: String, default: 'cm', trim: true },
+    description: { type: String, default: '', trim: true }
   },
   shippingType: { type: String, default: 'Standard Delivery', trim: true },
 

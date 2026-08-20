@@ -3,11 +3,252 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard | Inithat Custom Gifts</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Add Product | Admin Panel | Inithat Custom Gifts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/admin.css">
   <link rel="icon" type="image/png" href="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png">
+  <style>
+    :root {
+      --admin-bg-soft: #f8fafc;
+      --card-border: #e2e8f0;
+      --input-border: #cbd5e1;
+      --primary-accent: #C41E3A;
+      --primary-soft: rgba(196, 30, 58, 0.08);
+      --dark-text: #1e293b;
+      --muted-text: #64748b;
+    }
+
+    body.admin-body {
+      background-color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .product-form-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 0 20px 0;
+    }
+
+    /* Sticky Action Header */
+    .top-action-bar {
+      position: sticky;
+      top: 70px;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .top-action-bar h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--dark-text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .top-action-bar span {
+      font-size: 0.82rem;
+      color: var(--muted-text);
+    }
+
+    .top-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Responsive Grid Layout */
+    .product-layout-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .product-layout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Cards Styling */
+    .form-card {
+      background: #ffffff;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      transition: box-shadow 0.2s ease;
+    }
+
+    .form-card:hover {
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--dark-text);
+      margin-top: 0;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title .badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: #f1f5f9;
+      color: var(--muted-text);
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+
+    /* Input Groups & Rows */
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .form-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 640px) {
+      .form-row-2, .form-row-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 5px;
+    }
+
+    .input-group input[type="text"],
+    .input-group input[type="number"],
+    .input-group select,
+    .input-group textarea {
+      width: 100%;
+      padding: 9px 12px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--dark-text);
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus,
+    .input-group textarea:focus {
+      outline: none;
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.12);
+    }
+
+    /* Modern Media Dropzones */
+    .upload-zone-main {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      background: #f8fafc;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .upload-zone-main:hover {
+      border-color: var(--primary-accent);
+      background: rgba(196, 30, 58, 0.02);
+    }
+
+    .upload-zone-main input[type="file"] {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .upload-icon-svg {
+      color: var(--primary-accent);
+      margin-bottom: 4px;
+    }
+
+    /* Modern Checkbox Pills for Highlights */
+    .pill-checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .pill-label:hover {
+      background: #e2e8f0;
+    }
+
+    /* Primary Save Button */
+    .btn-save-main {
+      background: var(--primary-accent);
+      color: #ffffff;
+      border: none;
+      padding: 10px 24px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      border-radius: 9px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(196, 30, 58, 0.3);
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-save-main:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(196, 30, 58, 0.4);
+      opacity: 0.95;
+    }
+  </style>
 </head>
 <body class="admin-body">
 
@@ -29,8 +270,11 @@
           <a href="admin-products.html" class="admin-nav-link active">
             <span>🛍️</span> Products
           </a>
+          <a href="admin-offers.html" class="admin-nav-link">
+            <span>🏷️</span> Occasion Offers
+          </a>
           <a href="admin-categories.html" class="admin-nav-link">
-            <span>🗂️</span> Categories
+            <span>🗂️</span> Categories & Occasions
           </a>
           <a href="admin-users.html" class="admin-nav-link">
             <span>👥</span> Users
@@ -61,57 +305,255 @@
         </div>
       </header>
 
-      <div class="admin-content">
-        <!-- Add Product Section -->
+      <div class="admin-content" style="padding: 15px;">
         <section id="addProductSection" class="admin-section active">
           
           <form id="addProductForm">
-            <!-- Normal Header -->
-            <div class="section-header" style="margin-bottom: 25px;">
-              <div>
-                <h2 style="margin: 0;">Add New Product</h2>
-                <span style="color: var(--gray-500); font-size: 0.9rem;">Fill in all product details to publish to the store.</span>
-              </div>
-              <a href="admin-products.html" class="btn btn-outline">Cancel</a>
-            </div>
+            
+            <div class="product-form-container">
 
-            <div class="form-grid">
-              
-              <!-- Left Column (Main Info) -->
-              <div class="form-column">
+              <!-- Sticky Header Bar -->
+              <div class="top-action-bar">
+                <div>
+                  <h2>🛍️ Add New Product</h2>
+                  <span>Fill in product details below to publish live to your store</span>
+                </div>
+                <div class="top-actions-group">
+                  <a href="admin-products.html" class="btn btn-outline" style="padding: 9px 18px; font-weight: 600; font-size: 0.88rem;">Cancel</a>
+                  <button type="submit" class="btn-save-main" id="saveProductBtn">
+                    <span>✨ Save Product</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Shopify-Style Perfectly Balanced Grid Layout -->
+              <div class="product-layout-grid">
                 
-                <!-- General Info Card -->
-                <div class="card form-card">
-                  <h3>📦 General Information</h3>
-                  <div class="input-group">
-                    <label>Product Name *</label>
-                    <input type="text" id="p_name" required placeholder="e.g. Personalized Wall Clock">
-                  </div>
-                  <div class="row-2">
+                <!-- LEFT COLUMN (Main Content & Specs) -->
+                <div class="left-column">
+                  
+                  <!-- Product Title & Basic Info -->
+                  <div class="form-card">
+                    <h3 class="card-title">
+                      <span>📦 Product Details & Descriptions</span>
+                      <span class="badge">Basic Details</span>
+                    </h3>
+
+                    <div class="input-group" style="margin-bottom: 14px;">
+                      <label>Product Name *</label>
+                      <input type="text" id="p_name" required placeholder="e.g. Personalized Wall Clock">
+                    </div>
+
+                    <div class="form-row-2" style="margin-bottom: 14px;">
+                      <div class="input-group">
+                        <label>Product Code (SKU) *</label>
+                        <input type="text" id="p_code" required placeholder="e.g. WALL-123">
+                      </div>
+                      <div class="input-group">
+                        <label>Brand</label>
+                        <input type="text" id="p_brand" value="Inithat Custom Gifts">
+                      </div>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 14px;">
+                      <label>Short Description (Displays on store cards)</label>
+                      <textarea id="p_shortDescription" rows="2" placeholder="Brief 1-2 sentence description"></textarea>
+                    </div>
+
                     <div class="input-group">
-                      <label>Product Code (SKU) *</label>
-                      <input type="text" id="p_code" required placeholder="e.g. WALL-123">
+                      <label>Detailed Description</label>
+                      <textarea id="p_detailedDescription" rows="4" placeholder="Full specifications, materials, care instructions..."></textarea>
+                    </div>
+                  </div>
+
+                  <!-- Photos & Media -->
+                  <div class="form-card">
+                    <h3 class="card-title">
+                      <span>📸 Photos & Media</span>
+                      <span class="badge">S3 Upload</span>
+                    </h3>
+                    
+                    <div style="margin-bottom: 16px;">
+                      <label style="display:block; font-weight:600; margin-bottom:6px; font-size:0.83rem; color:#334155;">Primary Cover Image *</label>
+                      <div class="upload-zone-main" id="primaryUploadBox">
+                        <input type="file" id="p_imageFile" accept="image/*" required>
+                        <div class="upload-icon-svg">
+                          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                        </div>
+                        <div style="font-weight: 600; font-size: 0.88rem; color: #1e293b;">Click or drag photo here to upload</div>
+                        <div style="font-size: 0.75rem; color: #64748b; margin-top: 2px;">Supports JPG, PNG, WEBP</div>
+                        <img src="" class="modern-image-preview" id="primaryImagePreview" style="display:none; margin-top:10px; max-height:140px; border-radius:8px; object-fit:contain; margin-left:auto; margin-right:auto;">
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style="display:block; font-weight:600; margin-bottom:6px; font-size:0.83rem; color:#334155;">Gallery Images (Optional)</label>
+                      <div class="modern-gallery-preview" id="galleryPreviewContainer" style="display:flex; flex-wrap:wrap; gap:10px;">
+                        <div class="upload-zone-main" id="galleryUploadBox" style="width:100px; height:100px; padding:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:10px;">
+                          <input type="file" id="p_galleryFiles" accept="image/*" multiple>
+                          <div style="font-size:1.4rem; font-weight:bold; color:var(--primary-accent);">+</div>
+                          <div style="font-size:0.75rem; font-weight:600; color:#475569;">Add Photos</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Pricing Card -->
+                  <div class="form-card">
+                    <h3 class="card-title">
+                      <span>💰 Pricing & Offer</span>
+                      <span class="badge">Auto-Calc</span>
+                    </h3>
+                    <div class="form-row-2" style="margin-bottom: 14px;">
+                      <div class="input-group">
+                        <label>Selling Price (₹) *</label>
+                        <input type="number" step="0.01" min="0" id="p_price" required placeholder="0.00">
+                      </div>
+                      <div class="input-group">
+                        <label>Offer Percentage (%)</label>
+                        <input type="number" step="0.01" min="0" max="100" id="p_offerPercentage" placeholder="0%">
+                      </div>
                     </div>
                     <div class="input-group">
-                      <label>Brand</label>
-                      <input type="text" id="p_brand" value="Inithat Custom Gifts">
+                      <label>Discount Price (₹)</label>
+                      <input type="number" step="0.01" min="0" id="p_discountPrice" placeholder="0.00">
                     </div>
                   </div>
-                  <div class="row-2">
+
+                  <!-- Customer Customization Options -->
+                  <div class="form-card">
+                    <h3 class="card-title">
+                      <span style="display: flex; align-items: center; gap: 8px;">
+                        <span style="background: rgba(196, 30, 58, 0.1); color: var(--primary-accent); padding: 5px 8px; border-radius: 6px; font-size: 1rem;">🎨</span>
+                        <span>Customer Customization Options</span>
+                      </span>
+                      <span class="badge" style="background: #eff6ff; color: #1d4ed8; font-weight: 600;">Personalization</span>
+                    </h3>
+                    <p style="font-size: 0.83rem; color: #64748b; margin-top: -6px; margin-bottom: 16px;">Control custom fields (names, messages, photos) customers fill when ordering.</p>
+                    
+                    <div class="form-row-2">
+                      <!-- Custom Text Box -->
+                      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0;">
+                          <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 1.1rem;">✍️</span>
+                            <div>
+                              <div style="font-weight: 700; font-size: 0.88rem; color: #1e293b;">Custom Text / Message</div>
+                              <div style="font-size: 0.72rem; color: #64748b;">Enable text printing on gift</div>
+                            </div>
+                          </div>
+                          <input type="checkbox" id="p_allowCustomText" checked style="width: 18px; height: 18px; accent-color: var(--primary-accent); cursor: pointer;">
+                        </div>
+                        
+                        <div class="input-group">
+                          <label style="font-size: 0.78rem; font-weight: 600; color: #475569;">Field Label Prompt</label>
+                          <input type="text" id="p_customTextLabel" value="Custom Name / Message to Print" placeholder="e.g. Name to print on Mug" style="font-size: 0.83rem; padding: 8px 10px; background: #ffffff;">
+                        </div>
+                      </div>
+
+                      <!-- Custom Photo Box -->
+                      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0;">
+                          <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 1.1rem;">🖼️</span>
+                            <div>
+                              <div style="font-weight: 700; font-size: 0.88rem; color: #1e293b;">Customer Photo Uploads</div>
+                              <div style="font-size: 0.72rem; color: #64748b;">Enable photo upload for printing</div>
+                            </div>
+                          </div>
+                          <input type="checkbox" id="p_allowCustomImage" checked style="width: 18px; height: 18px; accent-color: var(--primary-accent); cursor: pointer;">
+                        </div>
+                        
+                        <div class="input-group">
+                          <label style="font-size: 0.78rem; font-weight: 600; color: #475569;">Max Customer Photos</label>
+                          <input type="number" id="p_maxCustomImages" value="1" min="1" max="10" placeholder="1" style="font-size: 0.83rem; padding: 8px 10px; background: #ffffff;">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Shipping & Dimensions Card -->
+                  <div class="form-card" style="margin-bottom: 0;">
+                    <h3 class="card-title">
+                      <span>⚙️ Shipping & Dimensions</span>
+                      <span class="badge">Specs</span>
+                    </h3>
+                    <div class="form-row-2" style="margin-bottom: 14px;">
+                      <div class="input-group">
+                        <label>Weight (kg)</label>
+                        <input type="number" step="0.1" id="p_weight" value="0.5">
+                      </div>
+                      <div class="input-group">
+                        <label>Dimension Unit</label>
+                        <select id="p_dim_unit">
+                          <option value="cm" selected>Centimeters (cm)</option>
+                          <option value="mm">Millimeters (mm)</option>
+                          <option value="inches">Inches (in)</option>
+                          <option value="ft">Feet (ft)</option>
+                          <option value="m">Meters (m)</option>
+                        </select>
+                      </div>
+                    </div>
+                    
+                    <label style="font-size: 0.83rem; font-weight: 600; margin-bottom: 5px; display: block; color: #334155;">Dimensions (Length × Width × Height)</label>
+                    <div class="form-row-3" style="margin-bottom: 14px;">
+                      <div class="input-group"><input type="number" step="0.1" id="p_dim_l" placeholder="Length"></div>
+                      <div class="input-group"><input type="number" step="0.1" id="p_dim_w" placeholder="Width"></div>
+                      <div class="input-group"><input type="number" step="0.1" id="p_dim_h" placeholder="Height"></div>
+                    </div>
+
                     <div class="input-group">
+                      <label>Dimensions Note / Size Description (Optional)</label>
+                      <input type="text" id="p_dim_description" placeholder="e.g. 10 x 12 inches / 350 GSM / 500 ml">
+                    </div>
+                  </div>
+
+                </div>
+
+
+                <!-- RIGHT COLUMN (Organization Sidebar) -->
+                <div class="right-column">
+                  
+                  <!-- Status & Visibility -->
+                  <div class="form-card">
+                    <h3 class="card-title">
+                      <span>⚡ Status & Visibility</span>
+                      <span class="badge">Publishing</span>
+                    </h3>
+                    <div class="input-group" style="margin-bottom: 14px;">
+                      <label>Product Status</label>
+                      <select id="p_status">
+                        <option value="Active">Active (Live in Store)</option>
+                        <option value="Draft">Draft (Hidden)</option>
+                      </select>
+                    </div>
+                    <div class="input-group">
+                      <label>Storefront Visibility</label>
+                      <select id="p_visibility">
+                        <option value="Visible (Public)">Visible (Public)</option>
+                        <option value="Hidden">Hidden</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Category & Classification -->
+                  <div class="form-card">
+                    <h3 class="card-title">
+                      <span>🗂️ Category & Type</span>
+                      <span class="badge">Navigation</span>
+                    </h3>
+                    <div class="input-group" style="margin-bottom: 14px;">
                       <label>Category *</label>
                       <select id="p_category" required>
                         <option value="">Loading categories...</option>
                       </select>
                     </div>
-                    <div class="input-group">
+                    <div class="input-group" style="margin-bottom: 14px;">
                       <label>Sub Category</label>
                       <select id="p_subCategory">
                         <option value="">Select Category First</option>
                       </select>
                     </div>
-                  </div>
-                  <div class="row-2">
                     <div class="input-group">
                       <label>Product Type</label>
                       <select id="p_productType">
@@ -119,201 +561,71 @@
                         <option value="Digital">Digital Product</option>
                       </select>
                     </div>
+                  </div>
+
+                  <!-- Target Occasions Picker -->
+                  <div class="form-card">
+                    <h3 class="card-title">
+                      <span>🎉 Target Occasions</span>
+                      <span class="badge">Multi-Select</span>
+                    </h3>
                     <div class="input-group">
-                      <label>Status</label>
-                      <select id="p_status">
-                        <option value="Active">Active</option>
-                        <option value="Draft">Draft</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Media Card -->
-                <div class="card form-card">
-                  <h3>📸 Media & Images</h3>
-                  
-                  <div style="margin-bottom: 20px;">
-                    <label style="display:block; font-weight:600; margin-bottom:10px; font-size:0.9rem; color:var(--gray-600);">Primary Image *</label>
-                    <div class="modern-upload-box" id="primaryUploadBox">
-                      <input type="file" id="p_imageFile" accept="image/*" required>
-                      <div class="modern-upload-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                      </div>
-                      <div class="modern-upload-label">Upload<br>Main Photo</div>
-                      <img src="" class="modern-image-preview" id="primaryImagePreview">
-                    </div>
-                  </div>
-
-                  <div>
-                    <label style="display:block; font-weight:600; margin-bottom:10px; font-size:0.9rem; color:var(--gray-600);">Gallery Images (Optional)</label>
-                    <div class="modern-gallery-preview" id="galleryPreviewContainer">
-                      <div class="modern-upload-box" id="galleryUploadBox" style="width:100px; height:100px; border-radius:12px;">
-                        <input type="file" id="p_galleryFiles" accept="image/*" multiple>
-                        <div class="modern-upload-icon" style="font-size:1.5rem; margin-bottom:2px;">+</div>
-                        <div class="modern-upload-label" style="font-size:0.7rem;">Add More</div>
+                      <label style="font-weight: 600; font-size: 0.82rem; color: #475569;">Select applicable events for this gift</label>
+                      <div id="p_occ_widget" style="background: #ffffff; border: 1px solid var(--input-border); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
+                        <input type="text" id="p_occ_search" placeholder="🔍 Search occasions..." style="padding: 7px 10px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 0.83rem; width: 100%; outline: none;">
+                        <div id="p_occ_selected_tags" style="display: flex; flex-wrap: wrap; gap: 6px; min-height: 32px; padding: 6px; background: #f8fafc; border-radius: 8px; border: 1px dashed #cbd5e1; align-items: center;">
+                          <span style="color: #94a3b8; font-size: 0.8rem; font-style: italic;">No occasions selected yet</span>
+                        </div>
+                        <div id="p_occ_options_list" style="max-height: 130px; overflow-y: auto; display: flex; flex-direction: column; gap: 3px; border-top: 1px solid #f1f5f9; padding-top: 6px;">
+                          <span style="color: #64748b; font-size: 0.85rem;">Loading occasions...</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <!-- Descriptions Card -->
-                <div class="card form-card">
-                  <h3>📝 Descriptions</h3>
-                  <div class="input-group">
-                    <label>Short Description (Displays on cards)</label>
-                    <textarea id="p_shortDescription" rows="2" placeholder="Brief 1-2 sentence description"></textarea>
-                  </div>
-                  <div class="input-group">
-                    <label>Detailed Description</label>
-                    <textarea id="p_detailedDescription" rows="5" placeholder="Full details, materials, care instructions..."></textarea>
-                  </div>
-                </div>
-
-
-
-              </div>
-
-              <!-- Right Column (Pricing, Inventory, SEO) -->
-              <div class="form-column">
-                
-                <!-- Pricing Card -->
-                <div class="card form-card">
-                  <h3>💰 Pricing</h3>
-                  <div class="row-2">
-                    <div class="input-group">
-                      <label>Selling Price (₹) *</label>
-                      <input type="number" id="p_price" required placeholder="0.00">
-                    </div>
-                    <div class="input-group">
-                      <label>Discount Price (₹)</label>
-                      <input type="number" id="p_discountPrice" placeholder="0.00">
+                  <!-- Product Highlights -->
+                  <div class="form-card">
+                    <h3 class="card-title">
+                      <span>✨ Product Highlights</span>
+                      <span class="badge">Badges</span>
+                    </h3>
+                    <div class="pill-checkbox-group">
+                      <label class="pill-label"><input type="checkbox" id="p_isFeatured" style="cursor:pointer;"> <span>Featured</span></label>
+                      <label class="pill-label"><input type="checkbox" id="p_isBestSeller" style="cursor:pointer;"> <span>Best Seller</span></label>
+                      <label class="pill-label"><input type="checkbox" id="p_isNewArrival" checked style="cursor:pointer;"> <span>New Arrival</span></label>
+                      <label class="pill-label"><input type="checkbox" id="p_showOnHomepage" checked style="cursor:pointer;"> <span>Show on Homepage</span></label>
+                      <label class="pill-label"><input type="checkbox" id="p_allowReviews" checked style="cursor:pointer;"> <span>Allow Reviews</span></label>
                     </div>
                   </div>
-                  <div class="input-group">
-                    <label>Cost Price (₹) - For your tracking only</label>
-                    <input type="number" id="p_costPrice" placeholder="0.00">
-                  </div>
-                </div>
 
-                <!-- Inventory & Shipping Card -->
-                <div class="card form-card">
-                  <h3>⚙️ Inventory & Shipping</h3>
-                  <div class="row-2">
-                    <div class="input-group">
-                      <label>Stock Quantity</label>
-                      <input type="number" id="p_stockQuantity" value="50">
+                  <!-- SEO & Discovery Card -->
+                  <div class="form-card" style="margin-bottom: 0;">
+                    <h3 class="card-title">
+                      <span>🔍 SEO & Discovery</span>
+                      <span class="badge">Search Tags</span>
+                    </h3>
+                    <div class="input-group" style="margin-bottom: 12px;">
+                      <label>Keywords (Comma separated)</label>
+                      <input type="text" id="p_keywords" placeholder="mug, custom, photo">
                     </div>
-                    <div class="input-group">
-                      <label>Low Stock Alert</label>
-                      <input type="number" id="p_lowStockAlert" value="5">
+                    <div class="input-group" style="margin-bottom: 12px;">
+                      <label>Meta Title</label>
+                      <input type="text" id="p_metaTitle" placeholder="SEO Title">
                     </div>
-                  </div>
-                  <div class="row-2">
-                    <div class="input-group">
-                      <label>SKU / Barcode</label>
-                      <input type="text" id="p_skuBarcode" placeholder="Barcode string">
+                    <div class="input-group" style="margin-bottom: 12px;">
+                      <label>Meta Description</label>
+                      <textarea id="p_metaDescription" rows="2" placeholder="SEO Description"></textarea>
                     </div>
-                    <div class="input-group">
-                      <label>Weight (kg)</label>
-                      <input type="number" step="0.1" id="p_weight" value="0.5">
-                    </div>
-                  </div>
-                  <label style="font-size: 0.9rem; font-weight: 500; margin-bottom: 5px; display: block; color: var(--dark);">Dimensions (cm)</label>
-                  <div class="row-3" style="margin-bottom: 15px;">
-                    <div class="input-group"><input type="number" id="p_dim_l" placeholder="Length"></div>
-                    <div class="input-group"><input type="number" id="p_dim_w" placeholder="Width"></div>
-                    <div class="input-group"><input type="number" id="p_dim_h" placeholder="Height"></div>
-                  </div>
-                  <div class="input-group">
-                    <label>Shipping Type</label>
-                    <input type="text" id="p_shippingType" placeholder="e.g. Standard, Heavy, Free">
-                  </div>
-                </div>
-
-                <!-- SEO & Discovery Card -->
-                <div class="card form-card">
-                  <h3>🔍 SEO & Discovery</h3>
-                  <div class="input-group">
-                    <label>Keywords (Comma separated)</label>
-                    <input type="text" id="p_keywords" placeholder="mug, custom, photo">
-                  </div>
-                  <div class="input-group">
-                    <label>Meta Title</label>
-                    <input type="text" id="p_metaTitle" placeholder="SEO Title">
-                  </div>
-                  <div class="input-group">
-                    <label>Meta Description</label>
-                    <textarea id="p_metaDescription" rows="2" placeholder="SEO Description"></textarea>
-                  </div>
-                  <div class="row-2">
                     <div class="input-group">
                       <label>URL Slug</label>
                       <input type="text" id="p_urlSlug" placeholder="custom-wall-clock">
                     </div>
-                    <div class="input-group">
-                      <label>Visibility</label>
-                      <select id="p_visibility">
-                        <option value="Visible (Public)">Visible (Public)</option>
-                        <option value="Hidden">Hidden</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                
-
-
-              </div>
-            </div>
-
-            <!-- Full Width Elements -->
-            <div style="margin-top: 30px;">
-              <!-- Customer Customization Options Card -->
-              <div class="card form-card" style="margin-bottom: 25px;">
-                <h3>🎨 Customer Customization Options</h3>
-                <p style="font-size: 0.85rem; color: var(--gray-500); margin-bottom: 15px;">Configure what details (photos/text) the customer provides when ordering this custom gift.</p>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                  <!-- Custom Text Options -->
-                  <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                    <label class="toggle-label" style="font-weight: 600; margin-bottom: 10px;">
-                      <input type="checkbox" id="p_allowCustomText" checked> <span>Allow Custom Text / Message</span>
-                    </label>
-                    <div class="input-group" style="margin-top: 10px;">
-                      <label style="font-size: 0.85rem;">Text Field Label Prompt</label>
-                      <input type="text" id="p_customTextLabel" value="Custom Name / Message to Print" placeholder="e.g. Name to print on Mug">
-                    </div>
                   </div>
 
-                  <!-- Custom Photo Options -->
-                  <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                    <label class="toggle-label" style="font-weight: 600; margin-bottom: 10px;">
-                      <input type="checkbox" id="p_allowCustomImage" checked> <span>Allow Customer Photo Uploads</span>
-                    </label>
-                    <div class="input-group" style="margin-top: 10px;">
-                      <label style="font-size: 0.85rem;">Max Customer Photos Allowed</label>
-                      <input type="number" id="p_maxCustomImages" value="1" min="1" max="10" placeholder="1">
-                    </div>
-                  </div>
                 </div>
+
               </div>
 
-              <!-- Toggles Card -->
-              <div class="card form-card">
-                <h3>✨ Product Highlights</h3>
-                <div class="toggle-grid" style="flex-direction: row; flex-wrap: wrap; gap: 25px;">
-                  <label class="toggle-label"><input type="checkbox" id="p_isFeatured"> <span>Featured</span></label>
-                  <label class="toggle-label"><input type="checkbox" id="p_isBestSeller"> <span>Best Seller</span></label>
-                  <label class="toggle-label"><input type="checkbox" id="p_isNewArrival" checked> <span>New Arrival</span></label>
-                  <label class="toggle-label"><input type="checkbox" id="p_showOnHomepage" checked> <span>Show on Homepage</span></label>
-                  <label class="toggle-label"><input type="checkbox" id="p_allowReviews" checked> <span>Allow Reviews</span></label>
-                </div>
-              </div>
-            </div>
-
-            <!-- Bottom Action Bar -->
-            <div style="margin-top: 30px; display: flex; justify-content: flex-end; padding: 20px 0; border-top: 1px solid #eaeaea;">
-              <button type="submit" class="btn btn-primary" id="saveProductBtn" style="padding: 12px 35px; font-size: 1.1rem; font-weight: 600; box-shadow: 0 4px 15px rgba(196, 30, 58, 0.3);">Save Product</button>
             </div>
 
           </form>

@@ -1,0 +1,294 @@
+/* ============================================================
+   INITHAN — PRODUCTS PAGE FILTER UX ENHANCEMENT
+   Purely additive. Does NOT override existing styles.
+   Load AFTER styles.css and mobile.css in products.html.
+   ============================================================ */
+
+/* ─── HEADER HEIGHT TOKEN ─────────────────────────────────── */
+:root {
+  --navbar-h: 80px;
+}
+
+/* ─── LAYOUT: INDEPENDENT SCROLL REGIONS ─────────────────── */
+.products-layout {
+  align-items: stretch !important;
+}
+
+/* Sidebar — sticky + own scroll */
+.products-sidebar {
+  position: sticky !important;
+  top: var(--navbar-h) !important;
+  max-height: calc(100dvh - var(--navbar-h) - 32px) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  align-self: flex-start;
+}
+
+/* ─── CUSTOM SCROLLBAR (sidebar) ─────────────────────────── */
+.products-sidebar::-webkit-scrollbar { width: 5px; }
+.products-sidebar::-webkit-scrollbar-track { background: transparent; }
+.products-sidebar::-webkit-scrollbar-thumb {
+  background: var(--gray-200, #e5e7eb);
+  border-radius: 10px;
+}
+.products-sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--primary, #c41e3a);
+}
+.products-sidebar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-200, #e5e7eb) transparent;
+}
+
+/* ─── SCROLL SHADOW INDICATORS ───────────────────────────── */
+.products-sidebar.shadow-top {
+  box-shadow: inset 0 8px 8px -8px rgba(0,0,0,0.08),
+              var(--shadow-sm, 0 2px 8px rgba(0,0,0,0.04));
+}
+.products-sidebar.shadow-bottom {
+  box-shadow: inset 0 -8px 8px -8px rgba(0,0,0,0.08),
+              var(--shadow-sm, 0 2px 8px rgba(0,0,0,0.04));
+}
+.products-sidebar.shadow-top.shadow-bottom {
+  box-shadow: inset 0 8px 8px -8px rgba(0,0,0,0.08),
+              inset 0 -8px 8px -8px rgba(0,0,0,0.08),
+              var(--shadow-sm, 0 2px 8px rgba(0,0,0,0.04));
+}
+
+/* ─── SHOW MORE / SHOW LESS BUTTON ──────────────────────── */
+.filter-show-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  background: none;
+  border: none;
+  padding: 5px 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--primary, #c41e3a);
+  cursor: pointer;
+  font-family: var(--font-body, inherit);
+  letter-spacing: 0.01em;
+  transition: opacity 0.15s;
+  min-height: 36px;
+  text-align: left;
+}
+.filter-show-more-btn:hover { opacity: 0.7; text-decoration: underline; }
+.filter-show-more-btn:focus-visible {
+  outline: 2px solid var(--primary, #c41e3a);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+.filter-show-more-btn .smb-chevron {
+  font-size: 0.7rem;
+  display: inline-block;
+  transition: transform 0.22s;
+}
+.filter-show-more-btn[aria-expanded="true"] .smb-chevron {
+  transform: rotate(180deg);
+}
+
+/* Extra items — collapsed by default */
+.filter-overflow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+}
+.filter-overflow.expanded {
+  max-height: 800px;
+  opacity: 1;
+}
+
+/* ─── MOBILE FILTER BAR ──────────────────────────────────── */
+.mobile-filter-bar {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: var(--white, #fff);
+  border-bottom: 1px solid var(--gray-200, #e5e7eb);
+  position: sticky;
+  top: var(--navbar-h);
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.mob-filter-open-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1.5px solid var(--gray-200, #e5e7eb);
+  border-radius: 8px;
+  background: var(--white, #fff);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--dark, #1a1a1a);
+  cursor: pointer;
+  font-family: var(--font-body, inherit);
+  transition: border-color 0.15s, color 0.15s;
+}
+.mob-filter-open-btn:hover {
+  border-color: var(--primary, #c41e3a);
+  color: var(--primary, #c41e3a);
+}
+.mob-filter-badge {
+  background: var(--primary, #c41e3a);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  border-radius: 50%;
+  min-width: 18px;
+  height: 18px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+}
+.mob-filter-badge.visible { display: inline-flex; }
+
+/* ─── MOBILE FILTER DRAWER ───────────────────────────────── */
+.mobile-filter-drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9000;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.mobile-filter-drawer-overlay.open { display: block; }
+
+.mobile-filter-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--white, #fff);
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.2);
+  z-index: 9001;
+  display: flex;
+  flex-direction: column;
+  max-height: 92dvh;
+  max-height: 92vh; /* Fallback */
+  transform: translateY(100%);
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-filter-drawer.open { transform: translateY(0); }
+
+.mfd-handle {
+  width: 40px;
+  height: 4px;
+  background: var(--gray-200, #e5e7eb);
+  border-radius: 2px;
+  margin: 14px auto 4px;
+  flex-shrink: 0;
+}
+.mfd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px 12px;
+  border-bottom: 1px solid var(--gray-100, #f3f4f6);
+  flex-shrink: 0;
+}
+.mfd-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--dark, #1a1a1a);
+}
+.mfd-close-btn {
+  background: var(--gray-100, #f3f4f6);
+  border: none;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dark, #1a1a1a);
+  font-weight: 700;
+  line-height: 1;
+  transition: background 0.15s;
+}
+.mfd-close-btn:hover { background: var(--gray-200, #e5e7eb); }
+
+.mfd-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px 20px 8px;
+  -webkit-overflow-scrolling: touch;
+}
+.mfd-body::-webkit-scrollbar { width: 4px; }
+.mfd-body::-webkit-scrollbar-thumb {
+  background: var(--gray-200, #e5e7eb);
+  border-radius: 10px;
+}
+
+.mfd-footer {
+  display: flex;
+  gap: 12px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--gray-100, #f3f4f6);
+  flex-shrink: 0;
+}
+.mfd-clear-btn {
+  flex: 1;
+  padding: 13px;
+  border: 1.5px solid var(--primary, #c41e3a);
+  background: transparent;
+  color: var(--primary, #c41e3a);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-body, inherit);
+  transition: background 0.15s;
+}
+.mfd-clear-btn:hover { background: rgba(196, 30, 58, 0.05); }
+.mfd-apply-btn {
+  flex: 2;
+  padding: 13px;
+  background: var(--primary, #c41e3a);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-body, inherit);
+  box-shadow: 0 4px 14px rgba(196, 30, 58, 0.25);
+  transition: background 0.15s;
+}
+.mfd-apply-btn:hover { background: #a01530; }
+
+/* Shared filter group styles for drawer */
+.mfd-body .filter-group { margin-bottom: 20px; }
+.mfd-body .filter-group-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 8px 0 8px;
+  border-bottom: 1px solid var(--gray-100, #f3f4f6);
+}
+
+/* ─── BODY SCROLL LOCK ───────────────────────────────────── */
+body.scroll-locked {
+  overflow: hidden !important;
+  padding-right: var(--scrollbar-w, 0px);
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 992px) {
+  .products-sidebar { display: none !important; }
+  .mobile-filter-bar { display: flex !important; }
+  .products-layout { grid-template-columns: 1fr !important; }
+}

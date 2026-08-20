@@ -16,8 +16,8 @@ const slugify = (text) => {
 const createProduct = async (req, res) => {
   try {
     const {
-      name, code, category, subCategory, brand, productType, keywords, status,
-      price, discountPrice, costPrice, imageUrl, galleryImages, shortDescription, detailedDescription,
+      name, code, category, subCategory, occasions, brand, productType, keywords, status,
+      price, discountPrice, offerPercentage, costPrice, imageUrl, galleryImages, shortDescription, detailedDescription,
       stockQuantity, lowStockAlert, skuBarcode, weight, dimensions, shippingType,
       metaTitle, metaDescription, urlSlug, visibility,
       isFeatured, isBestSeller, isNewArrival, allowReviews, showOnHomepage,
@@ -46,12 +46,14 @@ const createProduct = async (req, res) => {
       code: code.trim().toUpperCase(),
       category: category ? category.trim() : 'Custom Gifts',
       subCategory: subCategory ? subCategory.trim() : '',
+      occasions: Array.isArray(occasions) ? occasions.map(o => o.trim()).filter(Boolean) : [],
       brand: brand ? brand.trim() : 'Inithat Custom Gifts',
       productType: productType ? productType.trim() : 'Physical',
       keywords: keywords ? keywords.trim() : '',
       status: (status && ['Active', 'Inactive', 'Draft', 'Out of Stock'].includes(status.trim())) ? status.trim() : 'Active',
       price: Number(price),
       discountPrice: discountPrice ? Number(discountPrice) : 0,
+      offerPercentage: offerPercentage !== undefined ? Number(offerPercentage) : 0,
       costPrice: costPrice ? Number(costPrice) : 0,
       imageUrl: imageUrl ? imageUrl.trim() : 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png',
       galleryImages: Array.isArray(galleryImages) ? galleryImages : [],
@@ -224,8 +226,8 @@ const deleteProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const {
-      name, code, category, subCategory, brand, productType, keywords, status,
-      price, discountPrice, costPrice, imageUrl, galleryImages, shortDescription, detailedDescription,
+      name, code, category, subCategory, occasions, brand, productType, keywords, status,
+      price, discountPrice, offerPercentage, costPrice, imageUrl, galleryImages, shortDescription, detailedDescription,
       stockQuantity, lowStockAlert, skuBarcode, weight, dimensions, shippingType,
       metaTitle, metaDescription, urlSlug, visibility,
       isFeatured, isBestSeller, isNewArrival, allowReviews, showOnHomepage,
@@ -259,6 +261,7 @@ const updateProduct = async (req, res) => {
     if (name !== undefined) product.name = name.trim();
     if (category !== undefined) product.category = category.trim();
     if (subCategory !== undefined) product.subCategory = subCategory.trim();
+    if (occasions !== undefined) product.occasions = Array.isArray(occasions) ? occasions.map(o => o.trim()).filter(Boolean) : [];
     if (brand !== undefined) product.brand = brand.trim();
     if (productType !== undefined) product.productType = productType.trim();
     if (keywords !== undefined) product.keywords = keywords.trim();
@@ -269,6 +272,7 @@ const updateProduct = async (req, res) => {
     
     if (price !== undefined) product.price = Number(price);
     if (discountPrice !== undefined) product.discountPrice = Number(discountPrice);
+    if (offerPercentage !== undefined) product.offerPercentage = Number(offerPercentage);
     if (costPrice !== undefined) product.costPrice = Number(costPrice);
 
     if (imageUrl !== undefined) product.imageUrl = imageUrl.trim();
