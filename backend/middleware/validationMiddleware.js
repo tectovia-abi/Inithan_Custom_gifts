@@ -18,7 +18,7 @@ const validateSignup = [
   body('fullName').trim().notEmpty().withMessage('Full name is required.'),
   body('email').isEmail().normalizeEmail().withMessage('Please provide a valid email address.'),
   body('phone').trim().notEmpty().withMessage('Phone number is required.'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long.'),
+  body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters long.'),
   validate
 ];
 
@@ -52,8 +52,8 @@ const validateInquiry = [
   body('name').trim().notEmpty().withMessage('Name is required.'),
   body('email').isEmail().normalizeEmail().withMessage('Please provide a valid email address.'),
   body('phone').trim().notEmpty().withMessage('Phone number is required.'),
-  body('productName').trim().notEmpty().withMessage('Product name is required.'),
   body('quantity').isInt({ min: 1 }).withMessage('Quantity must be at least 1.'),
+  body('productDescription').optional().trim(),
   validate
 ];
 

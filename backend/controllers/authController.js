@@ -27,6 +27,26 @@ const signup = async (req, res) => {
       });
     }
 
+    if (password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        errorType: 'PASSWORD_TOO_SHORT',
+        message: 'Password must be at least 8 characters long.'
+      });
+    }
+
+    const hasUpper = /[A-Z]/.test(password);
+    const hasLower = /[a-z]/.test(password);
+    const hasNumSym = /[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
+
+    if (!hasUpper || !hasLower || !hasNumSym) {
+      return res.status(400).json({
+        success: false,
+        errorType: 'PASSWORD_TOO_WEAK',
+        message: 'Password must include uppercase (A-Z), lowercase (a-z), and at least one number or symbol.'
+      });
+    }
+
     if (confirmPassword && password !== confirmPassword) {
       console.warn(`⚠️ [AUTH BACKEND] Signup Failed: Passwords do not match`);
       return res.status(400).json({
@@ -110,11 +130,7 @@ const login = async (req, res) => {
     }
 
     // Check password match
-    let isMatch = await user.comparePassword(password);
-    if (!isMatch && user.email === 'admin@gmail.com' && (password === '123456' || password === '123465')) {
-      isMatch = true;
-    }
-
+    const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       console.warn(`❌ [AUTH BACKEND] Login Failed: Incorrect password for (${email})`);
       return res.status(401).json({
@@ -282,10 +298,21 @@ const changePassword = async (req, res) => {
       });
     }
 
-    if (newPassword.length < 6) {
+    if (newPassword.length < 8) {
       return res.status(400).json({
         success: false,
-        message: 'New password must be at least 6 characters long.'
+        message: 'New password must be at least 8 characters long.'
+      });
+    }
+
+    const hasUpper = /[A-Z]/.test(newPassword);
+    const hasLower = /[a-z]/.test(newPassword);
+    const hasNumberOrSpecial = /[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(newPassword);
+
+    if (!hasUpper || !hasLower || !hasNumberOrSpecial) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password must include a combination of uppercase letters (A-Z), lowercase letters (a-z), and at least one number or special character.'
       });
     }
 

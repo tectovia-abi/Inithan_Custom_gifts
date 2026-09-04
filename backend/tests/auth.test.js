@@ -7,8 +7,8 @@ describe('Auth API', () => {
     fullName: 'Test User',
     email: 'test@example.com',
     phone: '1234567890',
-    password: 'password123',
-    confirmPassword: 'password123'
+    password: 'Password123!',
+    confirmPassword: 'Password123!'
   };
 
   describe('POST /api/auth/signup', () => {

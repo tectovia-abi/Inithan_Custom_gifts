@@ -16,7 +16,10 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const occasionRoutes = require('./routes/occasionRoutes');
 const offerRoutes = require('./routes/offerRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
-const Product = require('./models/Product');
+const paymentRoutes  = require('./routes/paymentRoutes');
+const orderRoutes    = require('./routes/orderRoutes');
+const addressRoutes  = require('./routes/addressRoutes');
+const Product        = require('./models/Product');
 
 const app = express();
 
@@ -28,11 +31,13 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://*"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://checkout.razorpay.com", "https://*.razorpay.com", "https://*"],
+      scriptSrcAttr: ["'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      imgSrc: ["'self'", "data:", "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com", "https://*.amazonaws.com"],
-      connectSrc: ["'self'", "https://*", "http://127.0.0.1:*", "http://localhost:*"]
+      imgSrc: ["'self'", "data:", "https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com", "https://*.amazonaws.com", "https://*.razorpay.com"],
+      frameSrc: ["'self'", "https://api.razorpay.com", "https://checkout.razorpay.com", "https://*.razorpay.com"],
+      connectSrc: ["'self'", "https://api.razorpay.com", "https://*.razorpay.com", "https://*", "http://127.0.0.1:*", "http://localhost:*"]
     }
   }
 }));
@@ -106,6 +111,10 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/occasions', occasionRoutes);
 app.use('/api/offers', offerRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/payment', paymentRoutes);
+app.use('/api',         paymentRoutes);  // shorthand: /api/create-order, /api/verify-payment
+app.use('/api/orders',  orderRoutes);
+app.use('/api/address', addressRoutes);
 
 // ── Health check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
@@ -214,7 +223,18 @@ app.get('/products/:slug', async (req, res) => {
     const description = product.metaDescription || product.shortDescription || `Buy ${product.name} online at Inithan Custom Gifts. High-quality personalized gift made with love.`;
     const keywords = product.keywords || `${product.name}, custom gift, personalized gift, Inithan`;
     const url = `https://inithancustomgifts.com/products/${product.urlSlug}`;
-    const imageUrl = product.imageUrl ? (product.imageUrl.startsWith('http') ? product.imageUrl : `https://inithancustomgifts.com/${product.imageUrl}`) : 'https://inithancustomgifts.com/https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png';
+    const fallbackDefaultImage = 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png';
+    const imageUrl = product.imageUrl ? (product.imageUrl.startsWith('http') ? product.imageUrl : `https://inithancustomgifts.com/${product.imageUrl.replace(/^\//, '')}`) : fallbackDefaultImage;
+
+    const resolveImgSrc = (src) => {
+      if (!src) return fallbackDefaultImage;
+      if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('data:')) {
+        return src;
+      }
+      return src.startsWith('/') ? `..${src}` : `../${src}`;
+    };
+
+    const mainImgSrc = resolveImgSrc(product.imageUrl);
 
     const seoTags = `
   <title>${title}</title>
@@ -264,10 +284,10 @@ app.get('/products/:slug', async (req, res) => {
     // 2. Server-side pre-rendering of product details
     const discountPercent = product.costPrice > product.price ? Math.round(((product.costPrice - product.price) / product.costPrice) * 100) : 0;
     
-    let thumbnailsHtml = `<div class="thumbnail active"><img src="../${product.imageUrl}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'"></div>`;
+    let thumbnailsHtml = `<div class="thumbnail active"><img src="${mainImgSrc}" onerror="this.src='${fallbackDefaultImage}'"></div>`;
     if (product.galleryImages && product.galleryImages.length > 0) {
       product.galleryImages.forEach(img => {
-        thumbnailsHtml += `<div class="thumbnail"><img src="../${img}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'"></div>`;
+        thumbnailsHtml += `<div class="thumbnail"><img src="${resolveImgSrc(img)}" onerror="this.src='${fallbackDefaultImage}'"></div>`;
       });
     }
 
@@ -284,7 +304,7 @@ app.get('/products/:slug', async (req, res) => {
       <!-- Left: Images -->
       <div class="pdp-image-col">
         <div class="main-image-container">
-          <img id="mainProductImg" src="../${product.imageUrl}" alt="${product.name}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
+          <img id="mainProductImg" src="${mainImgSrc}" alt="${product.name}" onerror="this.src='${fallbackDefaultImage}'">
         </div>
         <div class="thumbnail-gallery">
           ${thumbnailsHtml}
@@ -400,7 +420,7 @@ const connectDB = require('./config/db');
 // ── Connect to MongoDB Atlas then start server ───────────────────────────────
 const PORT = process.env.PORT || 8081;
 
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test' && require.main === module) {
   connectDB().then(() => {
     app.listen(PORT, () => {
       console.log(`🚀 Server running → http://localhost:${PORT}`);

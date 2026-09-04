@@ -26,6 +26,9 @@
           <a href="admin-dashboard.html" class="admin-nav-link active">
             <span>📊</span> Dashboard
           </a>
+          <a href="admin-orders.html" class="admin-nav-link">
+            <span>📦</span> Orders
+          </a>
           <a href="admin-products.html" class="admin-nav-link">
             <span>🛍️</span> Products
           </a>
@@ -68,6 +71,20 @@
         <!-- Dashboard Overview -->
         <section id="dashboardSection" class="admin-section active">
           <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon" style="background: rgba(37, 99, 235, 0.1); color: #2563eb;">📦</div>
+              <div class="stat-details">
+                <h3>Total Orders</h3>
+                <h2 id="totalOrders">0</h2>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">💰</div>
+              <div class="stat-details">
+                <h3>Total Revenue</h3>
+                <h2 id="totalRevenue">₹0</h2>
+              </div>
+            </div>
             <div class="stat-card">
               <div class="stat-icon" style="background: rgba(196, 30, 58, 0.1); color: var(--primary);">🎁</div>
               <div class="stat-details">
@@ -134,5 +151,25 @@
 
   <script src="js/auth.js"></script>
   <script src="js/admin.js"></script>
+  <script>
+    // Fetch live order stats on dashboard load
+    document.addEventListener('DOMContentLoaded', async () => {
+      const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token') || (typeof getCookie === 'function' ? getCookie('inithat_token') : '');
+      const API_BASE = window.API_BASE || window.location.origin;
+
+      try {
+        const res = await fetch(`${API_BASE}/api/orders/stats`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          if (document.getElementById('totalOrders')) document.getElementById('totalOrders').textContent = (data.totalOrders || 0).toLocaleString();
+          if (document.getElementById('totalRevenue')) document.getElementById('totalRevenue').textContent = `₹${(data.totalRevenue || 0).toLocaleString('en-IN')}`;
+        }
+      } catch (e) {
+        console.error('Failed to load dashboard order stats:', e);
+      }
+    });
+  </script>
 </body>
 </html>

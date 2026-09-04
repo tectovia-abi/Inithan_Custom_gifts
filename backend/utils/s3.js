@@ -1,6 +1,5 @@
 const { S3Client, PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const path = require('path');
-const { v4: uuidv4 } = require('crypto');
 
 const s3 = new S3Client({
   region: process.env.AWS_REGION,

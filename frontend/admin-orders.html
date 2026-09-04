@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders Management & Activity Audit | Inithat Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="icon" type="image/png" href="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png">
+  <style>
+    :root {
+      --primary: #c41e3a;
+      --primary-dark: #9f1239;
+      --primary-light: #fff1f2;
+      --navy: #0f172a;
+      --slate-dark: #1e293b;
+      --slate-muted: #64748b;
+      --slate-light: #f8fafc;
+      --border-color: #e2e8f0;
+      --success: #16a34a;
+      --warning: #d97706;
+      --info: #2563eb;
+      --purple: #7c3aed;
+      --danger: #dc2626;
+      --radius-lg: 12px;
+      --radius-md: 8px;
+      --radius-sm: 6px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.03), 0 1px 2px rgba(0,0,0,0.02);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06);
+      --shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.14);
+    }
+
+    body.admin-body {
+      background: #f1f5f9;
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: var(--slate-dark);
+      margin: 0;
+      padding: 0;
+      font-size: 14px;
+    }
+
+    /* ─── Main Content Container (Optimized for 100% Zoom) ───── */
+    .admin-main {
+      flex: 1;
+      margin-left: var(--admin-sidebar-width, 260px);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #f1f5f9;
+      width: calc(100% - var(--admin-sidebar-width, 260px));
+    }
+
+    .admin-content-inner {
+      padding: 20px 24px;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* ─── Page Header ─────────────────────────────────────────── */
+    .page-title-wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .page-title-wrap h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 0 0 2px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .page-subtitle {
+      font-size: 0.84rem;
+      color: var(--slate-muted);
+      margin: 0;
+    }
+
+    .btn-refresh {
+      background: white;
+      border: 1px solid var(--border-color);
+      color: var(--slate-dark);
+      padding: 8px 14px;
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-refresh:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+
+    /* ─── Metric Stat Cards (Compact 100% Fit) ───────────────── */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 1200px) {
+      .stats-container {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+    }
+
+    .metric-card {
+      background: white;
+      padding: 14px 16px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .metric-icon-wrap {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .metric-info h3 {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--slate-muted);
+      margin: 0 0 3px 0;
+    }
+
+    .metric-info .metric-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin: 0;
+      line-height: 1;
+    }
+
+    /* ─── Filter & Search Box ────────────────────────────────── */
+    .action-toolbar {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .status-filter-pills {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .status-pill-btn {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border: 1px solid var(--border-color);
+      background: #f8fafc;
+      color: var(--slate-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-pill-btn:hover {
+      background: #e2e8f0;
+      color: var(--navy);
+    }
+
+    .status-pill-btn.active {
+      background: var(--navy);
+      color: white;
+      border-color: var(--navy);
+      box-shadow: 0 2px 5px rgba(15, 23, 42, 0.2);
+    }
+
+    .status-pill-btn .pill-count {
+      font-size: 0.7rem;
+      padding: 1px 6px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.25);
+    }
+
+    .status-pill-btn:not(.active) .pill-count {
+      background: #e2e8f0;
+      color: var(--slate-dark);
+    }
+
+    .search-filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search-input-wrap {
+      flex: 1;
+      min-width: 220px;
+      position: relative;
+    }
+
+    .search-input-wrap span {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+
+    .search-field {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px 12px 8px 34px;
+      border: 1px solid #cbd5e1;
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      outline: none;
+      font-family: inherit;
+      background: #f8fafc;
+      transition: all 0.2s;
+    }
+
+    .search-field:focus {
+      background: white;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
+    }
+
+    .select-field {
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      outline: none;
+      font-family: inherit;
+      background: #f8fafc;
+      color: var(--slate-dark);
+      cursor: pointer;
+    }
+
+    .select-field:focus {
+      border-color: var(--primary);
+    }
+
+    /* ─── Orders Table (Calibrated for 100% Zoom Fit) ────────── */
+    .table-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      width: 100%;
+    }
+
+    .orders-data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.8rem;
+    }
+
+    .orders-data-table th {
+      background: #f8fafc;
+      padding: 11px 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .orders-data-table td {
+      padding: 11px 12px;
+      border-bottom: 1px solid #f1f5f9;
+      color: var(--slate-dark);
+      vertical-align: middle;
+    }
+
+    .orders-data-table tbody tr {
+      transition: background-color 0.15s;
+    }
+
+    .orders-data-table tbody tr:hover {
+      background-color: #f8fafc;
+    }
+
+    /* Order # Pill */
+    .order-number-badge {
+      display: inline-flex;
+      align-items: center;
+      font-family: monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-light);
+      border: 1px solid #fecdd3;
+      padding: 3px 6px;
+      border-radius: var(--radius-sm);
+      white-space: nowrap;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .order-number-badge:hover {
+      background: #ffe4e6;
+    }
+
+    /* Date formatting */
+    .date-cell-main {
+      font-weight: 600;
+      color: #1e293b;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    .date-cell-sub {
+      font-size: 0.7rem;
+      color: #64748b;
+      white-space: nowrap;
+    }
+
+    /* Customer Cell */
+    .customer-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 120px;
+    }
+
+    .customer-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: var(--slate-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.76rem;
+      flex-shrink: 0;
+    }
+
+    .customer-details-name {
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 0.78rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 110px;
+    }
+
+    .customer-details-phone {
+      font-size: 0.7rem;
+      color: var(--slate-muted);
+      white-space: nowrap;
+    }
+
+    /* Item preview */
+    .item-cell-title {
+      font-weight: 600;
+      color: #1e293b;
+      font-size: 0.78rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 130px;
+    }
+
+    .item-cell-sub {
+      font-size: 0.7rem;
+      color: #64748b;
+      white-space: nowrap;
+      margin-top: 1px;
+    }
+
+    /* Badges */
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 14px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.15s;
+    }
+
+    .badge-status:hover {
+      transform: scale(1.02);
+    }
+
+    .badge-status.placed     { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+    .badge-status.processing { background: #fefce8; color: #a16207; border-color: #fef08a; }
+    .badge-status.shipped    { background: #f5f3ff; color: #7c3aed; border-color: #ddd6fe; }
+    .badge-status.delivered  { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+    .badge-status.cancelled  { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+
+    .badge-payment {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+    }
+
+    .badge-payment.paid     { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+    .badge-payment.failed   { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+    .badge-payment.pending  { background: #fefce8; color: #a16207; border: 1px solid #fef08a; }
+    .badge-payment.refunded { background: #f5f3ff; color: #7c3aed; border: 1px solid #ddd6fe; }
+
+    /* Handler Info Card in Table */
+    .handler-box {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 1px;
+      white-space: nowrap;
+    }
+
+    .handler-user-name {
+      font-weight: 600;
+      font-size: 0.76rem;
+      color: var(--navy);
+    }
+
+    .handler-badge-role {
+      display: inline-block;
+      align-self: flex-start;
+      font-size: 0.64rem;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+
+    .role-admin    { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .role-staff    { background: #fdf2f8; color: #be185d; border: 1px solid #fbcfe8; }
+    .role-customer { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+    .role-system   { background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; }
+
+    /* Action Buttons */
+    .btn-action-view {
+      background: white;
+      border: 1px solid #cbd5e1;
+      color: var(--slate-dark);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      transition: all 0.15s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-action-view:hover {
+      background: var(--navy);
+      color: white;
+      border-color: var(--navy);
+    }
+
+    /* ─── Pagination ─────────────────────────────────────────── */
+    .pagination-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 18px;
+      background: white;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* ─── Mandatory Status Update Modal Dialog ───────────────── */
+    .status-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.65);
+      z-index: 10005;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .status-modal-box {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      max-width: 500px;
+      width: 92%;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+      animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalPop {
+      from { transform: scale(0.95); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    .status-transition-hero {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .status-transition-node {
+      text-align: center;
+    }
+
+    .status-transition-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--slate-muted);
+      margin-bottom: 3px;
+    }
+
+    .quick-preset-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 6px 0 12px 0;
+    }
+
+    .preset-chip {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 4px 9px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--slate-dark);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .preset-chip:hover {
+      background: var(--primary-light);
+      border-color: #fda4af;
+      color: var(--primary);
+    }
+
+    .reason-textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 12px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: var(--radius-md);
+      font-size: 0.84rem;
+      font-family: inherit;
+      outline: none;
+      resize: vertical;
+      min-height: 75px;
+      transition: border-color 0.2s;
+    }
+
+    .reason-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.12);
+    }
+
+    .reason-textarea.invalid {
+      border-color: var(--danger);
+      background: #fef2f2;
+    }
+
+    .required-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--danger);
+      background: #fee2e2;
+      padding: 2px 5px;
+      border-radius: 4px;
+      margin-left: 6px;
+    }
+
+    /* ─── Details Modal ──────────────────────────────────────── */
+    .details-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.7);
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .details-modal-box {
+      background: white;
+      border-radius: 14px;
+      max-width: 820px;
+      width: 95%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .details-grid-2 {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 768px) {
+      .details-grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .info-card {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+    }
+
+    .info-card h4 {
+      margin: 0 0 8px 0;
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--slate-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ─── Activity Timeline ──────────────────────────────────── */
+    .activity-section {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      margin-top: 18px;
+    }
+
+    .activity-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .activity-stream {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .activity-entry {
+      display: flex;
+      gap: 12px;
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .activity-entry-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .activity-entry-body {
+      flex: 1;
+    }
+
+    .activity-entry-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+
+    .activity-title {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .activity-time {
+      font-size: 0.72rem;
+      color: var(--slate-muted);
+    }
+
+    .activity-actor {
+      font-size: 0.76rem;
+      color: var(--slate-muted);
+      margin-bottom: 3px;
+    }
+
+    .activity-note-quote {
+      font-size: 0.8rem;
+      color: var(--navy);
+      background: #f1f5f9;
+      border-left: 3px solid var(--primary);
+      padding: 6px 10px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin-top: 4px;
+      font-style: italic;
+      line-height: 1.35;
+    }
+
+    /* Toast */
+    .admin-toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 18px;
+      border-radius: var(--radius-md);
+      background: var(--navy);
+      color: white;
+      font-size: 0.86rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      z-index: 999999;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-brand">
+        <img src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Logo" class="admin-logo" onerror="this.style.display='none'">
+        <div class="admin-brand-text">
+          <h2>Inithat Gifts</h2>
+          <span>Admin Workspace</span>
+        </div>
+      </div>
+      
+      <nav class="admin-nav">
+          <a href="admin-dashboard.html" class="admin-nav-link">
+            <span>📊</span> Dashboard
+          </a>
+          <a href="admin-orders.html" class="admin-nav-link active">
+            <span>📦</span> Orders & Audit
+          </a>
+          <a href="admin-products.html" class="admin-nav-link">
+            <span>🛍️</span> Products
+          </a>
+          <a href="admin-offers.html" class="admin-nav-link">
+            <span>🏷️</span> Occasion Offers
+          </a>
+          <a href="admin-categories.html" class="admin-nav-link">
+            <span>🗂️</span> Categories & Occasions
+          </a>
+          <a href="admin-users.html" class="admin-nav-link">
+            <span>👥</span> Users
+          </a>
+          <a href="admin-inquiries.html" class="admin-nav-link">
+            <span>📝</span> Bulk Inquiries
+          </a>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <a href="index.html" class="admin-nav-link">
+          <span class="icon">🏠</span> Back to Store
+        </a>
+        <a href="#" class="admin-nav-link logout-link" onclick="logout()">
+          <span class="icon">🚪</span> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content (Calibrated for 100% Zoom) -->
+    <main class="admin-main">
+      <header class="admin-header">
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <div class="header-title">Orders Management & Activity Audit</div>
+        <div class="header-user">
+          <span id="adminName">Admin User</span>
+          <div class="admin-avatar" id="adminAvatar">A</div>
+        </div>
+      </header>
+
+      <div class="admin-content-inner">
+        
+        <!-- Page Title Header -->
+        <div class="page-title-wrap">
+          <div>
+            <h1>📦 Order Management & Audit Log</h1>
+            <p class="page-subtitle">Track and inspect audit activity logs with mandatory handler reasons.</p>
+          </div>
+          <div>
+            <button onclick="refreshData()" class="btn-refresh" title="Reload live data">
+              <span>🔄</span> Refresh Orders
+            </button>
+          </div>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="stats-container">
+          <div class="metric-card">
+            <div class="metric-icon-wrap" style="background: #eff6ff; color: #1d4ed8;">📦</div>
+            <div class="metric-info">
+              <h3>Total Orders</h3>
+              <div class="metric-num" id="statTotalOrders">0</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon-wrap" style="background: #ecfdf5; color: #047857;">💰</div>
+            <div class="metric-info">
+              <h3>Total Revenue</h3>
+              <div class="metric-num" id="statTotalRevenue">₹0</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon-wrap" style="background: #fefce8; color: #a16207;">⚙️</div>
+            <div class="metric-info">
+              <h3>Processing</h3>
+              <div class="metric-num" id="statProcessing">0</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon-wrap" style="background: #f5f3ff; color: #7c3aed;">🚚</div>
+            <div class="metric-info">
+              <h3>Shipped</h3>
+              <div class="metric-num" id="statShipped">0</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon-wrap" style="background: #ecfdf5; color: #047857;">🎁</div>
+            <div class="metric-info">
+              <h3>Delivered</h3>
+              <div class="metric-num" id="statDelivered">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action & Filter Toolbar -->
+        <div class="action-toolbar">
+          <!-- Status Filter Pills -->
+          <div class="status-filter-pills" id="statusPills">
+            <button class="status-pill-btn active" onclick="setStatusFilter('all', this)">All Orders</button>
+            <button class="status-pill-btn" onclick="setStatusFilter('placed', this)">Placed</button>
+            <button class="status-pill-btn" onclick="setStatusFilter('processing', this)">Processing</button>
+            <button class="status-pill-btn" onclick="setStatusFilter('shipped', this)">Shipped</button>
+            <button class="status-pill-btn" onclick="setStatusFilter('delivered', this)">Delivered</button>
+            <button class="status-pill-btn" onclick="setStatusFilter('cancelled', this)">Cancelled</button>
+          </div>
+
+          <!-- Search & Selects Row -->
+          <div class="search-filter-row">
+            <div class="search-input-wrap">
+              <span>🔍</span>
+              <input type="text" id="orderSearch" class="search-field" placeholder="Search Order #, Customer Name, Phone, Email, Payment ID...">
+            </div>
+
+            <select id="paymentFilter" class="select-field" onchange="applyFilters()">
+              <option value="all">Payment Status: All</option>
+              <option value="paid">Paid</option>
+              <option value="failed">Failed</option>
+            </select>
+
+            <select id="dateFilter" class="select-field" onchange="applyFilters()">
+              <option value="">Date: All Time</option>
+              <option value="today">Today</option>
+              <option value="7d">Last 7 Days</option>
+              <option value="30d">Last 30 Days</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Orders Table Card (Fit for 100% Zoom) -->
+        <div class="table-card">
+          <div class="table-container">
+            <table class="orders-data-table">
+              <thead>
+                <tr>
+                  <th style="min-width: 115px;">ORDER #</th>
+                  <th style="min-width: 85px;">DATE</th>
+                  <th style="min-width: 130px;">CUSTOMER</th>
+                  <th style="min-width: 130px;">ITEMS</th>
+                  <th style="min-width: 65px;">TOTAL</th>
+                  <th style="min-width: 80px;">PAYMENT</th>
+                  <th style="min-width: 100px;">ORDER STATUS</th>
+                  <th style="min-width: 95px;">HANDLED BY</th>
+                  <th style="min-width: 85px;">UPDATED</th>
+                  <th style="min-width: 65px; text-align:center;">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody">
+                <tr><td colspan="10" class="text-center" style="padding: 35px; color:#64748b; text-align:center;">Loading orders...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Bar -->
+          <div class="pagination-bar" id="paginationBar">
+            <span id="pageInfo" style="font-size: 0.8rem; color: #64748b; font-weight:500;">Showing 0 orders</span>
+            <div style="display: flex; gap: 6px;">
+              <button id="prevBtn" onclick="changePage(-1)" class="btn-action-view" disabled>← Prev</button>
+              <button id="nextBtn" onclick="changePage(1)" class="btn-action-view" disabled>Next →</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ═════════════════════════════════════════════════════════════════════════════ -->
+  <!-- MANDATORY STATUS UPDATE & AUDIT REASON MODAL                                 -->
+  <!-- ═════════════════════════════════════════════════════════════════════════════ -->
+  <div class="status-modal-overlay" id="statusPromptModal">
+    <div class="status-modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 style="margin: 0; color: var(--navy); font-size: 1.15rem; font-family:'Outfit',sans-serif;">
+          🔄 Update Order Status
+        </h3>
+        <button onclick="cancelStatusPrompt()" style="border:none; background:none; font-size:1.3rem; cursor:pointer; color:#64748b;">✕</button>
+      </div>
+
+      <div class="status-transition-hero">
+        <div class="status-transition-node">
+          <div class="status-transition-label">Current Status</div>
+          <span id="promptCurrentBadge" class="badge-status"></span>
+        </div>
+        <div style="font-size:1.2rem; color:#94a3b8; font-weight:bold;">➔</div>
+        <div class="status-transition-node">
+          <div class="status-transition-label">New Status</div>
+          <span id="promptNewBadge" class="badge-status"></span>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 4px;">
+        <label style="display: flex; justify-content:space-between; align-items:center; font-size: 0.8rem; font-weight: 700; color: var(--slate-dark);">
+          <span>Activity Reason / Note <span class="required-badge">MANDATORY</span></span>
+          <span id="reasonCharCount" style="font-size:0.72rem; color:#94a3b8;">0 chars</span>
+        </label>
+        
+        <!-- 1-Click Quick Preset Chips -->
+        <div class="quick-preset-chips" id="quickPresetChips">
+          <!-- Injected via JS -->
+        </div>
+
+        <textarea id="statusPromptNote" 
+                  class="reason-textarea" 
+                  placeholder="Enter specific audit reason (e.g. Package handed over to BlueDart courier tracking #)..."
+                  oninput="handleReasonInput()"></textarea>
+        
+        <div id="reasonErrorMsg" style="font-size:0.75rem; color:var(--danger); margin-top:3px; display:none;">
+          ⚠️ A note or reason is required to maintain the audit log.
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border-color);">
+        <button onclick="cancelStatusPrompt()" style="padding: 8px 14px; border: 1px solid #cbd5e1; background: white; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600; font-size:0.8rem;">Cancel</button>
+        <button id="statusPromptConfirmBtn" onclick="confirmStatusPrompt()" style="padding: 8px 18px; border: none; background: var(--primary); color: white; border-radius: var(--radius-sm); cursor: pointer; font-weight: 700; font-size:0.82rem; display:flex; align-items:center; gap:5px;">
+          <span>🔒 Record & Update Status</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════════════════════════════════════════════════════════════════════════════ -->
+  <!-- ORDER DETAILS & COMPLETE AUDIT TRAIL MODAL                                   -->
+  <!-- ═════════════════════════════════════════════════════════════════════════════ -->
+  <div class="details-modal-overlay" id="orderDetailsModal">
+    <div class="details-modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 14px; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <h3 id="modalOrderNumber" style="margin: 0; color: var(--navy); font-size: 1.25rem; font-family: monospace;">Order Details</h3>
+          <span id="modalHeaderStatus"></span>
+        </div>
+        <button onclick="closeDetailsModal()" style="border: none; background: none; font-size: 1.5rem; cursor: pointer; color:#64748b;">✕</button>
+      </div>
+      
+      <div id="modalDetailsContent">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════════════════════════════════════════════════════════════════════════════ -->
+  <!-- ADD ADMIN NOTE MODAL                                                         -->
+  <!-- ═════════════════════════════════════════════════════════════════════════════ -->
+  <div class="status-modal-overlay" id="addNoteModal">
+    <div class="status-modal-box">
+      <h3 style="margin: 0 0 6px 0; color: var(--navy); font-size: 1.1rem;">📝 Log Internal Admin Note</h3>
+      <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 12px;">This note will be permanently saved into the order's audit activity stream under your admin account.</p>
+      
+      <textarea id="modalNoteText" class="reason-textarea" placeholder="Enter administrative note regarding customization, customer contact, etc..."></textarea>
+      
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px;">
+        <button onclick="closeNoteModal()" style="padding: 8px 14px; border: 1px solid #cbd5e1; background: white; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600; font-size:0.8rem;">Cancel</button>
+        <button onclick="submitAdminNote()" style="padding: 8px 18px; border: none; background: var(--navy); color: white; border-radius: var(--radius-sm); cursor: pointer; font-weight: 700; font-size:0.82rem;">Save Note</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════════════════════════════════════════════════════════════════════════════ -->
+  <!-- ADD COURIER TRACKING MODAL                                                   -->
+  <!-- ═════════════════════════════════════════════════════════════════════════════ -->
+  <div class="status-modal-overlay" id="addTrackingModal">
+    <div class="status-modal-box">
+      <h3 style="margin: 0 0 6px 0; color: var(--navy); font-size: 1.1rem;">🚚 Record Courier Tracking</h3>
+      
+      <div style="margin-bottom: 10px;">
+        <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 3px;">Courier Partner Name:</label>
+        <input type="text" id="modalCourierName" placeholder="e.g. BlueDart / Delhivery / DTDC" class="search-field" style="padding-left:12px;">
+      </div>
+
+      <div style="margin-bottom: 10px;">
+        <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 3px;">Tracking Number / AWB *:</label>
+        <input type="text" id="modalTrackingNumber" placeholder="e.g. BD78392019482" class="search-field" style="padding-left:12px;">
+      </div>
+
+      <div style="margin-bottom: 14px;">
+        <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 3px;">Optional Note:</label>
+        <input type="text" id="modalTrackingNote" placeholder="e.g. Dispatched from Erode hub" class="search-field" style="padding-left:12px;">
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button onclick="closeTrackingModal()" style="padding: 8px 14px; border: 1px solid #cbd5e1; background: white; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600; font-size:0.8rem;">Cancel</button>
+        <button onclick="submitTrackingDetails()" style="padding: 8px 18px; border: none; background: var(--purple); color: white; border-radius: var(--radius-sm); cursor: pointer; font-weight: 700; font-size:0.82rem;">Record Tracking</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Lightbox for Custom Photo Zoom -->
+  <div id="adminLightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; justify-content:center; align-items:center;" onclick="closeAdminLightbox()">
+    <div style="position:relative; max-width:90%; max-height:90%;" onclick="event.stopPropagation()">
+      <span onclick="closeAdminLightbox()" style="position:absolute; top:-35px; right:0; color:white; font-size:1.4rem; cursor:pointer; font-weight:bold;">✕ Close</span>
+      <img id="adminLightboxImg" src="" style="max-width:100%; max-height:80vh; border-radius:8px; border:2px solid white; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="adminToast" class="admin-toast"></div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+  <script>
+    let currentPage = 1;
+    let totalPages = 1;
+    let ordersCache = [];
+    let activeModalOrderId = null;
+    let pendingStatusUpdate = null;
+    let currentStatusFilter = 'all';
+
+    // Status transition rules matching backend state machine
+    const ALLOWED_TRANSITIONS = {
+      placed:     ['processing', 'cancelled'],
+      processing: ['shipped',    'cancelled'],
+      shipped:    ['delivered'],
+      delivered:  [],
+      cancelled:  []
+    };
+
+    // Preset reasons for 1-click convenience (while strictly making note mandatory)
+    const PRESET_REASONS = {
+      processing: [
+        '🛠️ Accepted in workshop',
+        '🎨 Custom engraving started',
+        '🎁 Quality check & packing'
+      ],
+      shipped: [
+        '🚚 Handed over to BlueDart courier',
+        '📦 Dispatched with tracking number',
+        '✈️ Express priority dispatch'
+      ],
+      delivered: [
+        '🎁 Successfully delivered to customer',
+        '✍️ Customer signed & received'
+      ],
+      cancelled: [
+        '❌ Customer requested cancellation',
+        '⚠️ Out of stock / unable to customize',
+        '🚫 Duplicate order'
+      ]
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = typeof getAuthUser === 'function' ? getAuthUser() : null;
+      if (!user || (!user.isAdmin && user.email !== 'admin@gmail.com')) {
+        alert('Access denied. Admin authorization required.');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      fetchStats();
+      fetchOrders(1);
+
+      // Search debounce
+      let searchTimer;
+      document.getElementById('orderSearch').addEventListener('input', () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => fetchOrders(1), 350);
+      });
+    });
+
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('adminToast');
+      if (!toast) return;
+      toast.innerHTML = isError ? `❌ ${message}` : `✅ ${message}`;
+      toast.style.background = isError ? '#991b1b' : '#0f172a';
+      toast.style.display = 'flex';
+      setTimeout(() => { toast.style.display = 'none'; }, 3500);
+    }
+
+    async function refreshData() {
+      showToast('Refreshing orders list...');
+      await fetchStats();
+      await fetchOrders(currentPage);
+    }
+
+    async function fetchStats() {
+      const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token') || (typeof getCookie === 'function' ? getCookie('inithat_token') : '');
+      const API_BASE = window.API_BASE || window.location.origin;
+
+      try {
+        const res = await fetch(`${API_BASE}/api/orders/stats`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById('statTotalOrders').textContent = (data.totalOrders || 0).toLocaleString();
+          document.getElementById('statTotalRevenue').textContent = `₹${(data.totalRevenue || 0).toLocaleString('en-IN')}`;
+          document.getElementById('statProcessing').textContent = (data.processing || 0).toLocaleString();
+          document.getElementById('statShipped').textContent = (data.shipped || 0).toLocaleString();
+          document.getElementById('statDelivered').textContent = (data.delivered || 0).toLocaleString();
+        }
+      } catch (e) {
+        console.error('Stats fetch error:', e);
+      }
+    }
+
+    function setStatusFilter(status, btn) {
+      currentStatusFilter = status;
+      document.querySelectorAll('.status-pill-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      fetchOrders(1);
+    }
+
+    async function fetchOrders(page = 1) {
+      currentPage = page;
+      const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token') || (typeof getCookie === 'function' ? getCookie('inithat_token') : '');
+      const API_BASE = window.API_BASE || window.location.origin;
+
+      const search = document.getElementById('orderSearch').value.trim();
+      const paymentStatus = document.getElementById('paymentFilter').value;
+      const dateRange = document.getElementById('dateFilter').value;
+
+      const params = new URLSearchParams({
+        page,
+        limit: 15,
+        status: currentStatusFilter,
+        paymentStatus,
+        search,
+        dateRange
+      });
+
+      try {
+        const res = await fetch(`${API_BASE}/api/orders?${params.toString()}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || 'Failed to fetch orders.');
+        }
+
+        ordersCache = data.orders || [];
+        totalPages = data.pagination?.pages || 1;
+        renderOrdersTable(ordersCache, data.pagination);
+      } catch (err) {
+        console.error('Orders fetch error:', err);
+        document.getElementById('ordersTableBody').innerHTML = `
+          <tr><td colspan="10" class="text-center" style="color:#dc2626; padding:30px; text-align:center;">${err.message || 'Failed to load orders.'}</td></tr>
+        `;
+      }
+    }
+
+    function renderOrdersTable(orders, pagination) {
+      const tbody = document.getElementById('ordersTableBody');
+      if (!orders || orders.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="10" style="text-align:center; padding:45px 20px; color:#64748b;">
+              <div style="font-size:2rem; margin-bottom:6px;">📦</div>
+              <div style="font-weight:700; font-size:1rem; color:#0f172a;">No orders found</div>
+              <p style="font-size:0.8rem; margin:3px 0 0 0;">Try adjusting your filters or search terms.</p>
+            </td>
+          </tr>
+        `;
+        document.getElementById('pageInfo').textContent = 'Showing 0 orders';
+        document.getElementById('prevBtn').disabled = true;
+        document.getElementById('nextBtn').disabled = true;
+        return;
+      }
+
+      tbody.innerHTML = orders.map(order => {
+        const d = new Date(order.createdAt);
+        const dateMain = d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+        const dateTime = d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+
+        const upD = new Date(order.lastUpdatedAt || order.updatedAt || order.createdAt);
+        const upDateMain = upD.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+        const upDateTime = upD.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+
+        const itemsCount = (order.items || []).reduce((sum, i) => sum + (i.quantity || 1), 0);
+        const firstItem = (order.items && order.items[0]) ? order.items[0].name : 'Custom Gift';
+        const hasCustom = (order.items || []).some(i => i.customText || (i.customImages && i.customImages.length > 0));
+        
+        const customerName = order.customer?.name || 'Customer';
+        const customerInitial = customerName.charAt(0).toUpperCase();
+
+        const handler = order.lastHandledBy || { name: 'Customer', role: 'customer' };
+        const roleClass = `role-${(handler.role || 'customer').toLowerCase()}`;
+        const pStatus = (order.paymentStatus || 'paid').toLowerCase();
+
+        // Allowed transitions for this order
+        const allowed = ALLOWED_TRANSITIONS[order.orderStatus] || [];
+        const isTerminal = allowed.length === 0;
+
+        return `
+          <tr id="row-${order._id}">
+            <td>
+              <span class="order-number-badge" onclick="openOrderDetailsModal('${order._id}')" title="Click to view details">
+                #${order.orderNumber}
+              </span>
+            </td>
+            <td>
+              <div class="date-cell-main">${dateMain}</div>
+              <div class="date-cell-sub">${dateTime}</div>
+            </td>
+            <td>
+              <div class="customer-cell">
+                <div class="customer-avatar">${customerInitial}</div>
+                <div>
+                  <div class="customer-details-name" title="${customerName}">${customerName}</div>
+                  <div class="customer-details-phone">${order.customer?.phone || ''}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="item-cell-title" title="${firstItem}">${firstItem}</div>
+              <div class="item-cell-sub">
+                ${itemsCount} item(s) ${hasCustom ? '<span style="color:#be123c; font-weight:700;">• ✏️ Custom</span>' : ''}
+              </div>
+            </td>
+            <td>
+              <strong style="color:#0f172a; font-size:0.86rem; white-space:nowrap;">₹${Number(order.totalAmount || 0).toLocaleString('en-IN')}</strong>
+            </td>
+            <td>
+              <span class="badge-payment ${pStatus}">
+                ● ${pStatus}
+              </span>
+            </td>
+            <td>
+              ${isTerminal ? `
+                <span class="badge-status ${order.orderStatus}" style="cursor:default;" title="Terminal status">
+                  ● ${order.orderStatus}
+                </span>
+              ` : `
+                <select id="statusSelect-${order._id}" 
+                        class="badge-status ${order.orderStatus}" 
+                        style="outline:none; cursor:pointer;"
+                        data-current="${order.orderStatus}"
+                        onchange="initiateStatusChange('${order._id}', this.value, '${order.orderStatus}')">
+                  <option value="placed" ${order.orderStatus === 'placed' ? 'selected' : ''} ${!allowed.includes('placed') && order.orderStatus !== 'placed' ? 'disabled' : ''}>Placed</option>
+                  <option value="processing" ${order.orderStatus === 'processing' ? 'selected' : ''} ${!allowed.includes('processing') && order.orderStatus !== 'processing' ? 'disabled' : ''}>Processing</option>
+                  <option value="shipped" ${order.orderStatus === 'shipped' ? 'selected' : ''} ${!allowed.includes('shipped') && order.orderStatus !== 'shipped' ? 'disabled' : ''}>Shipped</option>
+                  <option value="delivered" ${order.orderStatus === 'delivered' ? 'selected' : ''} ${!allowed.includes('delivered') && order.orderStatus !== 'delivered' ? 'disabled' : ''}>Delivered</option>
+                  <option value="cancelled" ${order.orderStatus === 'cancelled' ? 'selected' : ''} ${!allowed.includes('cancelled') && order.orderStatus !== 'cancelled' ? 'disabled' : ''}>Cancelled</option>
+                </select>
+              `}
+            </td>
+            <td>
+              <div class="handler-box">
+                <span class="handler-user-name">${handler.name || 'Admin'}</span>
+                <span class="handler-badge-role ${roleClass}">${handler.role || 'admin'}</span>
+              </div>
+            </td>
+            <td>
+              <div class="date-cell-main">${upDateMain}</div>
+              <div class="date-cell-sub">${upDateTime}</div>
+            </td>
+            <td style="text-align:center;">
+              <button class="btn-action-view" onclick="openOrderDetailsModal('${order._id}')">
+                👁️ View
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Pagination
+      if (pagination) {
+        document.getElementById('pageInfo').textContent = `Page ${pagination.page} of ${pagination.pages} (${pagination.total} orders)`;
+        document.getElementById('prevBtn').disabled = pagination.page <= 1;
+        document.getElementById('nextBtn').disabled = pagination.page >= pagination.pages;
+      }
+    }
+
+    /* ── Mandatory Status Change Modal Logic ────────────────── */
+    function initiateStatusChange(orderId, newStatus, currentStatus) {
+      if (currentStatus === newStatus) return;
+
+      const order = ordersCache.find(o => o._id === orderId);
+      if (!order) return;
+
+      pendingStatusUpdate = { orderId, newStatus, currentStatus };
+
+      // Set Badges
+      const currentEl = document.getElementById('promptCurrentBadge');
+      currentEl.className = `badge-status ${currentStatus}`;
+      currentEl.textContent = `● ${currentStatus.toUpperCase()}`;
+
+      const newEl = document.getElementById('promptNewBadge');
+      newEl.className = `badge-status ${newStatus}`;
+      newEl.textContent = `● ${newStatus.toUpperCase()}`;
+
+      // Populate Quick Preset Chips
+      const chipsContainer = document.getElementById('quickPresetChips');
+      const presets = PRESET_REASONS[newStatus] || ['Order updated by admin'];
+      chipsContainer.innerHTML = presets.map(p => `
+        <span class="preset-chip" onclick="applyPresetReason('${p.replace(/'/g, "\\'")}')">${p}</span>
+      `).join('');
+
+      const noteInput = document.getElementById('statusPromptNote');
+      noteInput.value = '';
+      noteInput.classList.remove('invalid');
+      document.getElementById('reasonErrorMsg').style.display = 'none';
+      document.getElementById('reasonCharCount').textContent = '0 chars';
+
+      document.getElementById('statusPromptModal').style.display = 'flex';
+      setTimeout(() => { noteInput.focus(); }, 80);
+    }
+
+    function applyPresetReason(reason) {
+      const input = document.getElementById('statusPromptNote');
+      input.value = reason;
+      handleReasonInput();
+    }
+
+    function handleReasonInput() {
+      const input = document.getElementById('statusPromptNote');
+      const val = input.value.trim();
+      document.getElementById('reasonCharCount').textContent = `${val.length} chars`;
+      if (val.length > 0) {
+        input.classList.remove('invalid');
+        document.getElementById('reasonErrorMsg').style.display = 'none';
+      }
+    }
+
+    function cancelStatusPrompt() {
+      if (pendingStatusUpdate) {
+        const selectEl = document.getElementById(`statusSelect-${pendingStatusUpdate.orderId}`);
+        if (selectEl) selectEl.value = pendingStatusUpdate.currentStatus;
+      }
+      pendingStatusUpdate = null;
+      document.getElementById('statusPromptModal').style.display = 'none';
+    }
+
+    async function confirmStatusPrompt() {
+      if (!pendingStatusUpdate) return;
+      const { orderId, newStatus, currentStatus } = pendingStatusUpdate;
+      
+      const noteInput = document.getElementById('statusPromptNote');
+      const note = noteInput.value.trim();
+
+      // STRICT VALIDATION: Note is MANDATORY
+      if (!note) {
+        noteInput.classList.add('invalid');
+        document.getElementById('reasonErrorMsg').style.display = 'block';
+        noteInput.focus();
+        return;
+      }
+
+      const confirmBtn = document.getElementById('statusPromptConfirmBtn');
+      const selectEl = document.getElementById(`statusSelect-${orderId}`);
+
+      confirmBtn.disabled = true;
+      confirmBtn.innerHTML = '⏳ Updating...';
+      if (selectEl) selectEl.disabled = true;
+
+      const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token') || (typeof getCookie === 'function' ? getCookie('inithat_token') : '');
+      const API_BASE = window.API_BASE || window.location.origin;
+
+      try {
+        // SECURITY: Backend reads handler solely from req.user
+        const res = await fetch(`${API_BASE}/api/orders/${orderId}/status`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ status: newStatus, note })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || 'Status transition not allowed.');
+        }
+
+        showToast(data.message || 'Order status updated successfully');
+        document.getElementById('statusPromptModal').style.display = 'none';
+        pendingStatusUpdate = null;
+
+        await fetchStats();
+        await fetchOrders(currentPage);
+
+        // If open in modal, refresh
+        if (activeModalOrderId === orderId) {
+          openOrderDetailsModal(orderId);
+        }
+      } catch (err) {
+        alert(`❌ ${err.message}`);
+        if (selectEl) selectEl.value = currentStatus;
+        document.getElementById('statusPromptModal').style.display = 'none';
+        pendingStatusUpdate = null;
+      } finally {
+        confirmBtn.disabled = false;
+        confirmBtn.innerHTML = '<span>🔒 Record & Update Status</span>';
+        if (selectEl) selectEl.disabled = false;
+      }
+    }
+
+    /* ── Activity Display Formatter ────────────────────────── */
+    function formatActivityEvent(act) {
+      const type = act.type || 'status_updated';
+      let icon = '⚙️';
+      let title = 'Status Updated';
+      let bg = '#eff6ff';
+      let color = '#1d4ed8';
+
+      switch (type) {
+        case 'order_created':
+          icon = '📦';
+          title = 'Order Created & Placed';
+          bg = '#eff6ff';
+          color = '#1d4ed8';
+          break;
+        case 'payment_verified':
+          icon = '💳';
+          title = 'Payment Verified via Razorpay';
+          bg = '#ecfdf5';
+          color = '#047857';
+          break;
+        case 'status_updated':
+          icon = act.newValue === 'delivered' ? '🎁' : (act.newValue === 'shipped' ? '🚚' : '⚙️');
+          title = `Status Changed: ${String(act.oldValue || '').toUpperCase()} ➔ ${String(act.newValue || '').toUpperCase()}`;
+          bg = act.newValue === 'delivered' ? '#ecfdf5' : (act.newValue === 'shipped' ? '#f5f3ff' : '#fefce8');
+          color = act.newValue === 'delivered' ? '#047857' : (act.newValue === 'shipped' ? '#7c3aed' : '#a16207');
+          break;
+        case 'address_updated':
+          icon = '📍';
+          title = 'Shipping Address Updated';
+          bg = '#eff6ff';
+          color = '#1d4ed8';
+          break;
+        case 'tracking_added':
+          icon = '🚚';
+          title = `Courier Tracking Logged: ${act.newValue || ''}`;
+          bg = '#f5f3ff';
+          color = '#7c3aed';
+          break;
+        case 'note_added':
+          icon = '📝';
+          title = 'Internal Admin Note Logged';
+          bg = '#f1f5f9';
+          color = '#334155';
+          break;
+        case 'cancelled':
+          icon = '❌';
+          title = 'Order Cancelled';
+          bg = '#fef2f2';
+          color = '#b91c1c';
+          break;
+        default:
+          icon = '📌';
+          title = 'Activity Logged';
+      }
+
+      return { icon, title, bg, color };
+    }
+
+    /* ── Order Details & Audit Stream Modal ─────────────────── */
+    function openOrderDetailsModal(orderId) {
+      activeModalOrderId = orderId;
+      const order = ordersCache.find(o => o._id === orderId);
+      if (!order) return;
+
+      document.getElementById('modalOrderNumber').textContent = `Order #${order.orderNumber}`;
+      
+      const sBadge = `<span class="badge-status ${order.orderStatus}" style="cursor:default;">● ${order.orderStatus.toUpperCase()}</span>`;
+      document.getElementById('modalHeaderStatus').innerHTML = sBadge;
+
+      const addr = order.shippingAddress || {};
+      const items = order.items || [];
+      const activityLog = order.activityLog || [];
+      const handler = order.lastHandledBy || { name: 'Customer', role: 'customer' };
+
+      // Reverse chronological order
+      const sortedActivity = [...activityLog].reverse();
+
+      document.getElementById('modalDetailsContent').innerHTML = `
+        <div class="details-grid-2">
+          
+          <!-- Customer & Address Card -->
+          <div class="info-card">
+            <h4>👤 Customer & Shipping Address</h4>
+            <div style="font-weight:700; font-size:1rem; color:var(--navy); margin-bottom:3px;">${order.customer?.name}</div>
+            <div style="font-size:0.82rem; color:#475569; margin-bottom:2px;">📞 ${order.customer?.phone}</div>
+            <div style="font-size:0.82rem; color:#475569;">✉️ ${order.customer?.email}</div>
+            
+            <div style="margin-top:10px; padding-top:8px; border-top:1px dashed #cbd5e1; font-size:0.82rem; color:#334155; line-height:1.4;">
+              📍 <strong>Delivery Address:</strong><br>
+              ${addr.address1}${addr.address2 ? `, ${addr.address2}` : ''}<br>
+              ${addr.city}, ${addr.district}, ${addr.state} - <strong>${addr.pincode}</strong>
+            </div>
+          </div>
+
+          <!-- Payment & Handler Card -->
+          <div class="info-card">
+            <h4>💳 Payment & Handler Audit</h4>
+            <div style="font-size:0.82rem; margin-bottom:4px;">
+              <strong>Payment:</strong> <span class="badge-payment ${order.paymentStatus}">● ${order.paymentStatus}</span>
+            </div>
+            <div style="font-size:0.8rem; color:#475569; margin-bottom:2px;"><strong>Method:</strong> ${order.paymentMethod} (${order.paymentProvider})</div>
+            <div style="font-size:0.75rem; color:#64748b; margin-top:3px; font-family:monospace;"><strong>Razorpay Order:</strong> ${order.razorpayOrderId || 'N/A'}</div>
+            <div style="font-size:0.75rem; color:#64748b; font-family:monospace;"><strong>Payment ID:</strong> ${order.razorpayPaymentId || 'N/A'}</div>
+            
+            <div style="margin-top:8px; padding-top:8px; border-top:1px dashed #cbd5e1; font-size:0.8rem; color:#334155;">
+              <strong>Last Handled By:</strong> ${handler.name} (<span style="text-transform:uppercase; font-size:0.7rem; font-weight:700;">${handler.role}</span>)<br>
+              <strong>Last Updated:</strong> ${new Date(order.lastUpdatedAt || order.updatedAt).toLocaleString('en-IN')}
+            </div>
+          </div>
+        </div>
+
+        <!-- Items Breakdown -->
+        <h4 style="margin:14px 0 8px 0; font-size:0.9rem; color:var(--navy);">🛍️ Order Items (${items.length})</h4>
+        <div style="border:1px solid var(--border-color); border-radius:var(--radius-md); padding:10px; margin-bottom:16px;">
+          ${items.map(i => `
+            <div style="display:flex; gap:12px; padding:10px 0; border-bottom:1px solid #f1f5f9; align-items:flex-start;">
+              <img src="${i.image || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'}" style="width:60px; height:60px; border-radius:6px; object-fit:cover; border:1px solid var(--border-color);">
+              <div style="flex:1;">
+                <div style="font-weight:700; color:var(--navy); font-size:0.9rem;">${i.name}</div>
+                <div style="font-size:0.82rem; color:#475569; margin:2px 0;">Qty: ${i.quantity} × ₹${Number(i.unitPrice).toLocaleString('en-IN')} = <strong>₹${Number(i.subtotal).toLocaleString('en-IN')}</strong></div>
+                
+                ${i.customText ? `
+                  <div style="background:#fdf2f8; border:1px solid #fbcfe8; color:#be123c; padding:3px 7px; border-radius:4px; font-size:0.72rem; margin-top:3px; display:inline-block;">
+                    ✏️ <strong>Custom Text:</strong> "${i.customText}"
+                  </div>
+                ` : ''}
+
+                ${(i.customImages && i.customImages.length > 0) ? `
+                  <div style="margin-top:4px;">
+                    <span style="font-size:0.72rem; font-weight:600; color:#64748b;">Uploaded Photos (click to enlarge):</span>
+                    <div style="display:flex; gap:5px; margin-top:2px;">
+                      ${i.customImages.map(img => `
+                        <img src="${img}" style="width:44px; height:44px; border-radius:5px; object-fit:cover; border:1.5px solid var(--primary); cursor:pointer;" onclick="openAdminLightbox('${img.replace(/'/g, "\\'")}')" title="Click to view full image">
+                      `).join('')}
+                    </div>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- Financial Breakdown -->
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#fafafa; padding:12px 16px; border-radius:var(--radius-md); margin-bottom:18px; border:1px solid #f1f5f9;">
+          <div style="font-size:0.82rem; color:#64748b;">
+            Subtotal: ₹${Number(order.subtotal || 0).toLocaleString('en-IN')} | Shipping: ${order.shippingCharge === 0 ? '<span style="color:#16a34a; font-weight:700;">FREE</span>' : `₹${order.shippingCharge}`}
+          </div>
+          <div style="font-size:1.2rem; font-weight:800; color:var(--primary);">
+            Total: ₹${Number(order.totalAmount || 0).toLocaleString('en-IN')}
+          </div>
+        </div>
+
+        <!-- Permanent Activity & Audit Trail Stream -->
+        <div class="activity-section">
+          <div class="activity-header">
+            <div style="font-weight:800; font-size:0.82rem; text-transform:uppercase; color:var(--navy); letter-spacing:0.5px;">
+              📋 Complete Activity Audit Trail (${sortedActivity.length})
+            </div>
+            <div style="display:flex; gap:6px;">
+              <button onclick="openNoteModal('${order._id}')" class="btn-action-view" style="font-size:0.74rem; padding:4px 8px;">
+                📝 Add Note
+              </button>
+              <button onclick="openTrackingModal('${order._id}')" class="btn-action-view" style="font-size:0.74rem; padding:4px 8px;">
+                🚚 Add Tracking
+              </button>
+            </div>
+          </div>
+
+          <div class="activity-stream">
+            ${sortedActivity.length > 0 ? sortedActivity.map(act => {
+              const formatted = formatActivityEvent(act);
+              const timeStr = new Date(act.createdAt).toLocaleString('en-IN', {
+                day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
+              });
+              const actor = act.performedBy || { name: 'System', role: 'system' };
+              const roleClass = `role-${(actor.role || 'system').toLowerCase()}`;
+
+              return `
+                <div class="activity-entry">
+                  <div class="activity-entry-icon" style="background:${formatted.bg}; color:${formatted.color};">
+                    ${formatted.icon}
+                  </div>
+                  <div class="activity-entry-body">
+                    <div class="activity-entry-title-row">
+                      <span class="activity-title">${formatted.title}</span>
+                      <span class="activity-time">⏱️ ${timeStr}</span>
+                    </div>
+                    <div class="activity-actor">
+                      Performed by: <strong>${actor.name || 'Admin'}</strong> 
+                      <span class="handler-badge-role ${roleClass}">${actor.role || 'admin'}</span>
+                    </div>
+                    ${act.note ? `<div class="activity-note-quote">"${act.note}"</div>` : ''}
+                  </div>
+                </div>
+              `;
+            }).join('') : `
+              <div style="text-align:center; padding:16px; color:#64748b; font-size:0.82rem;">
+                No historical activity records found.
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+
+      document.getElementById('orderDetailsModal').style.display = 'flex';
+    }
+
+    function closeDetailsModal() {
+      document.getElementById('orderDetailsModal').style.display = 'none';
+      activeModalOrderId = null;
+    }
+
+    /* ── Add Note Modal Logic ───────────────────────────────── */
+    function openNoteModal(orderId) {
+      activeModalOrderId = orderId;
+      document.getElementById('modalNoteText').value = '';
+      document.getElementById('addNoteModal').style.display = 'flex';
+    }
+
+    function closeNoteModal() {
+      document.getElementById('addNoteModal').style.display = 'none';
+    }
+
+    async function submitAdminNote() {
+      const note = document.getElementById('modalNoteText').value.trim();
+      if (!note) {
+        alert('Please enter note content.');
+        return;
+      }
+
+      const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token') || (typeof getCookie === 'function' ? getCookie('inithat_token') : '');
+      const API_BASE = window.API_BASE || window.location.origin;
+
+      try {
+        const res = await fetch(`${API_BASE}/api/orders/${activeModalOrderId}/note`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ note })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Failed to add note.');
+
+        showToast('Admin note saved to activity log');
+        closeNoteModal();
+        await fetchOrders(currentPage);
+        openOrderDetailsModal(activeModalOrderId);
+      } catch (err) {
+        alert(`❌ ${err.message}`);
+      }
+    }
+
+    /* ── Tracking Modal Logic ───────────────────────────────── */
+    function openTrackingModal(orderId) {
+      activeModalOrderId = orderId;
+      document.getElementById('modalCourierName').value = '';
+      document.getElementById('modalTrackingNumber').value = '';
+      document.getElementById('modalTrackingNote').value = '';
+      document.getElementById('addTrackingModal').style.display = 'flex';
+    }
+
+    function closeTrackingModal() {
+      document.getElementById('addTrackingModal').style.display = 'none';
+    }
+
+    async function submitTrackingDetails() {
+      const courierName = document.getElementById('modalCourierName').value.trim();
+      const trackingNumber = document.getElementById('modalTrackingNumber').value.trim();
+      const note = document.getElementById('modalTrackingNote').value.trim();
+
+      if (!trackingNumber) {
+        alert('Please enter a tracking number.');
+        return;
+      }
+
+      const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token') || (typeof getCookie === 'function' ? getCookie('inithat_token') : '');
+      const API_BASE = window.API_BASE || window.location.origin;
+
+      try {
+        const res = await fetch(`${API_BASE}/api/orders/${activeModalOrderId}/tracking`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ courierName, trackingNumber, note })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Failed to add tracking.');
+
+        showToast('Courier tracking saved to activity log');
+        closeTrackingModal();
+        await fetchOrders(currentPage);
+        openOrderDetailsModal(activeModalOrderId);
+      } catch (err) {
+        alert(`❌ ${err.message}`);
+      }
+    }
+
+    /* ── Lightbox & Page Navigation ────────────────────────── */
+    function openAdminLightbox(src) {
+      const modal = document.getElementById('adminLightbox');
+      const img = document.getElementById('adminLightboxImg');
+      if (modal && img) {
+        img.src = src;
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeAdminLightbox() {
+      const modal = document.getElementById('adminLightbox');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function changePage(delta) {
+      const newPage = currentPage + delta;
+      if (newPage >= 1 && newPage <= totalPages) {
+        fetchOrders(newPage);
+      }
+    }
+
+    function applyFilters() {
+      fetchOrders(1);
+    }
+  </script>
+</body>
+</html>

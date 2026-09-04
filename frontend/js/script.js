@@ -78,19 +78,26 @@ function initLoader() {
 // ============================================
 // CART MANAGEMENT
 // ============================================
+function getUserCartKey() {
+  const user = typeof getAuthUser === 'function' ? getAuthUser() : (typeof isLoggedIn === 'function' && isLoggedIn() ? JSON.parse(localStorage.getItem('inithat_user')) : null);
+  if (!user) return 'inithat_cart_guest';
+  const identifier = user.email || user.id || user._id || 'guest';
+  return `inithat_cart_${identifier}`;
+}
+
 function getUserCart() {
-  const user = typeof isLoggedIn === 'function' && isLoggedIn() ? JSON.parse(localStorage.getItem('inithat_user')) : null;
-  const storageKey = user ? `inithat_cart_${user.email}` : 'inithat_cart_guest';
+  const storageKey = getUserCartKey();
   let items = JSON.parse(localStorage.getItem(storageKey)) || [];
 
   if (items.length > 0) {
     const mergedMap = new Map();
     items.forEach(item => {
       const qty = parseInt(item.qty) || 1;
-      if (mergedMap.has(item.name)) {
-        mergedMap.get(item.name).qty += qty;
+      const key = item.productId || item.name;
+      if (mergedMap.has(key)) {
+        mergedMap.get(key).qty += qty;
       } else {
-        mergedMap.set(item.name, { ...item, qty: qty });
+        mergedMap.set(key, { ...item, qty: qty });
       }
     });
     const dedupedItems = Array.from(mergedMap.values());
@@ -104,9 +111,8 @@ function getUserCart() {
 }
 
 function saveUserCart(items) {
-  const user = typeof isLoggedIn === 'function' && isLoggedIn() ? JSON.parse(localStorage.getItem('inithat_user')) : null;
-  const storageKey = user ? `inithat_cart_${user.email}` : 'inithat_cart_guest';
-  localStorage.setItem(storageKey, JSON.stringify(items));
+  const storageKey = getUserCartKey();
+  localStorage.setItem(storageKey, JSON.stringify(items || []));
 }
 
 // ============================================
@@ -477,7 +483,7 @@ function renderStorefrontProducts(productList) {
             ` : ''}
           </div>
           <div class="p-delivery-tag">
-            <span class="p-delivery-main"><strong>FREE delivery</strong> in 3–5 Days</span>
+            <span class="p-delivery-main">🚚 Delivery in 3–5 Days</span>
             <span class="p-delivery-sub">✨ Custom Photo &amp; Text</span>
           </div>
           <div class="p-action-wrapper">

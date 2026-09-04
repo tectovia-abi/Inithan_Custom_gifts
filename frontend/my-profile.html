@@ -450,6 +450,61 @@
       color: #64748b;
     }
 
+    .pwd-requirements-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-top: 12px;
+    }
+
+    .pwd-requirements-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .pwd-req-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    @media (max-width: 640px) {
+      .pwd-req-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pwd-req-item {
+      font-size: 0.8rem;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .pwd-req-item.valid {
+      color: #16a34a;
+      font-weight: 600;
+    }
+
+    .pwd-req-item.valid .req-icon {
+      color: #16a34a;
+      font-weight: 700;
+    }
+
+    .pwd-req-item .req-icon {
+      font-size: 0.85rem;
+      width: 16px;
+      display: inline-block;
+      text-align: center;
+    }
+
     /* ─── Inquiries Table ─────────────────────────────────────── */
     .inquiries-table {
       width: 100%;
@@ -611,11 +666,11 @@
           <div class="stat-lbl">Bulk Inquiries</div>
         </div>
       </a>
-      <a href="products.html" class="stat-card">
-        <div class="stat-icon-wrapper icon-orders">🛍️</div>
+      <a href="my-orders.html" class="stat-card">
+        <div class="stat-icon-wrapper icon-orders">📦</div>
         <div>
-          <div class="stat-val">Browse</div>
-          <div class="stat-lbl">Gift Collection</div>
+          <div class="stat-val" id="statOrdersCount">0</div>
+          <div class="stat-lbl">My Orders</div>
         </div>
       </a>
       <div class="stat-card" style="cursor: default;">
@@ -707,7 +762,7 @@
         <!-- Tab 2: Security & Password -->
         <section class="tab-content-pane" id="tab-security">
           <h2 class="section-title">Security & Password</h2>
-          <p class="section-subtitle">Keep your account secure by using a strong password with at least 6 characters.</p>
+          <p class="section-subtitle">Keep your account secure with a strong password (minimum 8 characters with a combination of uppercase, lowercase, and numbers/symbols).</p>
 
           <div class="profile-alert" id="passwordAlert"></div>
 
@@ -726,7 +781,7 @@
                 <label for="newPassword">New Password *</label>
                 <div class="form-input-wrapper">
                   <span class="input-icon">🔒</span>
-                  <input type="password" id="newPassword" placeholder="Min. 6 characters" required>
+                  <input type="password" id="newPassword" placeholder="Min. 8 characters (combination required)" required>
                   <button type="button" class="btn-toggle-password" data-target="newPassword" aria-label="Toggle password visibility">👁️</button>
                 </div>
                 <div class="pwd-meter-box">
@@ -734,6 +789,16 @@
                     <div class="pwd-meter-fill" id="pwdMeterFill"></div>
                   </div>
                   <span class="pwd-meter-text" id="pwdMeterText">Password strength: Enter password</span>
+                </div>
+                <!-- Password Protection Checklist -->
+                <div class="pwd-requirements-box" id="pwdReqBox">
+                  <div class="pwd-requirements-title">Password Protection Requirements:</div>
+                  <div class="pwd-req-list">
+                    <div class="pwd-req-item" id="req-length"><span class="req-icon">○</span> Min 8 characters</div>
+                    <div class="pwd-req-item" id="req-upper"><span class="req-icon">○</span> Uppercase letter (A-Z)</div>
+                    <div class="pwd-req-item" id="req-lower"><span class="req-icon">○</span> Lowercase letter (a-z)</div>
+                    <div class="pwd-req-item" id="req-num-sym"><span class="req-icon">○</span> Number or symbol (0-9, @, #...)</div>
+                  </div>
                 </div>
               </div>
 
@@ -744,6 +809,7 @@
                   <input type="password" id="confirmNewPassword" placeholder="Re-enter new password" required>
                   <button type="button" class="btn-toggle-password" data-target="confirmNewPassword" aria-label="Toggle password visibility">👁️</button>
                 </div>
+                <div id="confirmPasswordMatch" style="font-size:0.8rem; margin-top:8px; display:none;"></div>
               </div>
             </div>
 
@@ -814,27 +880,42 @@
 
             <div class="form-grid-2">
               <div class="form-group">
-                <label for="addrCity">Town / City</label>
+                <label for="addrState">State *</label>
                 <div class="form-input-wrapper">
-                  <span class="input-icon">🏢</span>
-                  <input type="text" id="addrCity" placeholder="e.g. Madurai">
+                  <span class="input-icon">🏛️</span>
+                  <select id="addrState" style="width:100%; border:none; outline:none; background:transparent; font-size:0.95rem; font-family:inherit; color:#1e293b; padding:12px 14px 12px 42px; cursor:pointer;" required>
+                    <option value="">Select State</option>
+                  </select>
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="addrState">State</label>
+                <label for="addrDistrict">District *</label>
                 <div class="form-input-wrapper">
-                  <span class="input-icon">📖</span>
-                  <input type="text" id="addrState" placeholder="e.g. Tamil Nadu">
+                  <span class="input-icon">📍</span>
+                  <select id="addrDistrict" disabled style="width:100%; border:none; outline:none; background:transparent; font-size:0.95rem; font-family:inherit; color:#1e293b; padding:12px 14px 12px 42px; cursor:pointer;" required>
+                    <option value="">Select District</option>
+                  </select>
                 </div>
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="addrPincode">Pincode</label>
-              <div class="form-input-wrapper">
-                <span class="input-icon">📮</span>
-                <input type="text" id="addrPincode" placeholder="e.g. 625001">
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="addrCity">Town / City *</label>
+                <div class="form-input-wrapper">
+                  <span class="input-icon">🏢</span>
+                  <input type="text" id="addrCity" placeholder="e.g. Gobichettipalayam" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="addrPincode">Pincode *</label>
+                <div class="form-input-wrapper">
+                  <span class="input-icon">📮</span>
+                  <input type="text" id="addrPincode" placeholder="e.g. 638452" maxlength="6" required>
+                </div>
+                <div id="addrPincodeStatus" style="display:none; margin-top:6px; font-size:0.82rem;"></div>
               </div>
             </div>
 
@@ -1036,8 +1117,12 @@
   </nav>
 
   <script src="js/auth.js"></script>
+  <script src="js/india-location-data.js"></script>
+  <script src="js/address-utils.js"></script>
   <script src="js/script.js"></script>
   <script>
+    let profileAddressManager = null;
+
     document.addEventListener('DOMContentLoaded', async () => {
       // 1. Check Auth Status
       const user = typeof getAuthUser === 'function' ? getAuthUser() : null;
@@ -1045,6 +1130,15 @@
         window.location.href = 'login.html';
         return;
       }
+
+      // Initialize address form with State, District and Pincode validation
+      profileAddressManager = AddressUtils.initAddressForm({
+        stateSelectId: 'addrState',
+        districtSelectId: 'addrDistrict',
+        pincodeInputId: 'addrPincode',
+        statusElementId: 'addrPincodeStatus',
+        initialState: 'Tamil Nadu'
+      });
 
       const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token') || (typeof getCookie === 'function' ? getCookie('inithat_token') : '');
       const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : window.location.origin;
@@ -1057,10 +1151,11 @@
       // 3. Fetch Fresh Profile Data from Server
       fetchFreshProfile(apiBase, token);
 
-      // 4. Fetch User's Bulk Inquiries
+      // 4. Fetch User's Bulk Inquiries & Order Metrics
       fetchUserInquiries(apiBase, token, user.email);
+      fetchUserOrdersCount(apiBase, token);
 
-      // 5. Handle Tab Switching (supports direct URL hash like #security)
+      // 5. Handle Tab Switching (supports direct URL hash like #security or #address)
       initTabNavigation();
 
       // 6. Bind Form Submissions & Event Listeners
@@ -1172,6 +1267,23 @@
       }
     }
 
+    async function fetchUserOrdersCount(apiBase, token) {
+      const statOrders = document.getElementById('statOrdersCount');
+      if (!token || !statOrders) return;
+
+      try {
+        const res = await fetch(`${apiBase}/api/orders/mine`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success && Array.isArray(data.orders)) {
+          statOrders.textContent = data.orders.length;
+        }
+      } catch (err) {
+        console.error('Error fetching order count:', err);
+      }
+    }
+
     function initTabNavigation() {
       const navButtons = document.querySelectorAll('.profile-tab-btn');
       const panes = document.querySelectorAll('.tab-content-pane');
@@ -1208,8 +1320,17 @@
           if (saved.street) document.getElementById('addrStreet').value = saved.street;
           if (saved.area) document.getElementById('addrArea').value = saved.area;
           if (saved.city) document.getElementById('addrCity').value = saved.city;
-          if (saved.state) document.getElementById('addrState').value = saved.state;
-          if (saved.pincode) document.getElementById('addrPincode').value = saved.pincode;
+          if (saved.state && document.getElementById('addrState')) {
+            document.getElementById('addrState').value = saved.state;
+            AddressUtils.populateDistricts(document.getElementById('addrDistrict'), saved.state, saved.district);
+          }
+          if (saved.district && document.getElementById('addrDistrict')) {
+            document.getElementById('addrDistrict').value = saved.district;
+          }
+          if (saved.pincode && document.getElementById('addrPincode')) {
+            document.getElementById('addrPincode').value = saved.pincode;
+            if (profileAddressManager) profileAddressManager.validateNow();
+          }
         }
       } catch (e) {}
     }
@@ -1273,9 +1394,19 @@
         const newPassword = document.getElementById('newPassword').value;
         const confirmPassword = document.getElementById('confirmNewPassword').value;
 
-        if (newPassword.length < 6) {
+        if (newPassword.length < 8) {
           pwdAlert.className = 'profile-alert error';
-          pwdAlert.textContent = '❌ New password must be at least 6 characters long.';
+          pwdAlert.textContent = '❌ New password must be at least 8 characters long.';
+          return;
+        }
+
+        const hasUpper = /[A-Z]/.test(newPassword);
+        const hasLower = /[a-z]/.test(newPassword);
+        const hasNumSym = /[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(newPassword);
+
+        if (!hasUpper || !hasLower || !hasNumSym) {
+          pwdAlert.className = 'profile-alert error';
+          pwdAlert.textContent = '❌ Password must include a combination of uppercase letters (A-Z), lowercase letters (a-z), and at least one number or symbol.';
           return;
         }
 
@@ -1331,8 +1462,40 @@
         });
       });
 
-      // 4. Password Strength Meter
+      // 4. Password Strength Meter & Real-Time Rule Validator
       const newPwdInput = document.getElementById('newPassword');
+      const confirmPwdInput = document.getElementById('confirmNewPassword');
+      const matchStatus = document.getElementById('confirmPasswordMatch');
+
+      function updateReqItem(id, isValid) {
+        const item = document.getElementById(id);
+        if (!item) return;
+        const icon = item.querySelector('.req-icon');
+        if (isValid) {
+          item.classList.add('valid');
+          item.classList.remove('invalid');
+          if (icon) icon.textContent = '✓';
+        } else {
+          item.classList.remove('valid');
+          item.classList.add('invalid');
+          if (icon) icon.textContent = '○';
+        }
+      }
+
+      function checkPasswordRules(val) {
+        const hasLength = val.length >= 8;
+        const hasUpper = /[A-Z]/.test(val);
+        const hasLower = /[a-z]/.test(val);
+        const hasNumSym = /[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(val);
+
+        updateReqItem('req-length', hasLength);
+        updateReqItem('req-upper', hasUpper);
+        updateReqItem('req-lower', hasLower);
+        updateReqItem('req-num-sym', hasNumSym);
+
+        return { hasLength, hasUpper, hasLower, hasNumSym };
+      }
+
       if (newPwdInput) {
         newPwdInput.addEventListener('input', () => {
           const val = newPwdInput.value;
@@ -1342,33 +1505,69 @@
           if (!val) {
             fill.style.width = '0%';
             text.textContent = 'Password strength: Enter password';
+            text.style.color = '#64748b';
+            checkPasswordRules('');
             return;
           }
 
+          const rules = checkPasswordRules(val);
           let score = 0;
-          if (val.length >= 6) score += 1;
-          if (val.length >= 10) score += 1;
-          if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score += 1;
-          if (/[0-9]/.test(val)) score += 1;
-          if (/[^A-Za-z0-9]/.test(val)) score += 1;
+          if (rules.hasLength) score += 1;
+          if (rules.hasUpper) score += 1;
+          if (rules.hasLower) score += 1;
+          if (rules.hasNumSym) score += 1;
+          if (val.length >= 12) score += 1;
 
           if (score <= 2) {
-            fill.style.width = '33%';
+            fill.style.width = '25%';
             fill.style.backgroundColor = '#ef4444';
-            text.textContent = 'Password strength: Weak';
+            text.textContent = 'Password strength: Weak (Requirements missing)';
             text.style.color = '#ef4444';
-          } else if (score <= 4) {
-            fill.style.width = '66%';
+          } else if (score === 3) {
+            fill.style.width = '50%';
             fill.style.backgroundColor = '#f59e0b';
-            text.textContent = 'Password strength: Medium';
+            text.textContent = 'Password strength: Fair (Almost there)';
             text.style.color = '#f59e0b';
+          } else if (score === 4) {
+            fill.style.width = '75%';
+            fill.style.backgroundColor = '#10b981';
+            text.textContent = 'Password strength: Strong 💪 (All rules met)';
+            text.style.color = '#10b981';
           } else {
             fill.style.width = '100%';
-            fill.style.backgroundColor = '#10b981';
-            text.textContent = 'Password strength: Strong 💪';
-            text.style.color = '#10b981';
+            fill.style.backgroundColor = '#059669';
+            text.textContent = 'Password strength: Very Strong 🛡️';
+            text.style.color = '#059669';
+          }
+
+          if (confirmPwdInput && confirmPwdInput.value) {
+            checkConfirmMatch();
           }
         });
+      }
+
+      function checkConfirmMatch() {
+        if (!confirmPwdInput || !newPwdInput || !matchStatus) return;
+        const p1 = newPwdInput.value;
+        const p2 = confirmPwdInput.value;
+        if (!p2) {
+          matchStatus.style.display = 'none';
+          return;
+        }
+        matchStatus.style.display = 'block';
+        if (p1 === p2) {
+          matchStatus.textContent = '✓ Passwords match';
+          matchStatus.style.color = '#16a34a';
+          matchStatus.style.fontWeight = '600';
+        } else {
+          matchStatus.textContent = '✕ Passwords do not match';
+          matchStatus.style.color = '#dc2626';
+          matchStatus.style.fontWeight = '600';
+        }
+      }
+
+      if (confirmPwdInput) {
+        confirmPwdInput.addEventListener('input', checkConfirmMatch);
       }
 
       function resetPasswordMeter() {
@@ -1379,6 +1578,8 @@
           text.textContent = 'Password strength: Enter password';
           text.style.color = '#64748b';
         }
+        if (matchStatus) matchStatus.style.display = 'none';
+        checkPasswordRules('');
       }
 
       // 5. Save Delivery Address Form
@@ -1391,20 +1592,43 @@
         const user = getAuthUser();
         if (!user) return;
 
+        const street = document.getElementById('addrStreet').value.trim();
+        const area = document.getElementById('addrArea').value.trim();
+        const state = document.getElementById('addrState').value.trim();
+        const district = document.getElementById('addrDistrict').value.trim();
+        const city = document.getElementById('addrCity').value.trim();
+        const pincode = document.getElementById('addrPincode').value.trim();
+
+        if (!state || !district || !city || !pincode) {
+          addrAlert.className = 'profile-alert error';
+          addrAlert.textContent = '❌ Please fill out all required address fields (State, District, City, Pincode).';
+          addrAlert.style.display = 'block';
+          return;
+        }
+
+        if (!/^[1-9][0-9]{5}$/.test(pincode)) {
+          addrAlert.className = 'profile-alert error';
+          addrAlert.textContent = '❌ Pincode must be a valid 6-digit Indian postal code.';
+          addrAlert.style.display = 'block';
+          return;
+        }
+
         const addrData = {
-          street: document.getElementById('addrStreet').value.trim(),
-          area: document.getElementById('addrArea').value.trim(),
-          city: document.getElementById('addrCity').value.trim(),
-          state: document.getElementById('addrState').value.trim(),
-          pincode: document.getElementById('addrPincode').value.trim()
+          street,
+          area,
+          city,
+          district,
+          state,
+          pincode
         };
 
         const storageKey = `inithat_addr_${user.email || 'user'}`;
         localStorage.setItem(storageKey, JSON.stringify(addrData));
 
         addrAlert.className = 'profile-alert success';
-        addrAlert.textContent = '✅ Delivery address saved successfully for future checkouts!';
-        setTimeout(() => { addrAlert.style.display = 'none'; }, 3000);
+        addrAlert.textContent = '✅ Delivery address saved successfully with verified location!';
+        addrAlert.style.display = 'block';
+        setTimeout(() => { addrAlert.style.display = 'none'; }, 3500);
       });
 
       // 6. Logout Button Click

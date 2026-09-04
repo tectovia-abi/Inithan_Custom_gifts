@@ -494,57 +494,67 @@
 
           <div class="input-row-2">
             <div class="input-field-group">
-              <label>Town / City</label>
+              <label>State *</label>
               <div class="input-box-wrapper">
-                <span class="input-icon">🏢</span>
-                <input type="text" id="city" placeholder="Madurai" required>
+                <span class="input-icon">🏛️</span>
+                <select id="state" required style="width:100%; border:none; outline:none; background:transparent; font-size:0.95rem; font-family:inherit; color:#1e293b; padding:12px 14px 12px 42px; cursor:pointer;">
+                  <option value="">Select State</option>
+                </select>
               </div>
             </div>
             <div class="input-field-group">
-              <label>State</label>
+              <label>District *</label>
               <div class="input-box-wrapper">
-                <span class="input-icon">📖</span>
-                <input type="text" id="state" placeholder="Tamil Nadu" required>
+                <span class="input-icon">📍</span>
+                <select id="district" required disabled style="width:100%; border:none; outline:none; background:transparent; font-size:0.95rem; font-family:inherit; color:#1e293b; padding:12px 14px 12px 42px; cursor:pointer;">
+                  <option value="">Select District</option>
+                </select>
               </div>
             </div>
           </div>
 
-          <div class="input-field-group" style="margin-bottom: 0;">
-            <label>Pincode</label>
-            <div class="input-box-wrapper">
-              <input type="text" id="pincode" placeholder="625001" style="padding-left: 14px;" required>
+          <div class="input-row-2">
+            <div class="input-field-group">
+              <label>Town / City *</label>
+              <div class="input-box-wrapper">
+                <span class="input-icon">🏢</span>
+                <input type="text" id="city" placeholder="e.g. Gobichettipalayam" required>
+              </div>
+            </div>
+            <div class="input-field-group">
+              <label>Pincode *</label>
+              <div class="input-box-wrapper">
+                <span class="input-icon">📮</span>
+                <input type="text" id="pincode" placeholder="e.g. 638452" maxlength="6" required>
+              </div>
+              <div id="pincodeStatus" style="display:none; margin-top:6px; font-size:0.82rem;"></div>
             </div>
           </div>
         </div>
 
-        <!-- Card 3: Payment Method -->
+        <!-- Card 3: Payment Method (Online Only via Razorpay) -->
         <div class="card-section">
           <div class="card-section-header">
             <div class="section-icon-badge">💳</div>
             <h2>Payment Method</h2>
           </div>
 
-          <div class="payment-option-card selected" onclick="selectPayment(this)">
-            <div class="payment-left">
-              <input type="radio" name="payment" value="online" checked>
-              <span>Razorpay (UPI, Cards, NetBanking)</span>
+          <div class="payment-option-card selected" style="cursor:default; border-color:var(--pink-primary); background:#fff5f7;">
+            <div class="payment-left" style="align-items:flex-start;">
+              <input type="radio" name="payment" value="online" checked style="accent-color:var(--pink-primary); margin-top:4px;">
+              <div>
+                <strong style="color:#0f172a; font-size:0.95rem;">Razorpay Online Payment</strong>
+                <div style="font-size:0.8rem; color:#64748b; margin-top:2px;">UPI (Google Pay, PhonePe, Paytm, BHIM), Credit/Debit Cards, NetBanking, Wallets</div>
+              </div>
             </div>
-            <span style="font-weight: 800; color: #0284c7; font-size: 0.9rem;">Razorpay</span>
-          </div>
-
-          <div class="payment-option-card" onclick="selectPayment(this)">
-            <div class="payment-left">
-              <input type="radio" name="payment" value="cod">
-              <span>Cash on Delivery (COD)</span>
-            </div>
-            <span style="font-size: 1.3rem;">🚚</span>
+            <span style="font-weight: 800; color: #0284c7; font-size: 0.9rem;">🔒 Secure</span>
           </div>
 
           <button type="button" class="btn-submit-payment" onclick="processPayment()">
             🔒 Proceed to Payment
           </button>
           <div style="text-align: center; font-size: 0.8rem; color: #64748b; margin-top: 10px;">
-            🛡️ Your data is secure and encrypted
+            🛡️ 100% Secure & Encrypted by Razorpay
           </div>
         </div>
 
@@ -570,13 +580,22 @@
               <span id="subtotalAmt">₹0</span>
             </div>
             <div class="totals-line">
-              <span>Shipping</span>
-              <span style="color: #16a34a; font-weight: 700;">FREE</span>
+              <span>Shipping Fee (<span id="shippingZoneLbl" style="font-size:0.85rem; color:#64748b;">Tamil Nadu</span>)</span>
+              <span id="shippingAmt" style="font-weight: 700; color: #0f172a;">₹40</span>
             </div>
             <div class="totals-line grand-total">
               <span>Total</span>
               <span id="totalAmt">₹0</span>
             </div>
+          </div>
+
+          <!-- Distance-Based Shipping Info Card -->
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 12px; font-size:0.78rem; color:#475569; margin-top:14px; line-height:1.45;">
+            📍 <strong>Distance-Based Shipping Rates:</strong><br>
+            • <strong>Local (TN / PY):</strong> ₹40 (0-400 km)<br>
+            • <strong>South India (KL, KA, AP, TS):</strong> ₹60 (400-900 km)<br>
+            • <strong>Rest of India (MH, DL, GJ, UP, etc.):</strong> ₹80 (900+ km)<br>
+            • <strong>Special/Remote (NE, Hills, Islands):</strong> ₹120
           </div>
         </div>
 
@@ -613,18 +632,63 @@
     </div>
   </div>
 
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/india-location-data.js"></script>
+  <script src="js/address-utils.js"></script>
   <script src="js/script.js"></script>
   <script>
+    let addressFormManager = null;
+
     document.addEventListener('DOMContentLoaded', () => {
+      // Require login to checkout
+      const user = typeof getAuthUser === 'function' ? getAuthUser() : null;
+      if (!user) {
+        alert('Please log in to proceed with checkout.');
+        window.location.href = 'login.html?redirect=checkout.html';
+        return;
+      }
+
+      // Initialize State, District & Distance-Based Shipping
+      addressFormManager = AddressUtils.initAddressForm({
+        stateSelectId: 'state',
+        districtSelectId: 'district',
+        pincodeInputId: 'pincode',
+        statusElementId: 'pincodeStatus',
+        initialState: 'Tamil Nadu',
+        onShippingChange: (info) => {
+          updateOrderTotals();
+        }
+      });
+
       renderCheckout();
     });
 
-    function selectPayment(cardEl) {
-      document.querySelectorAll('.payment-option-card').forEach(el => el.classList.remove('selected'));
-      cardEl.classList.add('selected');
-      const radio = cardEl.querySelector('input[type="radio"]');
-      if (radio) radio.checked = true;
+    function updateOrderTotals() {
+      const items = typeof getUserCart === 'function' ? getUserCart() : [];
+      let subtotal = 0;
+      items.forEach(item => {
+        subtotal += Number(item.price) * (item.qty || 1);
+      });
+
+      const stateSelect = document.getElementById('state');
+      const selectedState = stateSelect ? stateSelect.value : 'Tamil Nadu';
+      const shippingInfo = AddressUtils.getShippingFee(selectedState);
+      const shippingFee = shippingInfo.fee;
+      const grandTotal = subtotal + shippingFee;
+
+      if (document.getElementById('subtotalAmt')) {
+        document.getElementById('subtotalAmt').innerText = `₹${subtotal.toLocaleString('en-IN')}`;
+      }
+      if (document.getElementById('shippingAmt')) {
+        document.getElementById('shippingAmt').innerText = `₹${shippingFee}`;
+      }
+      if (document.getElementById('shippingZoneLbl')) {
+        document.getElementById('shippingZoneLbl').innerText = selectedState || 'Tamil Nadu';
+      }
+      if (document.getElementById('totalAmt')) {
+        document.getElementById('totalAmt').innerText = `₹${grandTotal.toLocaleString('en-IN')}`;
+      }
     }
 
     function renderCheckout() {
@@ -645,12 +709,10 @@
       }
 
       let html = '';
-      let subtotal = 0;
 
       items.forEach(item => {
         const qty = item.qty || 1;
         const itemTotal = Number(item.price) * qty;
-        subtotal += itemTotal;
 
         const mainImg = item.imageUrl || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png';
 
@@ -695,58 +757,55 @@
       });
 
       if (summaryContainer) summaryContainer.innerHTML = html;
-      if (document.getElementById('subtotalAmt')) document.getElementById('subtotalAmt').innerText = `₹${subtotal.toLocaleString('en-IN')}`;
-      if (document.getElementById('totalAmt')) document.getElementById('totalAmt').innerText = `₹${subtotal.toLocaleString('en-IN')}`;
+      updateOrderTotals();
 
       // Pre-fill user details if logged in
       const user = typeof getAuthUser === 'function' ? getAuthUser() : null;
       if (user) {
         const fill = (id, value) => {
           const el = document.getElementById(id);
-          if (el && value) {
-            el.value = value;
-            // Subtle highlight animation to signal auto-fill
-            el.style.transition = 'background 0.4s ease';
-            el.style.background = '#fff7ed';
-            setTimeout(() => { el.style.background = 'white'; }, 1600);
-          }
+          if (el && value) el.value = value;
         };
 
         fill('email',    user.email);
         fill('phone',    user.phone);
         fill('fullName', user.fullName || user.name);
 
-        // Also check if user has a saved delivery address in profile
         try {
           const savedAddr = JSON.parse(localStorage.getItem(`inithat_addr_${user.email || 'user'}`));
           if (savedAddr) {
             fill('address1', savedAddr.street);
             fill('address2', savedAddr.area);
             fill('city',     savedAddr.city);
-            fill('state',    savedAddr.state);
-            fill('pincode',  savedAddr.pincode);
+            if (savedAddr.state && document.getElementById('state')) {
+              document.getElementById('state').value = savedAddr.state;
+              if (addressFormManager) {
+                AddressUtils.populateDistricts(document.getElementById('district'), savedAddr.state, savedAddr.district);
+              }
+              updateOrderTotals();
+            }
+            if (savedAddr.district && document.getElementById('district')) {
+              document.getElementById('district').value = savedAddr.district;
+            }
+            if (savedAddr.pincode && document.getElementById('pincode')) {
+              document.getElementById('pincode').value = savedAddr.pincode;
+            }
           }
         } catch (e) {}
-
-        // Show a small "auto-filled" notice once
-        const firstCard = document.querySelector('.card-section');
-        if (firstCard && !document.getElementById('autofillNotice')) {
-          const notice = document.createElement('div');
-          notice.id = 'autofillNotice';
-          notice.style.cssText = `
-            display:flex; align-items:center; gap:8px;
-            background:#f0fdf4; border:1px solid #bbf7d0;
-            border-radius:8px; padding:8px 12px; margin-bottom:16px;
-            font-size:0.82rem; font-weight:600; color:#15803d;
-          `;
-          notice.innerHTML = '✅ Contact & shipping details auto-filled from your profile. Please review before placing your order.';
-          firstCard.insertBefore(notice, firstCard.querySelector('.input-row-2'));
-        }
       }
     }
 
-    function processPayment() {
-      const required = ['email', 'phone', 'fullName', 'address1', 'city', 'state', 'pincode'];
+    async function processPayment() {
+      const user = typeof getAuthUser === 'function' ? getAuthUser() : null;
+      const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token') || (typeof getCookie === 'function' ? getCookie('inithat_token') : '');
+
+      if (!user || !token) {
+        alert('Please log in to complete your purchase.');
+        window.location.href = 'login.html?redirect=checkout.html';
+        return;
+      }
+
+      const required = ['email', 'phone', 'fullName', 'address1', 'city', 'state', 'district', 'pincode'];
       for (let id of required) {
         const el = document.getElementById(id);
         if (!el || !el.value.trim()) {
@@ -756,16 +815,182 @@
         }
       }
 
+      // Check pincode format
+      const pincode = document.getElementById('pincode').value.trim();
+      if (!/^[1-9][0-9]{5}$/.test(pincode)) {
+        alert('Please enter a valid 6-digit Indian Pincode.');
+        document.getElementById('pincode').focus();
+        return;
+      }
+
+      const cartItems = typeof getUserCart === 'function' ? getUserCart() : [];
+      if (!cartItems || cartItems.length === 0) {
+        alert('Your cart is empty. Please add products first.');
+        return;
+      }
+
+      // Map cart items with product IDs
+      const itemsPayload = cartItems.map(item => ({
+        productId: item.productId || item._id || item.id || null,
+        name: item.name || 'Custom Gift',
+        image: item.imageUrl || item.image || '',
+        price: Number(item.price) || 0,
+        quantity: parseInt(item.qty) || 1,
+        customText: item.customText || '',
+        customImages: item.customImages || []
+      }));
+
+      const shippingAddressPayload = {
+        address1: document.getElementById('address1').value.trim(),
+        address2: document.getElementById('address2') ? document.getElementById('address2').value.trim() : '',
+        city: document.getElementById('city').value.trim(),
+        district: document.getElementById('district').value.trim(),
+        state: document.getElementById('state').value.trim(),
+        pincode: pincode
+      };
+
+      const customerPayload = {
+        name: document.getElementById('fullName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim()
+      };
+
       const btn = document.querySelector('.btn-submit-payment');
-      btn.innerText = 'Processing...';
+      btn.innerHTML = '⏳ Validating & Creating Order...';
       btn.style.opacity = '0.7';
       btn.disabled = true;
 
-      setTimeout(() => {
-        alert('Payment Gateway Integration Pending. Order placed successfully as a test!');
-        if (typeof saveUserCart === 'function') saveUserCart([]);
-        window.location.href = 'index.html';
-      }, 1500);
+      try {
+        const API_BASE = window.API_BASE || window.location.origin;
+
+        // STEP 1: Create Order on Backend (Backend calculates verified prices & validates pincode)
+        const orderRes = await fetch(`${API_BASE}/api/payment/create-order`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            items: itemsPayload,
+            shippingAddress: shippingAddressPayload
+          }),
+        });
+
+        const orderData = await orderRes.json();
+
+        if (!orderRes.ok || !orderData.success) {
+          throw new Error(orderData.message || 'Failed to create payment order.');
+        }
+
+        btn.innerHTML = '🔒 Proceed to Payment';
+        btn.style.opacity = '1';
+        btn.disabled = false;
+
+        // STEP 2: Open Razorpay Checkout Modal
+        const options = {
+          key: orderData.key_id,
+          amount: orderData.amount,
+          currency: orderData.currency,
+          name: 'Inithan Custom Gifts',
+          description: `Order for ${cartItems.length} item(s)`,
+          image: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png',
+          order_id: orderData.order_id,
+          prefill: {
+            name: customerPayload.name,
+            email: customerPayload.email,
+            contact: customerPayload.phone.replace(/[^\d]/g, '').slice(-10),
+          },
+          notes: {
+            address: `${shippingAddressPayload.address1}, ${shippingAddressPayload.city}, ${shippingAddressPayload.district}, ${shippingAddressPayload.state} - ${shippingAddressPayload.pincode}`,
+          },
+          theme: { color: '#e11d48' },
+
+          // STEP 3: On Successful Payment -> Verify Signature & Create MongoDB Order
+          handler: async function (response) {
+            btn.innerHTML = '⏳ Verifying Payment...';
+            btn.disabled = true;
+
+            try {
+              const verifyRes = await fetch(`${API_BASE}/api/payment/verify-payment`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                  razorpay_order_id:   response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature:  response.razorpay_signature,
+                  orderPayload: {
+                    customer: customerPayload,
+                    shippingAddress: shippingAddressPayload,
+                    items: itemsPayload,
+                    breakdown: orderData.breakdown
+                  }
+                }),
+              });
+
+              const verifyData = await verifyRes.json();
+
+              if (!verifyRes.ok || !verifyData.success) {
+                throw new Error(verifyData.message || 'Payment signature verification failed.');
+              }
+
+              // ✅ Order created and verified in MongoDB!
+              if (typeof saveUserCart === 'function') saveUserCart([]);
+
+              const orderNumber = (verifyData.order && verifyData.order.orderNumber) ? verifyData.order.orderNumber : '';
+              alert(`✅ Payment & Order Successful!\n\nOrder #: ${orderNumber}\nPayment ID: ${response.razorpay_payment_id}\n\nThank you! Redirecting to your Orders page...`);
+              
+              window.location.href = `my-orders.html?order=${encodeURIComponent(orderNumber)}`;
+            } catch (verifyErr) {
+              console.error('Payment verification error:', verifyErr);
+              alert('⚠️ Payment completed on Razorpay but order recording failed. Please contact support with Payment ID: ' + response.razorpay_payment_id);
+              btn.innerHTML = '🔒 Proceed to Payment';
+              btn.disabled = false;
+            }
+          },
+
+          modal: {
+            ondismiss: function () {
+              const dismissBtn = document.querySelector('.btn-submit-payment');
+              if (dismissBtn) {
+                dismissBtn.innerHTML = '🔒 Proceed to Payment';
+                dismissBtn.style.opacity = '1';
+                dismissBtn.disabled = false;
+              }
+            },
+          },
+        };
+
+        const rzp = new Razorpay(options);
+
+        rzp.on('payment.failed', function (response) {
+          console.error('===== RAZORPAY PAYMENT FAILED =====');
+          console.error('FULL ERROR:', response.error);
+          console.error('CODE:', response.error?.code);
+          console.error('DESCRIPTION:', response.error?.description);
+
+          const err = response.error || {};
+          alert(`Payment Failed\n\nReason: ${err.description || 'Transaction cancelled or failed.'}`);
+
+          const failBtn = document.querySelector('.btn-submit-payment');
+          if (failBtn) {
+            failBtn.innerHTML = '🔒 Proceed to Payment';
+            failBtn.style.opacity = '1';
+            failBtn.disabled = false;
+          }
+        });
+
+        rzp.open();
+
+      } catch (err) {
+        console.error('Payment initiation error:', err);
+        alert(`❌ ${err.message || 'Something went wrong. Please try again.'}`);
+        btn.innerHTML = '🔒 Proceed to Payment';
+        btn.style.opacity = '1';
+        btn.disabled = false;
+      }
     }
 
     function openPhotoModal(imgSrc) {
@@ -807,9 +1032,6 @@
       <span class="mob-cart-badge" id="mobCartBadge" style="display:none;">0</span>
     </a>
   </nav>
-
-  <script src="js/auth.js"></script>
-  <script src="js/script.js"></script>
 </body>
 
 </html>

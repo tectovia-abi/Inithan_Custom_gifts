@@ -78,14 +78,13 @@ function logout() {
 // ── User-Specific Cart Session Management ────────────────────────────────────
 function getUserCartKey() {
   const user = getAuthUser();
-  if (!user) return null;
-  const identifier = user.id || user._id || user.email || 'guest';
+  if (!user) return 'inithat_cart_guest';
+  const identifier = user.email || user.id || user._id || 'guest';
   return `inithat_cart_${identifier}`;
 }
 
 function getUserCart() {
   const cartKey = getUserCartKey();
-  if (!cartKey) return [];
   try {
     const data = localStorage.getItem(cartKey) || sessionStorage.getItem(cartKey);
     return data ? JSON.parse(data) : [];
@@ -96,8 +95,7 @@ function getUserCart() {
 
 function saveUserCart(cartItems) {
   const cartKey = getUserCartKey();
-  if (!cartKey) return;
-  const data = JSON.stringify(cartItems);
+  const data = JSON.stringify(cartItems || []);
   localStorage.setItem(cartKey, data);
   sessionStorage.setItem(cartKey, data);
 }
@@ -149,6 +147,7 @@ function updateNavbar() {
             <ul>
               ${user.isAdmin ? `<li><a href="admin-dashboard.html" class="admin-link">👑 Admin Dashboard</a></li>` : ''}
               <li><a href="my-profile.html">👤 My Profile</a></li>
+              <li><a href="my-orders.html">📦 My Orders</a></li>
               <li><a href="my-bulk-orders.html">🏢 My Bulk Inquiries</a></li>
               <li><a href="cart.html">🛒 My Cart</a></li>
               <li><a href="my-profile.html#security">🔒 Change Password</a></li>

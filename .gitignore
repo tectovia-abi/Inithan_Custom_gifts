@@ -10,3 +10,7 @@ backend/node_modules/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Scratch & temporary files
+backend/scratch/
+scratch/

@@ -423,6 +423,7 @@
         return;
       }
 
+      const API_BASE = window.API_BASE || window.location.origin;
       try {
         const response = await fetch(`${API_BASE}/api/products/${productId}`);
         const data = await response.json();

@@ -76,12 +76,12 @@ router.delete('/:id', protect, admin, async (req, res) => {
   }
 });
 
-// @route   POST /api/categories/:id/sub
+// @route   POST /api/categories/:id/sub AND /api/categories/:id/subcategories
 // @desc    Add a subcategory
 // @access  Private/Admin
-router.post('/:id/sub', protect, admin, async (req, res) => {
+const handleAddSubcategory = async (req, res) => {
   try {
-    const { subName } = req.body;
+    const subName = (req.body.name || req.body.subName || '').trim();
     if (!subName) return res.status(400).json({ success: false, message: 'Subcategory name is required' });
 
     const category = await Category.findById(req.params.id);
@@ -95,23 +95,28 @@ router.post('/:id/sub', protect, admin, async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
-});
+};
+router.post('/:id/sub', protect, admin, handleAddSubcategory);
+router.post('/:id/subcategories', protect, admin, handleAddSubcategory);
 
-// @route   DELETE /api/categories/:id/sub/:subName
+// @route   DELETE /api/categories/:id/sub/:subName AND /api/categories/:id/subcategories/:subName
 // @desc    Delete a subcategory
 // @access  Private/Admin
-router.delete('/:id/sub/:subName', protect, admin, async (req, res) => {
+const handleDeleteSubcategory = async (req, res) => {
   try {
+    const targetSub = decodeURIComponent(req.params.subName || '').trim();
     const category = await Category.findById(req.params.id);
     if (!category) return res.status(404).json({ success: false, message: 'Category not found' });
 
-    category.subcategories = category.subcategories.filter(sub => sub !== req.params.subName);
+    category.subcategories = category.subcategories.filter(sub => sub !== targetSub);
     await category.save();
     
     res.json({ success: true, category });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
-});
+};
+router.delete('/:id/sub/:subName', protect, admin, handleDeleteSubcategory);
+router.delete('/:id/subcategories/:subName', protect, admin, handleDeleteSubcategory);
 
 module.exports = router;

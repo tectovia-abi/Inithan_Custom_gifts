@@ -54,6 +54,21 @@
 
     alertDiv.style.display = 'none';
 
+    // Validate password complexity (min 8 chars, combination of letters & numbers/symbols)
+    if (password.length < 8) {
+      showAlert('Password must be at least 8 characters long.');
+      return;
+    }
+
+    const hasUpper = /[A-Z]/.test(password);
+    const hasLower = /[a-z]/.test(password);
+    const hasNumSym = /[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
+
+    if (!hasUpper || !hasLower || !hasNumSym) {
+      showAlert('Password must include uppercase (A-Z), lowercase (a-z), and at least one number or symbol.');
+      return;
+    }
+
     // Validate passwords match
     if (password !== confirmPassword) {
       console.warn('%c⚠️ [FRONTEND VALIDATION] Passwords do not match!', 'color: #f59e0b; font-weight: bold;');
