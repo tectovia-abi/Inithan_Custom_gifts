@@ -13,14 +13,25 @@ const { validatePincodeAgainstAddress } = require('../services/addressService');
 
 // ── Dynamic env reload ────────────────────────────────────────────────────────
 function loadEnv() {
-  dotenv.config({ path: path.join(__dirname, '..', '.env'), override: true });
+  try {
+    dotenv.config({ path: path.join(__dirname, '..', '.env') });
+  } catch (_) {}
 }
 
 function getRazorpay() {
   loadEnv();
+  const key_id = (process.env.RAZORPAY_KEY_ID || '').trim();
+  const key_secret = (process.env.RAZORPAY_KEY_SECRET || '').trim();
+
+  if (!key_id || !key_secret) {
+    const errorMsg = 'Razorpay API keys (RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET) are missing or not configured in server environment variables.';
+    console.error('❌ ' + errorMsg);
+    throw new Error(errorMsg);
+  }
+
   return new Razorpay({
-    key_id:     process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET,
+    key_id,
+    key_secret,
   });
 }
 
@@ -183,9 +194,15 @@ router.post('/verify-payment', protect, async (req, res) => {
     }
 
     // ── 2. HMAC signature verification ────────────────────────────────────
+    const keySecret = (process.env.RAZORPAY_KEY_SECRET || '').trim();
+    if (!keySecret) {
+      console.error('❌ RAZORPAY_KEY_SECRET is missing during verify-payment.');
+      return res.status(500).json({ success: false, message: 'Server payment configuration error.' });
+    }
+
     const body              = `${razorpay_order_id}|${razorpay_payment_id}`;
     const expectedSignature = crypto
-      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+      .createHmac('sha256', keySecret)
       .update(body)
       .digest('hex');
 
