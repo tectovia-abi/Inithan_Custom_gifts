@@ -196,6 +196,26 @@ function _syncMobileDrawerFromSidebar() {
 
   drawerBody.innerHTML = html;
 
+  // Sync actual checked states from sidebar to drawer
+  if (catList) {
+    catList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      const drawerCb = drawerBody.querySelector(`#mfdCategoryFilters input[value="${CSS.escape(cb.value)}"]`);
+      if (drawerCb) drawerCb.checked = cb.checked;
+    });
+  }
+  if (occList) {
+    occList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      const drawerCb = drawerBody.querySelector(`#mfdOccasionFilters input[value="${CSS.escape(cb.value)}"]`);
+      if (drawerCb) drawerCb.checked = cb.checked;
+    });
+  }
+  if (priceList) {
+    priceList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      const drawerCb = drawerBody.querySelector(`#mfdPriceFilters input[value="${CSS.escape(cb.value)}"]`);
+      if (drawerCb) drawerCb.checked = cb.checked;
+    });
+  }
+
   applyShowMoreToFilterList(document.getElementById('mfdCategoryFilters'), 'mfd-category');
   applyShowMoreToFilterList(document.getElementById('mfdOccasionFilters'), 'mfd-occasion');
 
