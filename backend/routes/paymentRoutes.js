@@ -21,7 +21,7 @@ function loadEnv() {
 function getRazorpay() {
   loadEnv();
   const key_id = (process.env.RAZORPAY_KEY_ID || '').trim();
-  const key_secret = (process.env.RAZORPAY_KEY_SECRET || '').trim();
+  const key_secret = (process.env.RAZORPAY_KEY_SECRET || process.env.RAZORPAY_KEY_SECRE || '').trim();
 
   if (!key_id || !key_secret) {
     const errorMsg = 'Razorpay API keys (RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET) are missing or not configured in server environment variables.';
@@ -194,7 +194,7 @@ router.post('/verify-payment', protect, async (req, res) => {
     }
 
     // ── 2. HMAC signature verification ────────────────────────────────────
-    const keySecret = (process.env.RAZORPAY_KEY_SECRET || '').trim();
+    const keySecret = (process.env.RAZORPAY_KEY_SECRET || process.env.RAZORPAY_KEY_SECRE || '').trim();
     if (!keySecret) {
       console.error('❌ RAZORPAY_KEY_SECRET is missing during verify-payment.');
       return res.status(500).json({ success: false, message: 'Server payment configuration error.' });
