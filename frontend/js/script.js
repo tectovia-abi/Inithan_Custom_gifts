@@ -1,5 +1,5 @@
 // ============================================
-// INITHAT CUSTOM GIFTS - Main JavaScript
+// INITHAN CUSTOM GIFTS - Main JavaScript
 // ============================================
 
 document.addEventListener('DOMContentLoaded', () => {

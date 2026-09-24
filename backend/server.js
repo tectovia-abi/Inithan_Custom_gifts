@@ -120,7 +120,7 @@ app.use('/api/address', addressRoutes);
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
-    message: 'Inithat Gifts backend server is running!',
+    message: 'Inithan Gifts backend server is running!',
     db: mongoose.connection.readyState === 1 ? 'Connected to MongoDB Atlas' : 'Disconnected'
   });
 });

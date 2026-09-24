@@ -142,7 +142,7 @@ async function sendBulkInquiryEmails(inquiry) {
           <p style="background:#fafafa;padding:12px;border-left:4px solid #C41E3A;font-size:14px;margin:0;"><strong>Additional Notes:</strong><br>${notes || 'None'}</p>
         </div>
         <div style="background:#f9f9f9;padding:15px 30px;text-align:center;border-top:1px solid #eee;font-size:12px;color:#999;">
-          &copy; 2026 Inithat Custom Gifts. All rights reserved. &nbsp;|&nbsp; This is an automated system notification.
+          &copy; 2026 Inithan Custom Gifts. All rights reserved. &nbsp;|&nbsp; This is an automated system notification.
         </div>
       </div>
     `
@@ -150,19 +150,19 @@ async function sendBulkInquiryEmails(inquiry) {
 
   const customerMailOptions = {
     from: {
-      name: 'Inithat Custom Gifts',
+      name: 'Inithan Custom Gifts',
       address: process.env.EMAIL_USER
     },
     to: data.email,
     replyTo: 'inithancustomgifts@gmail.com',
-    subject: `✅ Bulk Order Inquiry Received – Inithat Custom Gifts`,
+    subject: `✅ Bulk Order Inquiry Received – Inithan Custom Gifts`,
     messageId: `<${timestamp}-customer@inithancreations.com>`,
     date: new Date(),
     headers: sharedHeaders,
     text: [
       `Hi ${data.name},`,
       '',
-      'Thank you for choosing Inithat Custom Gifts!',
+      'Thank you for choosing Inithan Custom Gifts!',
       `We have successfully received your bulk order request for ${data.quantity} units of: ${(data.products || []).join(', ')}.`,
       '',
       'Our dedicated corporate gifting specialist is reviewing your requirements and will contact you within 24 working hours with a personalized quotation.',
@@ -175,7 +175,7 @@ async function sendBulkInquiryEmails(inquiry) {
       'For urgent queries, reply to this email or reach us at inithancustomgifts@gmail.com.',
       '',
       'Warm Regards,',
-      'Team Inithat Custom Gifts'
+      'Team Inithan Custom Gifts'
     ].join('\n'),
     html: `
       <!DOCTYPE html>
@@ -188,7 +188,7 @@ async function sendBulkInquiryEmails(inquiry) {
               <table role="presentation" width="600" border="0" cellspacing="0" cellpadding="0" style="background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
                 <tr>
                   <td style="background-color:#1A1A2E;padding:35px 30px;text-align:center;border-bottom:5px solid #C41E3A;">
-                    <h1 style="color:#ffffff;margin:0;font-size:26px;font-weight:800;letter-spacing:2px;text-transform:uppercase;">Inithat Custom Gifts</h1>
+                    <h1 style="color:#ffffff;margin:0;font-size:26px;font-weight:800;letter-spacing:2px;text-transform:uppercase;">Inithan Custom Gifts</h1>
                     <p style="color:#D4AF37;margin:8px 0 0;font-size:13px;font-style:italic;letter-spacing:1px;">Crafted with Love ✦ Made for You</p>
                   </td>
                 </tr>
@@ -201,7 +201,7 @@ async function sendBulkInquiryEmails(inquiry) {
                 <tr>
                   <td style="padding:35px 30px;">
                     <p style="font-size:16px;color:#333;margin-top:0;">Hi <strong>${name}</strong>,</p>
-                    <p style="font-size:15px;color:#555;line-height:1.7;">Thank you for choosing <strong>Inithat Custom Gifts</strong> for your corporate gifting needs. We have officially received your inquiry for <strong>${quantity} units</strong> and your request is now in our queue.</p>
+                    <p style="font-size:15px;color:#555;line-height:1.7;">Thank you for choosing <strong>Inithan Custom Gifts</strong> for your corporate gifting needs. We have officially received your inquiry for <strong>${quantity} units</strong> and your request is now in our queue.</p>
                     <p style="font-size:15px;color:#555;line-height:1.7;">Our dedicated bulk order specialist will review your requirements and contact you within <strong>24 working hours</strong> with a personalized quotation tailored to your needs.</p>
                     <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:25px 0;border:1px solid #eaeaea;border-radius:8px;overflow:hidden;">
                       <tr>
@@ -234,7 +234,7 @@ async function sendBulkInquiryEmails(inquiry) {
                     </table>
                     <p style="font-size:15px;color:#555;line-height:1.7;">If you have any urgent queries, design files, or brand guidelines to share, simply reply to this email and our team will respond promptly.</p>
                     <p style="font-size:15px;color:#333;margin-bottom:5px;">Warm Regards,</p>
-                    <p style="font-size:16px;color:#1A1A2E;font-weight:700;margin-top:0;">Team Inithat Custom Gifts</p>
+                    <p style="font-size:16px;color:#1A1A2E;font-weight:700;margin-top:0;">Team Inithan Custom Gifts</p>
                   </td>
                 </tr>
                 <tr>
@@ -242,9 +242,9 @@ async function sendBulkInquiryEmails(inquiry) {
                     <p style="color:#aaa;font-size:12px;margin:0 0 8px;">
                       📧 <a href="mailto:inithancustomgifts@gmail.com" style="color:#D4AF37;text-decoration:none;">inithancustomgifts@gmail.com</a>
                       &nbsp;&nbsp;|&nbsp;&nbsp;
-                      🌐 <a href="http://localhost:8081" style="color:#D4AF37;text-decoration:none;">inithat.com</a>
+                      🌐 <a href="http://localhost:8081" style="color:#D4AF37;text-decoration:none;">inithan.com</a>
                     </p>
-                    <p style="color:#666;font-size:11px;margin:0;">&copy; 2026 Inithat Custom Gifts. All rights reserved.</p>
+                    <p style="color:#666;font-size:11px;margin:0;">&copy; 2026 Inithan Custom Gifts. All rights reserved.</p>
                     <p style="color:#555;font-size:11px;margin:5px 0 0;">This is an official automated communication. Please do not reply to this automated notice.</p>
                   </td>
                 </tr>

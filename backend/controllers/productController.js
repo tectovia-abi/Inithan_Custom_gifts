@@ -47,7 +47,7 @@ const createProduct = async (req, res) => {
       category: category ? category.trim() : 'Custom Gifts',
       subCategory: subCategory ? subCategory.trim() : '',
       occasions: Array.isArray(occasions) ? occasions.map(o => o.trim()).filter(Boolean) : [],
-      brand: brand ? brand.trim() : 'Inithat Custom Gifts',
+      brand: brand ? brand.trim() : 'Inithan Custom Gifts',
       productType: productType ? productType.trim() : 'Physical',
       keywords: keywords ? keywords.trim() : '',
       status: (status && ['Active', 'Inactive', 'Draft', 'Out of Stock'].includes(status.trim())) ? status.trim() : 'Active',

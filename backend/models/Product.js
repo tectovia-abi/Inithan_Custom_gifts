@@ -7,7 +7,7 @@ const productSchema = new mongoose.Schema({
   category: { type: String, default: 'Custom Gifts', trim: true },
   subCategory: { type: String, default: '', trim: true },
   occasions: [{ type: String, trim: true }],
-  brand: { type: String, default: 'Inithat Custom Gifts', trim: true },
+  brand: { type: String, default: 'Inithan Custom Gifts', trim: true },
   productType: { type: String, default: 'Physical', trim: true },
   keywords: { type: String, default: '', trim: true },
   status: { type: String, default: 'Active', enum: ['Active', 'Inactive', 'Draft', 'Out of Stock'] },

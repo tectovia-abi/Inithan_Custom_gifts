@@ -183,7 +183,7 @@ async function runTests() {
   const testOrder2 = await Order.create({
     orderNumber: 'ICG-IMPERSONATION-' + Date.now(),
     userId: customerUser._id,
-    customer: { name: 'Test', email: 'test@inithat.com', phone: '9999999999' },
+    customer: { name: 'Test', email: 'test@inithan.com', phone: '9999999999' },
     shippingAddress: { address1: '1', city: 'Erode', district: 'Erode', state: 'Tamil Nadu', pincode: '638452' },
     items: [{ name: 'Item', quantity: 1, unitPrice: 10, subtotal: 10 }],
     subtotal: 10, totalAmount: 10,
