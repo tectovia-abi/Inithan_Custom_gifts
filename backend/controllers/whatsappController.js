@@ -23,6 +23,58 @@ const verifyWebhook = (req, res) => {
 
     const expectedToken = (process.env.WHATSAPP_VERIFY_TOKEN || 'inithan_wa_verify_token_2026').trim();
 
+    // 1. If accessed directly in a browser (without Meta query params), show a friendly status page
+    if (!mode && !token && !challenge) {
+      if (req.accepts && req.accepts('html')) {
+        return res.status(200).send(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp Webhook - Inithan Custom Gifts</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0b1120; color: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 14px; max-width: 520px; width: 100%; padding: 32px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
+    .badge { display: inline-block; background: #10b981; color: #022c22; font-weight: 700; font-size: 11px; padding: 4px 10px; border-radius: 999px; margin-bottom: 16px; letter-spacing: 0.5px; text-transform: uppercase; }
+    h1 { font-size: 20px; margin: 0 0 10px; color: #fff; font-weight: 700; }
+    p { font-size: 14px; color: #94a3b8; line-height: 1.6; margin: 0 0 22px; }
+    .box { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; }
+    .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; font-weight: 600; margin-bottom: 4px; }
+    .value { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; color: #38bdf8; word-break: break-all; }
+    .notice { font-size: 12px; color: #cbd5e1; background: rgba(56, 189, 248, 0.1); border-left: 3px solid #38bdf8; padding: 12px; border-radius: 4px; line-height: 1.5; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">● Webhook Live & Ready</div>
+    <h1>Inithan WhatsApp Cloud API</h1>
+    <p>This endpoint receives automated webhook messages and delivery status receipts from Meta WhatsApp Business Platform.</p>
+    <div class="box">
+      <div class="label">Callback URL (for Meta Developer Dashboard)</div>
+      <div class="value">https://inithancustomgifts.com/api/whatsapp/webhook</div>
+    </div>
+    <div class="box">
+      <div class="label">Verify Token (for Meta Developer Dashboard)</div>
+      <div class="value">${expectedToken}</div>
+    </div>
+    <div class="notice">
+      💡 <strong>For Meta Setup:</strong> Paste both values above into your <em>Meta Developer Dashboard &gt; WhatsApp &gt; Configuration &gt; Edit Webhook</em> and click <strong>Verify and Save</strong>.
+    </div>
+  </div>
+</body>
+</html>
+        `);
+      }
+      return res.status(200).json({
+        status: 'active',
+        message: 'WhatsApp Webhook is active and waiting for Meta requests.',
+        callbackUrl: 'https://inithancustomgifts.com/api/whatsapp/webhook',
+        verifyToken: expectedToken
+      });
+    }
+
+    // 2. Meta verification handshake
     if (mode && token) {
       if (mode === 'subscribe' && token === expectedToken) {
         console.log('✅ [WhatsApp Webhook] Meta handshake verified successfully!');
