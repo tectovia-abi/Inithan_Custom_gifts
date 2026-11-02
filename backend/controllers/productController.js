@@ -52,8 +52,16 @@ const createProduct = async (req, res) => {
       keywords: keywords ? keywords.trim() : '',
       status: (status && ['Active', 'Inactive', 'Draft', 'Out of Stock'].includes(status.trim())) ? status.trim() : 'Active',
       price: Number(price),
-      discountPrice: discountPrice ? Number(discountPrice) : 0,
-      offerPercentage: offerPercentage !== undefined ? Number(offerPercentage) : 0,
+      discountPrice: (discountPrice && Number(discountPrice) > 0 && Number(discountPrice) < Number(price)) 
+        ? Number(discountPrice) 
+        : (offerPercentage && Number(offerPercentage) > 0 
+            ? Math.round(Number(price) * (1 - Number(offerPercentage) / 100)) 
+            : 0),
+      offerPercentage: (offerPercentage !== undefined && Number(offerPercentage) > 0)
+        ? Number(offerPercentage)
+        : (discountPrice && Number(discountPrice) > 0 && Number(discountPrice) < Number(price)
+            ? Math.round(((Number(price) - Number(discountPrice)) / Number(price)) * 100)
+            : 0),
       costPrice: costPrice ? Number(costPrice) : 0,
       imageUrl: imageUrl ? imageUrl.trim() : 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png',
       galleryImages: Array.isArray(galleryImages) ? galleryImages : [],
@@ -273,6 +281,13 @@ const updateProduct = async (req, res) => {
     if (price !== undefined) product.price = Number(price);
     if (discountPrice !== undefined) product.discountPrice = Number(discountPrice);
     if (offerPercentage !== undefined) product.offerPercentage = Number(offerPercentage);
+    
+    // Auto-sync discountPrice and offerPercentage if one is set without the other
+    if (product.offerPercentage > 0 && (!product.discountPrice || product.discountPrice <= 0 || product.discountPrice >= product.price)) {
+      product.discountPrice = Math.round(product.price * (1 - product.offerPercentage / 100));
+    } else if (product.discountPrice > 0 && product.discountPrice < product.price && (!product.offerPercentage || product.offerPercentage <= 0)) {
+      product.offerPercentage = Math.round(((product.price - product.discountPrice) / product.price) * 100);
+    }
     if (costPrice !== undefined) product.costPrice = Number(costPrice);
 
     if (imageUrl !== undefined) product.imageUrl = imageUrl.trim();

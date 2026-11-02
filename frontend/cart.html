@@ -289,12 +289,13 @@
     </a>
     <div class="nav-links" id="navLinks">
       <a href="index.html">Home</a>
-      <a href="products.html">Products</a>
-      <a href="bulk-retail.html">Bulk / Retail</a>
-      <a href="offers.html">Offers</a>
-      <a href="reviews.html">Reviews</a>
-      <a href="contact.html">Contact</a>
-      <a href="machines.html">Machines</a>
+      <a href="products.html">All Products</a>
+      <a href="love-romance.html">Love & Romance</a>
+      <a href="birthday.html">Birthday</a>
+      <a href="special-occasions.html">Special Occasions</a>
+      <a href="for-her-and-him.html">For Her & Him</a>
+      <a href="corporate-gifts.html">Corporate Gifts</a>
+      <a href="personalize.html">Personalize</a>
     </div>
     <div class="nav-actions">
       <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
@@ -488,7 +489,13 @@
                     </div>
                   </div>
                 ` : ''}
-                <div class="cart-item-price">₹${Number(item.price).toLocaleString('en-IN')}</div>
+                <div class="cart-item-price">
+                  ₹${Number(item.price).toLocaleString('en-IN')}
+                  ${(item.mrp && Number(item.mrp) > Number(item.price)) ? `
+                    <span style="font-size:0.8rem; color:#94a3b8; text-decoration:line-through; margin-left:6px; font-weight:normal;">₹${Number(item.mrp).toLocaleString('en-IN')}</span>
+                    <span style="font-size:0.75rem; color:#16a34a; font-weight:700; margin-left:4px;">(${Math.round(((item.mrp - item.price) / item.mrp) * 100)}% off)</span>
+                  ` : ''}
+                </div>
               </div>
             </div>
             <div class="cart-item-actions">

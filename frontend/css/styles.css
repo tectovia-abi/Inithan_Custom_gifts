@@ -3,7 +3,7 @@
    ============================================ */
 
 /* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&family=Dancing+Script:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&family=Dancing+Script:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap');
 
 /* CSS Custom Properties */
 :root {
@@ -41,6 +41,7 @@
   --font-display: 'Playfair Display', serif;
   --font-body: 'Inter', sans-serif;
   --font-script: 'Dancing Script', cursive;
+  --font-nav: 'Outfit', 'Poppins', sans-serif;
 
   /* Spacing */
   --space-xs: 0.25rem;
@@ -252,10 +253,25 @@ button {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+  padding: 12px clamp(12px, 1.8vw, 36px) !important;
 }
 
 .navbar .nav-links a {
   color: var(--dark) !important;
+  font-family: var(--font-nav, 'Outfit', 'Poppins', sans-serif) !important;
+  font-size: clamp(0.86rem, 0.95vw, 1.02rem) !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  letter-spacing: 0.15px !important;
+}
+
+.navbar .nav-links a.active,
+.navbar .nav-links a:hover {
+  color: var(--primary, #C41E3A) !important;
+}
+
+.navbar .nav-links a::after {
+  background: var(--primary, #C41E3A) !important;
 }
 
 .navbar .nav-brand-name {
@@ -1369,17 +1385,21 @@ button {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: var(--space-xl);
+  gap: clamp(8px, 1.15vw, 18px);
+  flex-wrap: nowrap;
 }
 
 .nav-links a {
   color: var(--white);
-  font-weight: 500;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+  font-family: var(--font-nav, 'Outfit', 'Poppins', sans-serif);
+  font-weight: 600;
+  font-size: clamp(0.86rem, 0.95vw, 1.02rem);
+  text-transform: none;
+  letter-spacing: 0.15px;
   position: relative;
-  padding: var(--space-xs) 0;
+  padding: 6px 2px;
+  white-space: nowrap;
+  transition: color var(--transition-fast);
 }
 
 .nav-links a::after {
@@ -1388,9 +1408,10 @@ button {
   bottom: -2px;
   left: 0;
   width: 0;
-  height: 2px;
+  height: 2.5px;
+  border-radius: 2px;
   background: var(--gold);
-  transition: var(--transition-normal);
+  transition: width var(--transition-normal);
 }
 
 .nav-links a:hover::after,
@@ -2865,7 +2886,9 @@ button {
   }
 
   .nav-links a {
-    font-size: 1.2rem;
+    font-family: var(--font-nav, 'Outfit', 'Poppins', sans-serif);
+    font-size: 1.15rem;
+    text-transform: none;
   }
 
   .mobile-toggle {

@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const User = require('../models/User');
 const LoginLog = require('../models/LoginLog');
 
@@ -13,6 +14,15 @@ const generateToken = (userId) => {
 
 const signup = async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) {
+      console.warn('⚠️ [AUTH BACKEND] Database not ready during signup attempt');
+      return res.status(503).json({
+        success: false,
+        errorType: 'DATABASE_DISCONNECTED',
+        message: 'Database is currently connecting to MongoDB Atlas. Please ensure your IP is whitelisted and try again in a few seconds.'
+      });
+    }
+
     const { fullName, email, phone, password, confirmPassword } = req.body;
     console.log(`\n========================================`);
     console.log(`📥 [AUTH BACKEND] Signup Request Received for: ${email}`);
@@ -105,6 +115,15 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) {
+      console.warn('⚠️ [AUTH BACKEND] Login Attempt Blocked: Database is not ready or reconnecting.');
+      return res.status(503).json({
+        success: false,
+        errorType: 'DATABASE_DISCONNECTED',
+        message: 'Database is currently connecting to MongoDB Atlas. Please ensure your IP is whitelisted (0.0.0.0/0) and try again.'
+      });
+    }
+
     const { email, password } = req.body;
     console.log(`\n========================================`);
     console.log(`🔑 [AUTH BACKEND] Login Attempt Received for: ${email}`);

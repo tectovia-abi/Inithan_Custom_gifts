@@ -1,0 +1,339 @@
+/* ==========================================================================
+   HERO RUNNER BANNER SHOWCASE
+   Dynamic Auto-Running Image Carousel with Interactive Slides & Micro-Badges
+   ========================================================================== */
+
+.hero-ref-image-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.hero-banner-runner {
+  position: relative;
+  width: 100%;
+  max-width: 530px;
+  aspect-ratio: 4 / 3.4;
+  border-radius: 26px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(196, 30, 58, 0.16), 0 8px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: #ffffff;
+  z-index: 3;
+}
+
+/* Running Progress Line at Top */
+.runner-progress-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.12);
+  z-index: 10;
+}
+
+.runner-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #C41E3A, #ff6b81);
+  transition: width 0.05s linear;
+}
+
+/* Slides Container */
+.runner-slides-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.runner-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.04);
+  transition: opacity 0.65s cubic-bezier(0.165, 0.84, 0.44, 1),
+              transform 0.65s cubic-bezier(0.165, 0.84, 0.44, 1),
+              visibility 0.65s ease;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.runner-slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  z-index: 2;
+}
+
+.runner-slide-img-box {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: linear-gradient(135deg, #FFF5F7 0%, #FFF0F2 100%);
+}
+
+.runner-slide-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.runner-slide:hover .runner-slide-img-box img {
+  transform: scale(1.06);
+}
+
+/* Caption and Tags Overlay */
+.runner-slide-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 45px 22px 20px;
+  background: linear-gradient(to top, rgba(12, 16, 30, 0.92) 0%, rgba(12, 16, 30, 0.55) 65%, transparent 100%);
+  color: #ffffff;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.runner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(196, 30, 58, 0.92);
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  padding: 3.5px 10px;
+  border-radius: 50px;
+  margin-bottom: 6px;
+  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.35);
+}
+
+.runner-slide-title {
+  font-family: var(--font-display, 'Playfair Display', Georgia, serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0 0 3px 0;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.runner-slide-sub {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.runner-slide-cta {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #F0D68C;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: gap 0.2s ease, color 0.2s ease;
+}
+
+.runner-slide:hover .runner-slide-cta {
+  gap: 8px;
+  color: #ffffff;
+}
+
+/* Navigation Buttons */
+.runner-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  color: #1A1A2E;
+  font-size: 1.4rem;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.25s ease;
+  line-height: 1;
+  padding: 0 0 2px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  opacity: 0.75;
+}
+
+.runner-nav-btn:hover {
+  opacity: 1;
+  background: #ffffff;
+  color: var(--primary, #C41E3A);
+  transform: translateY(-50%) scale(1.12);
+}
+
+.runner-nav-btn.prev {
+  left: 12px;
+}
+
+.runner-nav-btn.next {
+  right: 12px;
+}
+
+/* Slide Indicator Dots */
+.runner-indicators {
+  position: absolute;
+  bottom: 14px;
+  right: 18px;
+  display: flex;
+  gap: 6px;
+  z-index: 10;
+}
+
+.runner-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.runner-dot.active {
+  width: 22px;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Floating Badges */
+.hero-runner-trust-badge {
+  position: absolute;
+  top: -15px;
+  right: -10px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(196, 30, 58, 0.15);
+  border-radius: 50px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  z-index: 4;
+  animation: floatMascot 4s ease-in-out infinite;
+}
+
+.trust-star {
+  font-size: 1.1rem;
+}
+
+.trust-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.trust-text strong {
+  font-size: 0.78rem;
+  color: #1A1A2E;
+}
+
+.trust-text small {
+  font-size: 0.65rem;
+  color: #6B7280;
+}
+
+.hero-runner-express-badge {
+  position: absolute;
+  bottom: -15px;
+  left: -10px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(196, 30, 58, 0.15);
+  border-radius: 50px;
+  padding: 7px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #1A1A2E;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  z-index: 4;
+  animation: floatMascot 4.5s ease-in-out infinite 0.5s;
+}
+
+.express-icon {
+  color: #EAB308;
+}
+
+/* Tablet & Mobile Responsiveness */
+@media (max-width: 992px) {
+  .hero-banner-runner {
+    max-width: 460px;
+    margin: 0 auto;
+    aspect-ratio: 4 / 3.2;
+  }
+  .hero-runner-trust-badge {
+    top: -8px;
+    right: 5px;
+    padding: 6px 12px;
+  }
+  .hero-runner-express-badge {
+    bottom: -8px;
+    left: 5px;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-banner-runner {
+    max-width: 100%;
+    border-radius: 18px;
+    aspect-ratio: 1 / 0.9;
+  }
+  .runner-slide-title {
+    font-size: 1.1rem;
+  }
+  .runner-slide-sub {
+    font-size: 0.74rem;
+  }
+  .runner-badge {
+    font-size: 0.62rem;
+    padding: 2.5px 7px;
+  }
+  .runner-slide-overlay {
+    padding: 30px 14px 14px;
+  }
+  .runner-nav-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+  }
+  .hero-runner-trust-badge,
+  .hero-runner-express-badge {
+    display: none;
+  }
+}

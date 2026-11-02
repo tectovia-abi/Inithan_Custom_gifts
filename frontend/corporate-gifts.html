@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Custom corporate gifts, branded employee welcome kits, laser engraved mementos, corporate event hampers, and executive desk sets with company logo.">
+  <meta name="keywords" content="corporate gifts, employee welcome kit, branded corporate gifts, custom mementos, corporate diwali gifts, trophies, promotional merchandise">
+  <title>Corporate Gifts &amp; Branded Merchandise | Inithan Custom Gifts</title>
+  
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/mobile.css">
+  <link rel="stylesheet" href="css/category-pages.css">
+  <link rel="icon" type="image/png" href="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png">
+  <meta name="theme-color" content="#0B192C">
+</head>
+
+<body data-page-type="corporate">
+
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <img id="navLogoImg" src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Inithan Custom Gifts Logo">
+      <div class="nav-brand-text">
+        <span class="nav-brand-name">Inithan Custom Gifts</span>
+        <span class="nav-brand-tagline">Made with Love</span>
+      </div>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="products.html">All Products</a>
+      <a href="love-romance.html">Love & Romance</a>
+      <a href="birthday.html">Birthday</a>
+      <a href="special-occasions.html">Special Occasions</a>
+      <a href="for-her-and-him.html">For Her & Him</a>
+      <a href="corporate-gifts.html" class="active">Corporate Gifts</a>
+      <a href="personalize.html">Personalize</a>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Auth State -->
+      <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
+      <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
+      <span id="navUserGreet" style="display:none; color:var(--gold); font-weight:600; font-size:0.85rem;"></span>
+      <button class="nav-auth-btn login-btn" id="navLogoutBtn" style="display:none; cursor:pointer; border:none;" onclick="logout()">LOGOUT</button>
+      <div class="nav-cart" id="navCart" style="cursor:pointer;" onclick="window.location.href='cart.html'">
+        <span class="cart-icon">🛒</span>
+        <span>CART</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page Wrapper -->
+  <main class="cat-page-wrapper">
+    <div class="cat-container">
+
+      <!-- Hero Banner -->
+      <section class="cat-hero theme-corporate">
+        <div class="cat-hero-content">
+          <span class="cat-hero-badge">🏢 Corporate Excellence &amp; Branding</span>
+          <h1 class="cat-hero-title">
+            Elevate Your Brand with <span class="gold-text">Corporate Gifts</span>
+          </h1>
+          <p class="cat-hero-desc">
+            Impress clients, welcome new team members, and celebrate company milestones with premium personalized gifts featuring your corporate logo and custom branding.
+          </p>
+          <div class="cat-hero-actions">
+            <a href="#quote-calc" class="cat-btn-primary">⚡ Instant Bulk Estimator</a>
+            <a href="bulk-retail.html" class="cat-btn-outline">📋 Full Bulk Catalog</a>
+          </div>
+        </div>
+
+        <div class="cat-hero-decor">
+          <img src="images/categories/combo.jpg" alt="Corporate Gifts" class="cat-hero-decor-img" onerror="this.src='images/gift-box.png'">
+        </div>
+      </section>
+
+      <!-- Instant Bulk Quote Calculator -->
+      <section id="quote-calc" class="corp-calc-card">
+        <div class="corp-calc-grid">
+          <div>
+            <span style="font-size:0.85rem; font-weight:700; color:#c41e3a; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px;">Instant Pricing Tool</span>
+            <h2 style="font-size:1.6rem; font-weight:800; color:#0f172a; margin-bottom:12px;">Bulk Quotation Calculator</h2>
+            <p style="color:#64748b; font-size:0.92rem; margin-bottom:24px; line-height:1.5;">
+              Choose your product and required volume to see estimated tier discounts with company logo engraving &amp; GST billing included.
+            </p>
+
+            <div class="corp-form-group">
+              <label class="corp-form-label" for="corpProductType">Select Corporate Product</label>
+              <select id="corpProductType" class="corp-select">
+                <option value="1299" selected>Executive Welcome Kit (Diary + Flask + Pen) — ₹1,299</option>
+                <option value="999">Custom Laser Crystal / Wood Memento Trophy — ₹999</option>
+                <option value="599">Stainless Steel Temperature Flask with Logo — ₹599</option>
+                <option value="399">Custom Matte Coffee Tumbler — ₹399</option>
+                <option value="249">Laser Engraved Metal Keychain Pack — ₹249</option>
+                <option value="1899">Festive Corporate Hamper Gift Box — ₹1,899</option>
+              </select>
+            </div>
+
+            <div class="corp-form-group">
+              <label class="corp-form-label" for="corpQty">Order Quantity (Pieces)</label>
+              <input type="number" id="corpQty" class="corp-input" value="50" min="10" max="5000" step="5">
+              <span style="font-size:0.78rem; color:#94a3b8; margin-top:4px; display:block;">Minimum bulk order: 10 units</span>
+            </div>
+          </div>
+
+          <div style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:16px; padding:28px; text-align:center;">
+            <span style="font-size:0.85rem; font-weight:600; color:#64748b; text-transform:uppercase;">Estimated Bulk Total</span>
+            <div id="corpEstPrice" style="font-size:2.4rem; font-weight:800; color:#0b192c; margin:10px 0;">₹49,158</div>
+            <div id="corpDiscountTier" style="display:inline-block; background:#dcfce7; color:#15803d; font-weight:700; font-size:0.82rem; padding:6px 14px; border-radius:50px; margin-bottom:20px;">
+              18% Bulk Discount Applied (₹983/unit)
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <button onclick="openWhatsAppInquiry('Hello Inithan Team, I would like to get a formal quote for ' + document.getElementById('corpQty').value + ' units of ' + document.getElementById('corpProductType').options[document.getElementById('corpProductType').selectedIndex].text)" class="cat-btn-primary" style="justify-content:center; background:#25d366; color:#fff; border:none; cursor:pointer;">
+                💬 Request Quote on WhatsApp
+              </button>
+              <a href="bulk-retail.html" style="font-size:0.85rem; color:#0b192c; font-weight:600; text-decoration:underline;">
+                Or submit formal GST bulk inquiry form →
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Popular Corporate Offerings -->
+      <section class="curated-showcase-section">
+        <div class="section-head">
+          <div>
+            <h2 class="section-head-title">Corporate Categories</h2>
+            <p class="section-head-sub">Top choices for startups, IT enterprises, and institutions</p>
+          </div>
+        </div>
+
+        <div class="curated-cards-grid">
+          <div class="curated-card" onclick="switchCategoryFilter('kit', this)">
+            <div class="curated-card-icon">
+              <img src="images/categories/combo.jpg" alt="Welcome Kits">
+            </div>
+            <span class="curated-card-title">Employee Kits</span>
+            <span class="curated-card-sub">Diary, Pen, Flask</span>
+          </div>
+
+          <div class="curated-card" onclick="switchCategoryFilter('trophy', this)">
+            <div class="curated-card-icon">
+              <img src="images/categories/engravings.jpg" alt="Awards & Trophies">
+            </div>
+            <span class="curated-card-title">Awards &amp; Mementos</span>
+            <span class="curated-card-sub">Laser Crystal &amp; Wood</span>
+          </div>
+
+          <div class="curated-card" onclick="switchCategoryFilter('mug', this)">
+            <div class="curated-card-icon">
+              <img src="images/custom-mug.png" alt="Branded Drinkware">
+            </div>
+            <span class="curated-card-title">Logo Drinkware</span>
+            <span class="curated-card-sub">Thermal Tumblers</span>
+          </div>
+
+          <div class="curated-card" onclick="switchCategoryFilter('keychain', this)">
+            <div class="curated-card-icon">
+              <img src="images/unique/unique_photo_keychain.jpg" alt="Metal Keychains">
+            </div>
+            <span class="curated-card-title">Logo Keychains</span>
+            <span class="curated-card-sub">Branded Swag</span>
+          </div>
+
+          <div class="curated-card" onclick="switchCategoryFilter('festive', this)">
+            <div class="curated-card-icon">
+              <img src="images/occasions/occ_luxury_hamper.jpg" alt="Festive Hampers">
+            </div>
+            <span class="curated-card-title">Festive Hampers</span>
+            <span class="curated-card-sub">Diwali &amp; New Year</span>
+          </div>
+
+          <div class="curated-card" onclick="switchCategoryFilter('shirt', this)">
+            <div class="curated-card-icon">
+              <img src="images/custom-tshirt.png" alt="Company Apparel">
+            </div>
+            <span class="curated-card-title">Corporate Apparel</span>
+            <span class="curated-card-sub">Embroidered / Printed</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Filter Pills Bar -->
+      <section id="catalog">
+        <div class="section-head">
+          <div>
+            <h2 class="section-head-title">Featured Corporate Products</h2>
+            <p class="section-head-sub">Available for single sample evaluation and large quantity orders</p>
+          </div>
+        </div>
+
+        <div class="cat-pills-bar">
+          <button class="cat-pill active" onclick="switchCategoryFilter('all', this)">🏢 All Corporate Items</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('kit', this)">📦 Welcome Onboarding Kits</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('trophy', this)">🏆 Mementos &amp; Trophies</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('mug', this)">☕ Branded Flasks &amp; Bottles</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('keychain', this)">🔑 Metal Swag &amp; Keychains</button>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="cat-products-grid" id="categoryProductsGrid">
+          <!-- Dynamically populated by category-pages.js -->
+        </div>
+      </section>
+
+      <!-- Trust Strip -->
+      <section class="cat-trust-strip">
+        <div class="cat-trust-item">
+          <div class="cat-trust-icon">🧾</div>
+          <div>
+            <div class="cat-trust-title">GST Compliant Billing</div>
+            <div class="cat-trust-sub">Official tax invoices for corporate input credit</div>
+          </div>
+        </div>
+        <div class="cat-trust-item">
+          <div class="cat-trust-icon">🖨️</div>
+          <div>
+            <div class="cat-trust-title">In-House Manufacturing</div>
+            <div class="cat-trust-sub">Direct factory pricing with no middleman</div>
+          </div>
+        </div>
+        <div class="cat-trust-item">
+          <div class="cat-trust-icon">📐</div>
+          <div>
+            <div class="cat-trust-title">Free Digital Sample</div>
+            <div class="cat-trust-sub">Virtual 3D mockup before mass production</div>
+          </div>
+        </div>
+        <div class="cat-trust-item">
+          <div class="cat-trust-icon">🤝</div>
+          <div>
+            <div class="cat-trust-title">Dedicated Account Lead</div>
+            <div class="cat-trust-sub">End-to-end support from quote to doorstep</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo-link">
+          <img src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Inithan Custom Gifts" class="footer-logo-img">
+          <div class="footer-brand-text">
+            <span class="footer-brand-name">Inithan Custom Gifts</span>
+            <span class="footer-brand-tagline">Made with Love</span>
+          </div>
+        </a>
+        <p>Premium corporate gifting and customized merchandise trusted by corporate leaders nationwide.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <div class="footer-heading-bar"></div>
+        <ul class="footer-links-list">
+          <li><a href="index.html"><span class="chevron-arrow">›</span> Home</a></li>
+          <li><a href="products.html"><span class="chevron-arrow">›</span> All Products</a></li>
+          <li><a href="love-romance.html"><span class="chevron-arrow">›</span> Love &amp; Romance</a></li>
+          <li><a href="birthday.html"><span class="chevron-arrow">›</span> Birthday Gifts</a></li>
+          <li><a href="special-occasions.html"><span class="chevron-arrow">›</span> Special Occasions</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Business Links</h4>
+        <div class="footer-heading-bar"></div>
+        <ul class="footer-links-list">
+          <li><a href="bulk-retail.html"><span class="chevron-arrow">›</span> Bulk / Retail Portal</a></li>
+          <li><a href="corporate-gifts.html"><span class="chevron-arrow">›</span> Corporate Gifts</a></li>
+          <li><a href="machines.html"><span class="chevron-arrow">›</span> Machine Printing Tech</a></li>
+          <li><a href="offers.html"><span class="chevron-arrow">›</span> Special Offers</a></li>
+          <li><a href="contact.html"><span class="chevron-arrow">›</span> Corporate Helpdesk</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-contact">
+        <h4>Corporate Desk</h4>
+        <div class="footer-heading-bar"></div>
+        <ul class="footer-contact">
+          <li><span class="contact-icon">📍</span> Gandhipuram, Coimbatore - 641012, India</li>
+          <li><span class="contact-icon">📞</span> <a href="tel:+919944444834">+91 99444 44834</a></li>
+          <li><span class="contact-icon">✉️</span> <a href="mailto:inithancustomgifts@gmail.com">inithancustomgifts@gmail.com</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">
+        <p>© 2026 <a href="index.html">Inithan Custom Gifts</a>. All rights reserved.</p>
+      </div>
+      <div class="footer-bottom-right">
+        <div class="secure-payments-title"><span class="lock-icon">🔒</span> GST Invoicing &amp; Bank Transfer Supported</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="index.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🏠</span>
+      <span class="mob-nav-label">Home</span>
+    </a>
+    <a href="products.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🛍️</span>
+      <span class="mob-nav-label">Products</span>
+    </a>
+    <a href="corporate-gifts.html" class="mob-nav-item active">
+      <span class="mob-nav-icon">🏢</span>
+      <span class="mob-nav-label">Corporate</span>
+    </a>
+    <a href="bulk-retail.html" class="mob-nav-item">
+      <span class="mob-nav-icon">📦</span>
+      <span class="mob-nav-label">Bulk</span>
+    </a>
+    <a href="cart.html" class="mob-nav-item mob-cart-link" id="mobCartLink">
+      <span class="mob-nav-icon">🛒</span>
+      <span class="mob-nav-label">Cart</span>
+      <span class="mob-cart-badge" id="mobCartBadge" style="display:none;">0</span>
+    </a>
+  </nav>
+
+  <!-- WhatsApp Floating Action Button -->
+  <a href="https://wa.me/919944444834?text=Hi%20Inithan%20Custom%20Gifts!%20I'm%20inquiring%20about%20corporate%20gifts%20and%20bulk%20orders." class="whatsapp-fab" target="_blank" aria-label="Chat on WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+    </svg>
+  </a>
+
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/category-pages.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCategoryPageProducts('corporate', 'all');
+      initCorporateCalc();
+    });
+  </script>
+</body>
+</html>

@@ -291,6 +291,65 @@ async function fetchDashboardData(token) {
         });
       }
 
+      // ── Real-time Auto-Slug & SEO Helper ────────────────────────
+      const pNameInput = document.getElementById('p_name');
+      const pSlugInput = document.getElementById('p_urlSlug');
+      const pMetaTitle = document.getElementById('p_metaTitle');
+      const pMetaDesc = document.getElementById('p_metaDescription');
+      const pKeywordsInput = document.getElementById('p_keywords');
+      const slugPreview = document.getElementById('slugPreviewText');
+      const btnAutoSEO = document.getElementById('btnAutoGenerateSEO');
+
+      function slugify(text) {
+        return (text || '').toLowerCase().trim()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-');
+      }
+
+      if (pNameInput && pSlugInput) {
+        pNameInput.addEventListener('input', () => {
+          if (!pSlugInput.dataset.manualEdited) {
+            const s = slugify(pNameInput.value);
+            pSlugInput.value = s;
+            if (slugPreview) slugPreview.textContent = s || 'custom-product';
+          }
+        });
+
+        pSlugInput.addEventListener('input', () => {
+          pSlugInput.dataset.manualEdited = 'true';
+          if (slugPreview) slugPreview.textContent = slugify(pSlugInput.value) || 'custom-product';
+        });
+      }
+
+      if (btnAutoSEO) {
+        btnAutoSEO.addEventListener('click', () => {
+          const name = pNameInput ? pNameInput.value.trim() : '';
+          const cat = document.getElementById('p_category') ? document.getElementById('p_category').value : 'Custom Gifts';
+
+          if (!name) {
+            alert('Please enter the Product Name first!');
+            return;
+          }
+
+          const s = slugify(name);
+          pSlugInput.value = s;
+          if (slugPreview) slugPreview.textContent = s;
+
+          pMetaTitle.value = `${name} | Personalized Gifts | Inithan Custom Gifts`.slice(0, 60);
+          pMetaDesc.value = `Order custom ${name} online at Inithan Gifts. Handcrafted with your photos & text. Premium quality, best prices, fast delivery across India!`.slice(0, 160);
+
+          const autoKw = [
+            name.toLowerCase(),
+            cat.replace(/[^a-zA-Z\s]/g, '').trim().toLowerCase(),
+            'personalized gift',
+            'customized gift',
+            'inithan gifts'
+          ].filter(Boolean);
+          pKeywordsInput.value = Array.from(new Set(autoKw)).join(', ');
+        });
+      }
+
       addProductForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -299,6 +358,61 @@ async function fetchDashboardData(token) {
         saveBtn.textContent = 'Saving...';
 
         const selectedOccasions = addProductOccasionPicker ? addProductOccasionPicker.getSelected() : [];
+        const occasionsSet = new Set(selectedOccasions);
+        const keywordsSet = new Set((document.getElementById('p_keywords').value || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean));
+
+        // Target Store Pages mapping
+        const pageHome = document.getElementById('page_home') ? document.getElementById('page_home').checked : true;
+        const pageRomance = document.getElementById('page_romance') && document.getElementById('page_romance').checked;
+        const pageBirthday = document.getElementById('page_birthday') && document.getElementById('page_birthday').checked;
+        const pageOccasions = document.getElementById('page_occasions') && document.getElementById('page_occasions').checked;
+        const pageHer = document.getElementById('page_her') && document.getElementById('page_her').checked;
+        const pageHim = document.getElementById('page_him') && document.getElementById('page_him').checked;
+        const pageCorporate = document.getElementById('page_corporate') && document.getElementById('page_corporate').checked;
+        const pagePersonalize = document.getElementById('page_personalize') ? document.getElementById('page_personalize').checked : true;
+
+        if (pageRomance) {
+          occasionsSet.add('Anniversary Gifts');
+          occasionsSet.add('Valentine Special');
+          occasionsSet.add('Love & Romance');
+          keywordsSet.add('love');
+          keywordsSet.add('romance');
+          keywordsSet.add('couple');
+        }
+        if (pageBirthday) {
+          occasionsSet.add('Birthday Gifts');
+          keywordsSet.add('birthday');
+          keywordsSet.add('bday');
+        }
+        if (pageOccasions) {
+          occasionsSet.add('Special Occasions');
+          occasionsSet.add('Wedding Gifts');
+          keywordsSet.add('occasion');
+        }
+        if (pageHer) {
+          keywordsSet.add('her');
+          keywordsSet.add('for her');
+          keywordsSet.add('women');
+        }
+        if (pageHim) {
+          keywordsSet.add('him');
+          keywordsSet.add('for him');
+          keywordsSet.add('men');
+        }
+        if (pageCorporate) {
+          occasionsSet.add('Corporate Events');
+          occasionsSet.add('Bulk Orders');
+          keywordsSet.add('corporate');
+          keywordsSet.add('memento');
+        }
+        if (pagePersonalize) {
+          keywordsSet.add('personalized');
+          keywordsSet.add('custom');
+        }
+
+        const finalOccasions = Array.from(occasionsSet);
+        const finalKeywords = Array.from(keywordsSet).join(', ');
+        const finalSlug = (document.getElementById('p_urlSlug').value || slugify(document.getElementById('p_name').value)).trim();
 
         const payload = {
           name: document.getElementById('p_name').value,
@@ -306,7 +420,7 @@ async function fetchDashboardData(token) {
           brand: document.getElementById('p_brand').value,
           category: document.getElementById('p_category').value,
           subCategory: document.getElementById('p_subCategory').value,
-          occasions: selectedOccasions,
+          occasions: finalOccasions,
           productType: document.getElementById('p_productType').value,
           status: (document.getElementById('p_status') && document.getElementById('p_status').value) ? document.getElementById('p_status').value : 'Active',
           imageUrl: primaryImageS3Url,
@@ -329,14 +443,14 @@ async function fetchDashboardData(token) {
             description: document.getElementById('p_dim_description') ? document.getElementById('p_dim_description').value : ''
           },
           shippingType: document.getElementById('p_shippingType') ? document.getElementById('p_shippingType').value : 'Standard Delivery',
-          keywords: document.getElementById('p_keywords').value,
-          metaTitle: document.getElementById('p_metaTitle').value,
-          metaDescription: document.getElementById('p_metaDescription').value,
-          urlSlug: document.getElementById('p_urlSlug').value,
+          keywords: finalKeywords,
+          metaTitle: document.getElementById('p_metaTitle').value || `${document.getElementById('p_name').value} | Inithan Custom Gifts`,
+          metaDescription: document.getElementById('p_metaDescription').value || document.getElementById('p_shortDescription').value,
+          urlSlug: finalSlug,
           isFeatured: document.getElementById('p_isFeatured').checked,
           isBestSeller: document.getElementById('p_isBestSeller').checked,
           isNewArrival: document.getElementById('p_isNewArrival').checked,
-          showOnHomepage: document.getElementById('p_showOnHomepage').checked,
+          showOnHomepage: pageHome,
           allowReviews: document.getElementById('p_allowReviews').checked,
           allowCustomText: document.getElementById('p_allowCustomText') ? document.getElementById('p_allowCustomText').checked : true,
           customTextLabel: document.getElementById('p_customTextLabel') ? document.getElementById('p_customTextLabel').value : 'Custom Name / Message to Print',
@@ -418,6 +532,22 @@ function populateProducts(products) {
     if (p.category === 'Photo Frames') { badgeClass = 'badge-purple'; catIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>'; }
     if (p.category === 'Custom Mugs') { badgeClass = 'badge-orange'; catIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>'; }
 
+    const statusVal = p.status || 'Active';
+    let statusBadgeHtml = '';
+    if (statusVal === 'Active') {
+      statusBadgeHtml = `<span class="badge-status-active" style="background:#dcfce7; color:#15803d; border:1px solid #bbf7d0; padding:4px 10px; border-radius:20px; font-weight:700; font-size:0.76rem; display:inline-flex; align-items:center; gap:4px;">🟢 Active (Live)</span>`;
+    } else if (statusVal === 'Draft') {
+      statusBadgeHtml = `<span class="badge-status-draft" style="background:#fef3c7; color:#b45309; border:1px solid #fde68a; padding:4px 10px; border-radius:20px; font-weight:700; font-size:0.76rem; display:inline-flex; align-items:center; gap:4px;">🟡 Draft (Hidden)</span>`;
+    } else if (statusVal === 'Out of Stock') {
+      statusBadgeHtml = `<span class="badge-status-oos" style="background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; padding:4px 10px; border-radius:20px; font-weight:700; font-size:0.76rem; display:inline-flex; align-items:center; gap:4px;">🔴 Out of Stock</span>`;
+    } else {
+      statusBadgeHtml = `<span style="background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; padding:4px 10px; border-radius:20px; font-weight:700; font-size:0.76rem; display:inline-flex; align-items:center; gap:4px;">⚪ ${statusVal}</span>`;
+    }
+
+    const quickToggleBtn = statusVal === 'Draft' 
+      ? `<button class="action-btn" title="Publish live immediately to products.html" data-action="toggle-status" data-id="${p._id}" data-status="Active" style="color:#15803d; font-size:0.75rem; font-weight:700; padding:4px 10px; width:auto; border-color:#86efac; background:#f0fdf4; border-radius:6px; cursor:pointer;">🚀 Publish</button>`
+      : `<button class="action-btn" title="Set to Draft (Hide from storefront)" data-action="toggle-status" data-id="${p._id}" data-status="Draft" style="color:#b45309; font-size:0.72rem; padding:4px 8px; width:auto; border-color:#fde68a; background:#fef3c7; border-radius:6px; cursor:pointer;">Draft</button>`;
+
     return `
       <tr>
         <td>
@@ -435,9 +565,21 @@ function populateProducts(products) {
           </span>
         </td>
         <td>${p.code || 'N/A'}</td>
-        <td>₹${p.price}</td>
+        <td>
+          ${(p.discountPrice && Number(p.discountPrice) > 0 && Number(p.discountPrice) < Number(p.price)) ? `
+            <div>
+              <strong style="color: #15803d; font-size: 0.95rem;">₹${Number(p.discountPrice).toLocaleString('en-IN')}</strong>
+              <div style="font-size: 0.76rem; color: #94a3b8; text-decoration: line-through;">M.R.P: ₹${Number(p.price).toLocaleString('en-IN')}</div>
+              <span style="display: inline-block; font-size: 0.72rem; font-weight: 700; color: #b91c1c; background: #fee2e2; padding: 1px 6px; border-radius: 4px; margin-top: 2px;">
+                ${p.offerPercentage || Math.round(((p.price - p.discountPrice) / p.price) * 100)}% OFF
+              </span>
+            </div>
+          ` : `<strong>₹${Number(p.price).toLocaleString('en-IN')}</strong>`}
+        </td>
+        <td>${statusBadgeHtml}</td>
         <td>
           <div class="action-cell">
+            ${quickToggleBtn}
             <button class="action-btn view-btn" title="View" data-action="view-product" data-id="${p._id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
             <button class="action-btn edit-btn" title="Edit" data-action="edit-product" data-id="${p._id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
             <button class="action-btn delete-btn" title="Delete" data-action="delete-product" data-id="${p._id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
@@ -667,7 +809,12 @@ function viewProduct(id) {
         <h2 style="margin-top:0; margin-bottom:5px;">${product.name}</h2>
         <div style="color: #6b7280; margin-bottom: 15px;">Code: ${product.code} | Category: ${product.category}</div>
         <p><strong>Description:</strong><br/>${product.shortDescription || 'N/A'}</p>
-        <p><strong>Price:</strong> ₹${product.price}</p>
+        <p><strong>Regular Price (M.R.P.):</strong> ₹${Number(product.price).toLocaleString('en-IN')}</p>
+        ${(product.discountPrice && Number(product.discountPrice) > 0 && Number(product.discountPrice) < Number(product.price)) ? `
+          <p><strong>Discounted Price:</strong> <span style="color:#15803d; font-weight:700; font-size:1.05rem;">₹${Number(product.discountPrice).toLocaleString('en-IN')}</span> <span style="background:#fee2e2; color:#b91c1c; font-weight:700; font-size:0.8rem; padding:2px 8px; border-radius:4px; margin-left:6px;">${product.offerPercentage || Math.round(((product.price - product.discountPrice)/product.price)*100)}% OFF</span></p>
+        ` : (product.offerPercentage > 0 ? `
+          <p><strong>Discount Offer:</strong> <span style="color:#b91c1c; font-weight:700;">${product.offerPercentage}% OFF</span></p>
+        ` : '')}
         <p><strong>Stock:</strong> ${product.stockQuantity !== undefined ? product.stockQuantity : 'N/A'}</p>
         <p><strong>Status:</strong> ${product.status || 'Active'}</p>
       </div>
@@ -876,6 +1023,15 @@ document.addEventListener('click', (e) => {
     return;
   }
 
+  // Quick Toggle Status (Publish / Draft)
+  const toggleStatusBtn = e.target.closest('[data-action="toggle-status"]');
+  if (toggleStatusBtn) {
+    const id = toggleStatusBtn.getAttribute('data-id');
+    const targetStatus = toggleStatusBtn.getAttribute('data-status');
+    quickToggleProductStatus(id, targetStatus);
+    return;
+  }
+
   // View Product
   const viewProdBtn = e.target.closest('[data-action="view-product"]');
   if (viewProdBtn) {
@@ -908,6 +1064,43 @@ document.addEventListener('click', (e) => {
     return;
   }
 });
+
+// Quick toggle between Active & Draft
+async function quickToggleProductStatus(id, newStatus) {
+  const prod = cachedProducts.find(p => p._id === id);
+  if (!prod) return;
+  
+  try {
+    const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
+    const apiBase = typeof API_BASE !== 'undefined' ? API_BASE : window.location.origin;
+    
+    const payload = {
+      ...prod,
+      status: newStatus
+    };
+    
+    const res = await fetch(`${apiBase}/api/products/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    const data = await res.json();
+    if (res.ok && data.success) {
+      prod.status = newStatus;
+      populateProducts(cachedProducts);
+      alert(`Product "${prod.name}" is now ${newStatus === 'Active' ? '🟢 LIVE on products.html!' : '🟡 saved as Draft (Hidden).'}`);
+    } else {
+      alert(data.message || 'Failed to update status');
+    }
+  } catch (err) {
+    console.error('Status toggle error:', err);
+    alert('Server error updating product status');
+  }
+}
 
 // Global S3 file upload helper
 async function uploadFileToS3(file, endpoint = '/api/upload/single') {

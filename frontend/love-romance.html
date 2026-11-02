@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Personalized romantic gifts for couples, anniversaries, and Valentine's Day. Custom acrylic photo plaques, couple mugs, 3D lamps, and engraved wooden keepsakes.">
+  <meta name="keywords" content="love and romance gifts, anniversary gifts, couple gifts, valentine gifts, romantic photo frames, couple mug, spotify plaque">
+  <title>Love & Romance Gifts | Inithan Custom Gifts</title>
+  
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/mobile.css">
+  <link rel="stylesheet" href="css/category-pages.css">
+  <link rel="icon" type="image/png" href="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png">
+  <meta name="theme-color" content="#C41E3A">
+</head>
+
+<body data-page-type="romance">
+
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <img id="navLogoImg" src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Inithan Custom Gifts Logo">
+      <div class="nav-brand-text">
+        <span class="nav-brand-name">Inithan Custom Gifts</span>
+        <span class="nav-brand-tagline">Made with Love</span>
+      </div>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="products.html">All Products</a>
+      <a href="love-romance.html" class="active">Love & Romance</a>
+      <a href="birthday.html">Birthday</a>
+      <a href="special-occasions.html">Special Occasions</a>
+      <a href="for-her-and-him.html">For Her & Him</a>
+      <a href="corporate-gifts.html">Corporate Gifts</a>
+      <a href="personalize.html">Personalize</a>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Auth State -->
+      <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
+      <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
+      <span id="navUserGreet" style="display:none; color:var(--gold); font-weight:600; font-size:0.85rem;"></span>
+      <button class="nav-auth-btn login-btn" id="navLogoutBtn" style="display:none; cursor:pointer; border:none;" onclick="logout()">LOGOUT</button>
+      <div class="nav-cart" id="navCart" style="cursor:pointer;" onclick="window.location.href='cart.html'">
+        <span class="cart-icon">🛒</span>
+        <span>CART</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page Wrapper -->
+  <main class="cat-page-wrapper">
+    <div class="cat-container">
+
+      <!-- Hero Banner -->
+      <section class="cat-hero theme-romance">
+        <div class="cat-hero-content">
+          <span class="cat-hero-badge">💕 Handcrafted With Love</span>
+          <h1 class="cat-hero-title">
+            Celebrate Endless <span class="gold-text">Love &amp; Romance</span>
+          </h1>
+          <p class="cat-hero-desc">
+            Turn your cherished memories, anniversaries, and love songs into timeless personalized keepsakes. Specially handcrafted to make your partner smile every day.
+          </p>
+          <div class="cat-hero-actions">
+            <a href="#catalog" class="cat-btn-primary">Browse Romantic Gifts ↓</a>
+            <a href="customize-product.html" class="cat-btn-outline">✨ Create Couple Keepsake</a>
+          </div>
+        </div>
+
+        <div class="cat-hero-decor">
+          <img src="images/occasions/occ_heart_cushion.jpg" alt="Romantic Couple Gifts" class="cat-hero-decor-img" onerror="this.src='images/gift-box.png'">
+        </div>
+      </section>
+
+      <!-- Curated Category Cards -->
+      <section class="curated-showcase-section">
+        <div class="section-head">
+          <div>
+            <h2 class="section-head-title">Trending Couple Collections</h2>
+            <p class="section-head-sub">Popular romantic keepsakes chosen by over 10,000+ couples</p>
+          </div>
+        </div>
+
+        <div class="curated-cards-grid">
+          <div class="curated-card" onclick="switchCategoryFilter('spotify', this)">
+            <div class="curated-card-icon">
+              <img src="images/unique/unique_spotify_acrylic.jpg" alt="Spotify Plaques">
+            </div>
+            <span class="curated-card-title">Spotify Plaques</span>
+            <span class="curated-card-sub">Play Your Song</span>
+          </div>
+
+          <div class="curated-card" onclick="switchCategoryFilter('lamp', this)">
+            <div class="curated-card-icon">
+              <img src="images/unique/unique_glow_frame.jpg" alt="Couple Lamps">
+            </div>
+            <span class="curated-card-title">Glowing Lamps</span>
+            <span class="curated-card-sub">Warm 3D Heart Glow</span>
+          </div>
+
+          <div class="curated-card" onclick="switchCategoryFilter('mug', this)">
+            <div class="curated-card-icon">
+              <img src="images/unique/unique_magic_mug.jpg" alt="Couple Magic Mugs">
+            </div>
+            <span class="curated-card-title">Magic Mugs</span>
+            <span class="curated-card-sub">Heat Reveal Photos</span>
+          </div>
+
+          <div class="curated-card" onclick="switchCategoryFilter('wood', this)">
+            <div class="curated-card-icon">
+              <img src="images/unique/unique_wood_engraving.jpg" alt="Carved Wood Plaques">
+            </div>
+            <span class="curated-card-title">Wood Engraving</span>
+            <span class="curated-card-sub">Handcrafted Art</span>
+          </div>
+
+          <div class="curated-card" onclick="switchCategoryFilter('keychain', this)">
+            <div class="curated-card-icon">
+              <img src="images/unique/unique_photo_keychain.jpg" alt="Couple Keychains">
+            </div>
+            <span class="curated-card-title">Keychains</span>
+            <span class="curated-card-sub">Carry Your Love</span>
+          </div>
+
+          <div class="curated-card" onclick="switchCategoryFilter('hamper', this)">
+            <div class="curated-card-icon">
+              <img src="images/occasions/occ_combo_hamper.jpg" alt="Romantic Hampers">
+            </div>
+            <span class="curated-card-title">Gift Hampers</span>
+            <span class="curated-card-sub">All-in-One Boxes</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Filter Pills Bar -->
+      <section id="catalog">
+        <div class="section-head">
+          <div>
+            <h2 class="section-head-title">Romantic Catalog &amp; Gifts</h2>
+            <p class="section-head-sub">Filter by romantic occasion or keepsake type</p>
+          </div>
+        </div>
+
+        <div class="cat-pills-bar">
+          <button class="cat-pill active" onclick="switchCategoryFilter('all', this)">❤️ All Romantic (12)</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('anniversary', this)">💍 Anniversaries</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('valentine', this)">💖 Valentine Specials</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('spotify', this)">🎵 Spotify &amp; Song Art</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('lamp', this)">💡 Glowing Photo Lamps</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('hamper', this)">🎁 Luxury Hampers</button>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="cat-products-grid" id="categoryProductsGrid">
+          <!-- Dynamically populated by category-pages.js -->
+        </div>
+      </section>
+
+      <!-- Trust Strip -->
+      <section class="cat-trust-strip">
+        <div class="cat-trust-item">
+          <div class="cat-trust-icon">💖</div>
+          <div>
+            <div class="cat-trust-title">Handcrafted with Care</div>
+            <div class="cat-trust-sub">Every piece previewed before dispatch</div>
+          </div>
+        </div>
+        <div class="cat-trust-item">
+          <div class="cat-trust-icon">🚀</div>
+          <div>
+            <div class="cat-trust-title">Express Delivery</div>
+            <div class="cat-trust-sub">Fast shipping across all India pincodes</div>
+          </div>
+        </div>
+        <div class="cat-trust-item">
+          <div class="cat-trust-icon">🎁</div>
+          <div>
+            <div class="cat-trust-title">Luxury Gift Box</div>
+            <div class="cat-trust-sub">Complimentary premium gift wrapping</div>
+          </div>
+        </div>
+        <div class="cat-trust-item">
+          <div class="cat-trust-icon">💬</div>
+          <div>
+            <div class="cat-trust-title">Instant WhatsApp Help</div>
+            <div class="cat-trust-sub">Send photos &amp; questions 24/7</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo-link">
+          <img src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Inithan Custom Gifts" class="footer-logo-img">
+          <div class="footer-brand-text">
+            <span class="footer-brand-name">Inithan Custom Gifts</span>
+            <span class="footer-brand-tagline">Made with Love</span>
+          </div>
+        </a>
+        <p>Turning memories into handcrafted custom gifts for every romantic milestone and celebration.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <div class="footer-heading-bar"></div>
+        <ul class="footer-links-list">
+          <li><a href="index.html"><span class="chevron-arrow">›</span> Home</a></li>
+          <li><a href="products.html"><span class="chevron-arrow">›</span> All Products</a></li>
+          <li><a href="love-romance.html"><span class="chevron-arrow">›</span> Love &amp; Romance</a></li>
+          <li><a href="birthday.html"><span class="chevron-arrow">›</span> Birthday Gifts</a></li>
+          <li><a href="special-occasions.html"><span class="chevron-arrow">›</span> Special Occasions</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <div class="footer-heading-bar"></div>
+        <ul class="footer-links-list">
+          <li><a href="for-her-and-him.html"><span class="chevron-arrow">›</span> For Her &amp; Him</a></li>
+          <li><a href="corporate-gifts.html"><span class="chevron-arrow">›</span> Corporate Gifts</a></li>
+          <li><a href="personalize.html"><span class="chevron-arrow">›</span> Personalize Studio</a></li>
+          <li><a href="offers.html"><span class="chevron-arrow">›</span> Special Offers</a></li>
+          <li><a href="contact.html"><span class="chevron-arrow">›</span> Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-contact">
+        <h4>Get in Touch</h4>
+        <div class="footer-heading-bar"></div>
+        <ul class="footer-contact">
+          <li><span class="contact-icon">📍</span> Gandhipuram, Coimbatore - 641012, India</li>
+          <li><span class="contact-icon">📞</span> <a href="tel:+919944444834">+91 99444 44834</a></li>
+          <li><span class="contact-icon">✉️</span> <a href="mailto:inithancustomgifts@gmail.com">inithancustomgifts@gmail.com</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">
+        <p>© 2026 <a href="index.html">Inithan Custom Gifts</a>. All rights reserved.</p>
+      </div>
+      <div class="footer-bottom-right">
+        <div class="secure-payments-title"><span class="lock-icon">🔒</span> 100% Secure Checkout</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="index.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🏠</span>
+      <span class="mob-nav-label">Home</span>
+    </a>
+    <a href="products.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🛍️</span>
+      <span class="mob-nav-label">Products</span>
+    </a>
+    <a href="love-romance.html" class="mob-nav-item active">
+      <span class="mob-nav-icon">💖</span>
+      <span class="mob-nav-label">Romance</span>
+    </a>
+    <a href="personalize.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🎨</span>
+      <span class="mob-nav-label">Custom</span>
+    </a>
+    <a href="cart.html" class="mob-nav-item mob-cart-link" id="mobCartLink">
+      <span class="mob-nav-icon">🛒</span>
+      <span class="mob-nav-label">Cart</span>
+      <span class="mob-cart-badge" id="mobCartBadge" style="display:none;">0</span>
+    </a>
+  </nav>
+
+  <!-- WhatsApp Floating Action Button -->
+  <a href="https://wa.me/919944444834?text=Hi%20Inithan%20Custom%20Gifts!%20I'm%20looking%20for%20a%20romantic%20gift." class="whatsapp-fab" target="_blank" aria-label="Chat on WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+    </svg>
+  </a>
+
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/category-pages.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCategoryPageProducts('romance', 'all');
+    });
+  </script>
+</body>
+</html>

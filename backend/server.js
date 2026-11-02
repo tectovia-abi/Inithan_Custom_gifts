@@ -19,6 +19,8 @@ const uploadRoutes = require('./routes/uploadRoutes');
 const paymentRoutes  = require('./routes/paymentRoutes');
 const orderRoutes    = require('./routes/orderRoutes');
 const addressRoutes  = require('./routes/addressRoutes');
+const homepageConfigRoutes = require('./routes/homepageConfigRoutes');
+const whatsappRoutes = require('./routes/whatsappRoutes');
 const Product        = require('./models/Product');
 
 const app = express();
@@ -68,8 +70,7 @@ app.use(cors({
 const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 300,
-  standardHeaders: true,
-  legacyHeaders: false,
+  skip: (req) => req.originalUrl.startsWith('/api/whatsapp/webhook'),
   message: { success: false, message: 'Too many requests, please try again later.' }
 });
 app.use('/api', generalLimiter);
@@ -77,8 +78,6 @@ app.use('/api', generalLimiter);
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 15,
-  standardHeaders: true,
-  legacyHeaders: false,
   message: { success: false, message: 'Too many auth attempts, please try again in 15 minutes.' }
 });
 app.use('/api/auth/login', authLimiter);
@@ -87,8 +86,6 @@ app.use('/api/auth/signup', authLimiter);
 const inquiryLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   max: 5,
-  standardHeaders: true,
-  legacyHeaders: false,
   message: { success: false, message: 'Too many inquiries submitted, please try again in an hour.' }
 });
 app.use('/api/bulk-inquiry', inquiryLimiter);
@@ -115,6 +112,8 @@ app.use('/api/payment', paymentRoutes);
 app.use('/api',         paymentRoutes);  // shorthand: /api/create-order, /api/verify-payment
 app.use('/api/orders',  orderRoutes);
 app.use('/api/address', addressRoutes);
+app.use('/api/homepage-config', homepageConfigRoutes);
+app.use('/api/whatsapp', whatsappRoutes);
 
 // ── Health check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
@@ -162,7 +161,37 @@ app.get('/sitemap.xml', async (req, res) => {
   <url>
     <loc>https://inithancustomgifts.com/products.html</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://inithancustomgifts.com/love-romance.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://inithancustomgifts.com/birthday.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://inithancustomgifts.com/special-occasions.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://inithancustomgifts.com/for-her-and-him.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://inithancustomgifts.com/corporate-gifts.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://inithancustomgifts.com/personalize.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
   </url>
   <url>
     <loc>https://inithancustomgifts.com/bulk-retail.html</loc>

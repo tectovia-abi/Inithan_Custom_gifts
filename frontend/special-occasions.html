@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Custom gifts for special occasions: weddings, housewarmings, baby showers, festive celebrations, anniversaries, and retirement mementos.">
+  <meta name="keywords" content="special occasions gifts, wedding gifts, housewarming gifts, baby shower gifts, diwali gift hamper, custom name plates, retirement trophy">
+  <title>Special Occasions Gifts | Inithan Custom Gifts</title>
+  
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/mobile.css">
+  <link rel="stylesheet" href="css/category-pages.css">
+  <link rel="icon" type="image/png" href="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png">
+  <meta name="theme-color" content="#C41E3A">
+</head>
+
+<body data-page-type="occasions">
+
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <img id="navLogoImg" src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Inithan Custom Gifts Logo">
+      <div class="nav-brand-text">
+        <span class="nav-brand-name">Inithan Custom Gifts</span>
+        <span class="nav-brand-tagline">Made with Love</span>
+      </div>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="products.html">All Products</a>
+      <a href="love-romance.html">Love & Romance</a>
+      <a href="birthday.html">Birthday</a>
+      <a href="special-occasions.html" class="active">Special Occasions</a>
+      <a href="for-her-and-him.html">For Her & Him</a>
+      <a href="corporate-gifts.html">Corporate Gifts</a>
+      <a href="personalize.html">Personalize</a>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Auth State -->
+      <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
+      <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
+      <span id="navUserGreet" style="display:none; color:var(--gold); font-weight:600; font-size:0.85rem;"></span>
+      <button class="nav-auth-btn login-btn" id="navLogoutBtn" style="display:none; cursor:pointer; border:none;" onclick="logout()">LOGOUT</button>
+      <div class="nav-cart" id="navCart" style="cursor:pointer;" onclick="window.location.href='cart.html'">
+        <span class="cart-icon">🛒</span>
+        <span>CART</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page Wrapper -->
+  <main class="cat-page-wrapper">
+    <div class="cat-container">
+
+      <!-- Hero Banner -->
+      <section class="cat-hero theme-occasions">
+        <div class="cat-hero-content">
+          <span class="cat-hero-badge">🌟 Meaningful Milestones</span>
+          <h1 class="cat-hero-title">
+            Celebrate Every <span class="gold-text">Special Occasion</span>
+          </h1>
+          <p class="cat-hero-desc">
+            Life is full of milestone moments worth treasuring forever. From wedding vows and new home blessings to festive celebrations and retirement citations.
+          </p>
+          <div class="cat-hero-actions">
+            <a href="#catalog" class="cat-btn-primary">Browse All Occasions ↓</a>
+            <a href="contact.html" class="cat-btn-outline">💬 Custom Event Orders</a>
+          </div>
+        </div>
+
+        <div class="cat-hero-decor">
+          <img src="images/occasions/occ_wooden_frame.jpg" alt="Special Occasions Gifts" class="cat-hero-decor-img" onerror="this.src='images/gift-box.png'">
+        </div>
+      </section>
+
+      <!-- Occasion Milestones Grid -->
+      <section class="curated-showcase-section">
+        <div class="section-head">
+          <div>
+            <h2 class="section-head-title">Select by Life Occasion</h2>
+            <p class="section-head-sub">Curated gifts crafted to match each celebration</p>
+          </div>
+        </div>
+
+        <div class="curated-cards-grid">
+          <div class="curated-card" onclick="switchCategoryFilter('wedding', this)">
+            <div class="curated-card-icon">
+              <img src="images/categories/frames.jpg" alt="Weddings">
+            </div>
+            <span class="curated-card-title">Wedding &amp; Reception</span>
+            <span class="curated-card-sub">Couples &amp; Return Gifts</span>
+          </div>
+
+          <div class="curated-card" onclick="switchCategoryFilter('housewarming', this)">
+            <div class="curated-card-icon">
+              <img src="images/unique/unique_glow_frame.jpg" alt="Housewarming">
+            </div>
+            <span class="curated-card-title">Housewarming</span>
+            <span class="curated-card-sub">LED Nameplates &amp; Art</span>
+          </div>
+
+          <div class="curated-card" onclick="switchCategoryFilter('baby', this)">
+            <div class="curated-card-icon">
+              <img src="images/occasions/occ_daily_calendar.jpg" alt="Baby Milestones">
+            </div>
+            <span class="curated-card-title">Baby Shower &amp; Birth</span>
+            <span class="curated-card-sub">Milestone Memory Boards</span>
+          </div>
+
+          <div class="curated-card" onclick="switchCategoryFilter('festive', this)">
+            <div class="curated-card-icon">
+              <img src="images/occasions/occ_combo_hamper.jpg" alt="Festive Diwali">
+            </div>
+            <span class="curated-card-title">Festive &amp; Diwali</span>
+            <span class="curated-card-sub">Traditional Hampers</span>
+          </div>
+
+          <div class="curated-card" onclick="switchCategoryFilter('parents', this)">
+            <div class="curated-card-icon">
+              <img src="images/unique/unique_wood_engraving.jpg" alt="Parents Day">
+            </div>
+            <span class="curated-card-title">Mother's &amp; Father's Day</span>
+            <span class="curated-card-sub">Engraved Wooden Art</span>
+          </div>
+
+          <div class="curated-card" onclick="switchCategoryFilter('farewell', this)">
+            <div class="curated-card-icon">
+              <img src="images/categories/engravings.jpg" alt="Farewell & Achievements">
+            </div>
+            <span class="curated-card-title">Farewell &amp; Honors</span>
+            <span class="curated-card-sub">Mementos &amp; Plaques</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Filter Pills Bar -->
+      <section id="catalog">
+        <div class="section-head">
+          <div>
+            <h2 class="section-head-title">Occasion Products Catalog</h2>
+            <p class="section-head-sub">Explore bespoke personalized keepsakes</p>
+          </div>
+        </div>
+
+        <div class="cat-pills-bar">
+          <button class="cat-pill active" onclick="switchCategoryFilter('all', this)">✨ All Occasions (12)</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('wedding', this)">💍 Wedding &amp; Anniversaries</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('housewarming', this)">🏡 Griha Pravesh &amp; Home</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('baby', this)">👶 Baby Milestones</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('festive', this)">🪔 Festive &amp; Diwali</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('trophy', this)">🏆 Trophies &amp; Farewell</button>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="cat-products-grid" id="categoryProductsGrid">
+          <!-- Dynamically populated by category-pages.js -->
+        </div>
+      </section>
+
+      <!-- Trust Strip -->
+      <section class="cat-trust-strip">
+        <div class="cat-trust-item">
+          <div class="cat-trust-icon">💎</div>
+          <div>
+            <div class="cat-trust-title">Premium Craftsmanship</div>
+            <div class="cat-trust-sub">Laser-cut wood, optical acrylic &amp; brass</div>
+          </div>
+        </div>
+        <div class="cat-trust-item">
+          <div class="cat-trust-icon">📦</div>
+          <div>
+            <div class="cat-trust-title">Bulk Event Pricing</div>
+            <div class="cat-trust-sub">Discounts for return gift orders (10+ pcs)</div>
+          </div>
+        </div>
+        <div class="cat-trust-item">
+          <div class="cat-trust-icon">🎨</div>
+          <div>
+            <div class="cat-trust-title">Custom Design Assistance</div>
+            <div class="cat-trust-sub">Send event dates, names, or religious motifs</div>
+          </div>
+        </div>
+        <div class="cat-trust-item">
+          <div class="cat-trust-icon">🚚</div>
+          <div>
+            <div class="cat-trust-title">Safe Doorstep Delivery</div>
+            <div class="cat-trust-sub">Tracked express shipping with live updates</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo-link">
+          <img src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Inithan Custom Gifts" class="footer-logo-img">
+          <div class="footer-brand-text">
+            <span class="footer-brand-name">Inithan Custom Gifts</span>
+            <span class="footer-brand-tagline">Made with Love</span>
+          </div>
+        </a>
+        <p>Celebrating the milestones of life with customized gifts that bring joy and fond memories.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <div class="footer-heading-bar"></div>
+        <ul class="footer-links-list">
+          <li><a href="index.html"><span class="chevron-arrow">›</span> Home</a></li>
+          <li><a href="products.html"><span class="chevron-arrow">›</span> All Products</a></li>
+          <li><a href="love-romance.html"><span class="chevron-arrow">›</span> Love &amp; Romance</a></li>
+          <li><a href="birthday.html"><span class="chevron-arrow">›</span> Birthday Gifts</a></li>
+          <li><a href="special-occasions.html"><span class="chevron-arrow">›</span> Special Occasions</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Specialties</h4>
+        <div class="footer-heading-bar"></div>
+        <ul class="footer-links-list">
+          <li><a href="for-her-and-him.html"><span class="chevron-arrow">›</span> For Her &amp; Him</a></li>
+          <li><a href="corporate-gifts.html"><span class="chevron-arrow">›</span> Corporate Gifts</a></li>
+          <li><a href="personalize.html"><span class="chevron-arrow">›</span> Personalize Studio</a></li>
+          <li><a href="offers.html"><span class="chevron-arrow">›</span> Special Offers</a></li>
+          <li><a href="contact.html"><span class="chevron-arrow">›</span> Contact Support</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-contact">
+        <h4>Get in Touch</h4>
+        <div class="footer-heading-bar"></div>
+        <ul class="footer-contact">
+          <li><span class="contact-icon">📍</span> Gandhipuram, Coimbatore - 641012, India</li>
+          <li><span class="contact-icon">📞</span> <a href="tel:+919944444834">+91 99444 44834</a></li>
+          <li><span class="contact-icon">✉️</span> <a href="mailto:inithancustomgifts@gmail.com">inithancustomgifts@gmail.com</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">
+        <p>© 2026 <a href="index.html">Inithan Custom Gifts</a>. All rights reserved.</p>
+      </div>
+      <div class="footer-bottom-right">
+        <div class="secure-payments-title"><span class="lock-icon">🔒</span> 100% Safe Payments</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="index.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🏠</span>
+      <span class="mob-nav-label">Home</span>
+    </a>
+    <a href="products.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🛍️</span>
+      <span class="mob-nav-label">Products</span>
+    </a>
+    <a href="special-occasions.html" class="mob-nav-item active">
+      <span class="mob-nav-icon">🌟</span>
+      <span class="mob-nav-label">Occasions</span>
+    </a>
+    <a href="personalize.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🎨</span>
+      <span class="mob-nav-label">Custom</span>
+    </a>
+    <a href="cart.html" class="mob-nav-item mob-cart-link" id="mobCartLink">
+      <span class="mob-nav-icon">🛒</span>
+      <span class="mob-nav-label">Cart</span>
+      <span class="mob-cart-badge" id="mobCartBadge" style="display:none;">0</span>
+    </a>
+  </nav>
+
+  <!-- WhatsApp Floating Action Button -->
+  <a href="https://wa.me/919944444834?text=Hi%20Inithan%20Custom%20Gifts!%20I'm%20looking%20for%20special%20occasion%20gifts." class="whatsapp-fab" target="_blank" aria-label="Chat on WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+    </svg>
+  </a>
+
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/category-pages.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCategoryPageProducts('occasions', 'all');
+    });
+  </script>
+</body>
+</html>

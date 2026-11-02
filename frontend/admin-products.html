@@ -32,6 +32,9 @@
           <a href="admin-products.html" class="admin-nav-link active">
             <span>🛍️</span> Products
           </a>
+          <a href="admin-homepage.html" class="admin-nav-link">
+            <span>🏠</span> Homepage Sections
+          </a>
           <a href="admin-offers.html" class="admin-nav-link">
             <span>🏷️</span> Occasion Offers
           </a>
@@ -160,11 +163,12 @@
                     <th>CATEGORY</th>
                     <th>CODE / SKU</th>
                     <th>PRICE</th>
+                    <th>STATUS</th>
                     <th>ACTIONS</th>
                   </tr>
                 </thead>
                 <tbody id="productsTableBody">
-                  <tr><td colspan="5" class="text-center" style="padding: 40px;">Loading products...</td></tr>
+                  <tr><td colspan="6" class="text-center" style="padding: 40px;">Loading products...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -257,18 +261,18 @@
                   <h3>Pricing & Inventory</h3>
                   <div class="row-2">
                     <div class="input-group">
-                      <label>Selling Price (₹) *</label>
-                      <input type="number" step="0.01" id="editProductPrice" min="0" required placeholder="0.00">
+                      <label>Regular Price / M.R.P. (₹) *</label>
+                      <input type="number" step="0.01" id="editProductPrice" min="0" required placeholder="e.g. 1500.00">
                     </div>
                     <div class="input-group">
                       <label>Offer Percentage (%)</label>
-                      <input type="number" step="0.01" id="editProductOfferPercentage" min="0" max="100" placeholder="0%">
+                      <input type="number" step="0.01" id="editProductOfferPercentage" min="0" max="100" placeholder="e.g. 38%">
                     </div>
                   </div>
                   <div class="row-2">
                     <div class="input-group">
-                      <label>Discount Price (₹)</label>
-                      <input type="number" step="0.01" id="editProductDiscountPrice" min="0" placeholder="0.00">
+                      <label>Discounted Selling Price (₹) <span style="font-size:0.75rem; color:#15803d; font-weight:600;">(What customer pays)</span></label>
+                      <input type="number" step="0.01" id="editProductDiscountPrice" min="0" placeholder="e.g. 930.00">
                     </div>
                     <div class="input-group">
                       <label>Stock Quantity</label>
@@ -276,11 +280,12 @@
                     </div>
                   </div>
                   <div class="input-group">
-                    <label>Status</label>
+                    <label>Status (Live Storefront Visibility)</label>
                     <select id="editProductStatus">
-                      <option value="Active">Active</option>
-                      <option value="Inactive">Inactive</option>
-                      <option value="Out of Stock">Out of Stock</option>
+                      <option value="Active">🟢 Active (Live in Store)</option>
+                      <option value="Draft">🟡 Draft (Hidden from Storefront)</option>
+                      <option value="Inactive">⚪ Inactive (Disabled)</option>
+                      <option value="Out of Stock">🔴 Out of Stock</option>
                     </select>
                   </div>
                 </div>

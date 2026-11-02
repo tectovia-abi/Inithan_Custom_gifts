@@ -273,6 +273,9 @@
           <a href="admin-products.html" class="admin-nav-link active">
             <span>🛍️</span> Products
           </a>
+          <a href="admin-homepage.html" class="admin-nav-link">
+            <span>🏠</span> Homepage Sections
+          </a>
           <a href="admin-offers.html" class="admin-nav-link">
             <span>🏷️</span> Occasion Offers
           </a>
@@ -409,17 +412,17 @@
                     </h3>
                     <div class="form-row-2" style="margin-bottom: 14px;">
                       <div class="input-group">
-                        <label>Selling Price (₹) *</label>
-                        <input type="number" step="0.01" min="0" id="p_price" required placeholder="0.00">
+                        <label>Regular Price / M.R.P. (₹) *</label>
+                        <input type="number" step="0.01" min="0" id="p_price" required placeholder="e.g. 1500.00">
                       </div>
                       <div class="input-group">
                         <label>Offer Percentage (%)</label>
-                        <input type="number" step="0.01" min="0" max="100" id="p_offerPercentage" placeholder="0%">
+                        <input type="number" step="0.01" min="0" max="100" id="p_offerPercentage" placeholder="e.g. 38%">
                       </div>
                     </div>
                     <div class="input-group">
-                      <label>Discount Price (₹)</label>
-                      <input type="number" step="0.01" min="0" id="p_discountPrice" placeholder="0.00">
+                      <label>Discounted Selling Price (₹) <span style="font-size:0.78rem; color:#15803d; font-weight:600;">(What customer pays)</span></label>
+                      <input type="number" step="0.01" min="0" id="p_discountPrice" placeholder="e.g. 930.00">
                     </div>
                   </div>
 
@@ -524,11 +527,12 @@
                       <span class="badge">Publishing</span>
                     </h3>
                     <div class="input-group" style="margin-bottom: 14px;">
-                      <label>Product Status</label>
+                      <label>Product Status *</label>
                       <select id="p_status">
-                        <option value="Active">Active (Live in Store)</option>
-                        <option value="Draft">Draft (Hidden)</option>
+                        <option value="Active" selected>🟢 Active (Live in Store - Shows on products.html immediately)</option>
+                        <option value="Draft">🟡 Draft (Hidden - Saved in admin only, not visible to customers)</option>
                       </select>
+                      <span style="font-size:0.75rem; color:#64748b; margin-top:4px; display:block;">Select <b>Active</b> so the product shows up for customers on <code>products.html</code>.</span>
                     </div>
                     <div class="input-group">
                       <label>Storefront Visibility</label>
@@ -601,27 +605,58 @@
                     </div>
                   </div>
 
+                  <!-- Target Store Pages (Page Routing) -->
+                  <div class="form-card">
+                    <h3 class="card-title">
+                      <span>🎯 Target Store Pages</span>
+                      <span class="badge" style="background:#e0f2fe; color:#0284c7;">Page Routing</span>
+                    </h3>
+                    <p style="font-size:0.8rem; color:#64748b; margin-top:-6px; margin-bottom:12px;">
+                      Select which page(s) in your header menu this product should appear on:
+                    </p>
+                    <div class="pill-checkbox-group" style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                      <label class="pill-label"><input type="checkbox" id="page_home" checked> <span>🏠 Home Page</span></label>
+                      <label class="pill-label"><input type="checkbox" id="page_all" checked disabled> <span>🛍️ All Products</span></label>
+                      <label class="pill-label"><input type="checkbox" id="page_romance"> <span>💖 Love &amp; Romance</span></label>
+                      <label class="pill-label"><input type="checkbox" id="page_birthday"> <span>🎂 Birthday</span></label>
+                      <label class="pill-label"><input type="checkbox" id="page_occasions"> <span>🌟 Special Occasions</span></label>
+                      <label class="pill-label"><input type="checkbox" id="page_her"> <span>🌸 For Her</span></label>
+                      <label class="pill-label"><input type="checkbox" id="page_him"> <span>🎩 For Him</span></label>
+                      <label class="pill-label"><input type="checkbox" id="page_corporate"> <span>🏢 Corporate Gifts</span></label>
+                      <label class="pill-label"><input type="checkbox" id="page_personalize" checked> <span>🎨 Personalize Studio</span></label>
+                    </div>
+                  </div>
+
                   <!-- SEO & Discovery Card -->
                   <div class="form-card" style="margin-bottom: 0;">
-                    <h3 class="card-title">
-                      <span>🔍 SEO & Discovery</span>
-                      <span class="badge">Search Tags</span>
-                    </h3>
-                    <div class="input-group" style="margin-bottom: 12px;">
-                      <label>Keywords (Comma separated)</label>
-                      <input type="text" id="p_keywords" placeholder="mug, custom, photo">
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; border-bottom:1px solid #f1f5f9; padding-bottom:8px;">
+                      <h3 class="card-title" style="margin:0; border:none; padding:0;">
+                        <span>🔍 SEO &amp; Discovery</span>
+                      </h3>
+                      <button type="button" id="btnAutoGenerateSEO" class="btn btn-outline" style="padding:4px 10px; font-size:0.75rem; border-color:#c41e3a; color:#c41e3a; font-weight:700; border-radius:8px; cursor:pointer;">
+                        ⚡ Auto-Generate SEO
+                      </button>
                     </div>
+
                     <div class="input-group" style="margin-bottom: 12px;">
-                      <label>Meta Title</label>
-                      <input type="text" id="p_metaTitle" placeholder="SEO Title">
+                      <label>URL Slug (Permanent Link)</label>
+                      <input type="text" id="p_urlSlug" placeholder="e.g. custom-couple-acrylic-lamp">
+                      <span style="font-size:0.72rem; color:#94a3b8;">Google-friendly URL: /products/<b id="slugPreviewText">custom-product</b></span>
                     </div>
+
                     <div class="input-group" style="margin-bottom: 12px;">
-                      <label>Meta Description</label>
-                      <textarea id="p_metaDescription" rows="2" placeholder="SEO Description"></textarea>
+                      <label>Meta Title (SEO Headline - max 60 chars)</label>
+                      <input type="text" id="p_metaTitle" placeholder="e.g. Personalized Couple Acrylic Lamp | Inithan Custom Gifts">
                     </div>
+
+                    <div class="input-group" style="margin-bottom: 12px;">
+                      <label>Meta Description (Google Summary - max 160 chars)</label>
+                      <textarea id="p_metaDescription" rows="2" placeholder="e.g. Buy custom couple acrylic LED lamp online. Personalized with photo & names. Free delivery in India. Order now at Inithan Gifts!"></textarea>
+                    </div>
+
                     <div class="input-group">
-                      <label>URL Slug</label>
-                      <input type="text" id="p_urlSlug" placeholder="custom-wall-clock">
+                      <label>Keywords (Search Tags, comma separated)</label>
+                      <input type="text" id="p_keywords" placeholder="e.g. couple lamp, custom gift, anniversary gift, led lamp">
                     </div>
                   </div>
 

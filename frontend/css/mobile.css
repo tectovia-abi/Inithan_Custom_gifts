@@ -123,12 +123,14 @@
 
   .nav-links a,
   .nav-menu a {
+    font-family: 'Outfit', 'Poppins', sans-serif !important;
+    text-transform: none !important;
     padding: 14px 24px !important;
-    font-size: 0.95rem !important;
+    font-size: 1rem !important;
     font-weight: 600 !important;
     color: #1F2937 !important;
     border-bottom: 1px solid #F3F4F6;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.15px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -1294,9 +1296,13 @@
     padding: 0 3px;
   }
 
-  /* Push page content above bottom nav */
+  /* Push page content above bottom nav via footer padding instead of body to prevent white gap */
   body {
-    padding-bottom: calc(75px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: 0 !important;
+  }
+
+  .footer {
+    padding-bottom: calc(85px + env(safe-area-inset-bottom, 0px)) !important;
   }
 
   /* WhatsApp FAB sits above bottom nav */

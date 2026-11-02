@@ -192,12 +192,13 @@ function initNavbar() {
       }
     });
 
-    navLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) {
-        link.classList.add('active');
-      }
-    });
+    if (current && document.querySelector(`.nav-links a[href="#${current}"]`)) {
+      navLinks.forEach(link => {
+        if (link.getAttribute('href') && link.getAttribute('href').startsWith('#')) {
+          link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
+        }
+      });
+    }
   });
 }
 
@@ -386,6 +387,51 @@ async function loadDatabaseProducts() {
     if (data.success && Array.isArray(data.products)) {
       allStorefrontProducts = data.products.filter(p => (p.status || 'Active') === 'Active');
       renderStorefrontProducts(allStorefrontProducts);
+
+      // Handle URL query parameters (?search=..., ?category=..., ?budget=...)
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchParam = urlParams.get('search') || urlParams.get('q');
+        const budgetParam = urlParams.get('budget');
+        const catParam = urlParams.get('category');
+        const occParam = urlParams.get('occasion');
+        let needsFilter = false;
+
+        if (searchParam) {
+          const searchInput = document.getElementById('mainProductSearch');
+          if (searchInput) {
+            searchInput.value = searchParam;
+            needsFilter = true;
+          }
+        }
+        if (budgetParam) {
+          const priceCb = document.querySelector(`.price-filter-db[value="under${budgetParam}"]`) || 
+                          document.querySelector(`.price-filter-db[value="${budgetParam}"]`);
+          if (priceCb) {
+            priceCb.checked = true;
+            needsFilter = true;
+          }
+        }
+        if (catParam) {
+          const catCb = Array.from(document.querySelectorAll('.cat-filter-db')).find(cb => cb.value.toLowerCase().includes(catParam.toLowerCase()));
+          if (catCb) {
+            catCb.checked = true;
+            needsFilter = true;
+          }
+        }
+        if (occParam) {
+          const occCb = Array.from(document.querySelectorAll('.occ-filter-db')).find(cb => cb.value.toLowerCase().includes(occParam.toLowerCase()));
+          if (occCb) {
+            occCb.checked = true;
+            needsFilter = true;
+          }
+        }
+        if (needsFilter) {
+          applyStorefrontFilters();
+        }
+      } catch (e) {
+        console.warn('URL param parse error:', e);
+      }
     } else {
       allStorefrontProducts = [];
       grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--gray-600); font-size: 1.1rem; font-weight: 500;">No products found in catalog. Add products in the admin panel to publish them here!</div>';
@@ -416,7 +462,7 @@ function renderStorefrontProducts(productList) {
     
     const sellingPrice = Number(p.price) || 0;
     
-    // Priority: 1. Specific Occasion Offer Price -> 2. Product discountPrice -> 3. Base price
+    // Priority: 1. Specific Occasion Offer Price -> 2. Product discountPrice -> 3. offerPercentage -> 4. Base price
     let displayPrice = sellingPrice;
     let hasOffer = false;
     let badgeText = '';
@@ -429,13 +475,18 @@ function renderStorefrontProducts(productList) {
     } else if (p.discountPrice && Number(p.discountPrice) > 0 && Number(p.discountPrice) < sellingPrice) {
       displayPrice = Number(p.discountPrice);
       hasOffer = true;
-      badgeText = p.offerPercentage > 0 ? `${p.offerPercentage}% OFF` : 'SALE';
+      const calcPct = (p.offerPercentage && Number(p.offerPercentage) > 0)
+        ? Number(p.offerPercentage)
+        : Math.round(((sellingPrice - displayPrice) / sellingPrice) * 100);
+      badgeText = `${calcPct}% OFF`;
     } else if (p.offerPercentage && Number(p.offerPercentage) > 0) {
-      hasOffer = true;
-      badgeText = `${p.offerPercentage}% OFF`;
+      const calcPct = Number(p.offerPercentage);
+      displayPrice = Math.round(sellingPrice * (1 - calcPct / 100));
+      hasOffer = sellingPrice > displayPrice;
+      badgeText = `${calcPct}% OFF`;
     }
 
-    const calcPct = sellingPrice > displayPrice ? Math.round(((sellingPrice - displayPrice) / sellingPrice) * 100) : (p.offerPercentage || 0);
+    const calcPct = sellingPrice > displayPrice ? Math.round(((sellingPrice - displayPrice) / sellingPrice) * 100) : (Number(p.offerPercentage) || 0);
 
     // Realistic rating & social proof (deterministic per product)
     const nameSeed = (p.name || '').split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
@@ -452,7 +503,7 @@ function renderStorefrontProducts(productList) {
            data-occasions="${occasionsList.join(',').toLowerCase()}"
            data-price="${displayPrice}">
         <div class="p-card-media">
-          ${hasOffer && calcPct > 0 ? `<span class="product-badge sale">${calcPct}% off</span>` : (hasOffer && badgeText ? `<span class="product-badge sale">${badgeText}</span>` : '')}
+          ${sellingPrice > displayPrice && calcPct > 0 ? `<span class="product-badge sale">${calcPct}% off</span>` : (hasOffer && badgeText ? `<span class="product-badge sale">${badgeText}</span>` : '')}
           <a href="product-details.html?id=${p._id}" class="product-image" title="${p.name.replace(/"/g, '&quot;')}">
             <img src="${imgSrc}" alt="${p.name}" class="p-card-img" data-fallback="${FALLBACK_IMG}" loading="lazy">
           </a>
@@ -477,7 +528,7 @@ function renderStorefrontProducts(productList) {
             <div class="price-main-wrap">
               <span class="p-price-sym">₹</span><span class="current">${displayPrice.toLocaleString('en-IN')}</span>
             </div>
-            ${hasOffer && sellingPrice > displayPrice ? `
+            ${sellingPrice > displayPrice ? `
               <span class="p-mrp">M.R.P: ₹${sellingPrice.toLocaleString('en-IN')}</span>
               <span class="p-discount-pct">(${calcPct}% off)</span>
             ` : ''}
@@ -543,8 +594,16 @@ function applyStorefrontFilters() {
     const pOccasions = (Array.isArray(p.occasions) ? p.occasions : []).map(o => o.toLowerCase());
     const matchesOccasion = selectedOccasions.length === 0 || selectedOccasions.some(sel => pOccasions.includes(sel));
 
-    // 4. Price range filter
-    const price = Number(p.discountPrice && p.discountPrice > 0 ? p.discountPrice : p.price) || 0;
+    // 4. Price range filter (based on effective discounted price)
+    let effectivePrice = Number(p.price) || 0;
+    if (p.offerPrice && Number(p.offerPrice) > 0 && Number(p.offerPrice) < effectivePrice) {
+      effectivePrice = Number(p.offerPrice);
+    } else if (p.discountPrice && Number(p.discountPrice) > 0 && Number(p.discountPrice) < effectivePrice) {
+      effectivePrice = Number(p.discountPrice);
+    } else if (p.offerPercentage && Number(p.offerPercentage) > 0) {
+      effectivePrice = Math.round(effectivePrice * (1 - Number(p.offerPercentage) / 100));
+    }
+    const price = effectivePrice;
     let matchesPrice = selectedPrices.length === 0;
     if (!matchesPrice) {
       if (selectedPrices.includes('under500') && price < 500) matchesPrice = true;

@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homepage Section Manager | Inithan Custom Gifts Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="icon" type="image/png" href="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png">
+  <style>
+    .hp-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      padding: 16px 24px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+      margin-bottom: 24px;
+      border: 1px solid #e2e8f0;
+      position: sticky;
+      top: 15px;
+      z-index: 99;
+    }
+    .hp-top-title h2 {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hp-top-title p {
+      margin: 4px 0 0 0;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+    .hp-top-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn-save-hp {
+      background: #C41E3A;
+      color: #ffffff;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(196, 30, 58, 0.25);
+      transition: all 0.2s ease;
+    }
+    .btn-save-hp:hover {
+      background: #a01830;
+      transform: translateY(-1px);
+    }
+    .btn-preview-hp {
+      background: #f8fafc;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-preview-hp:hover {
+      background: #e2e8f0;
+    }
+
+    /* Section Accordion / Cards */
+    .hp-sections-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .section-card {
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      overflow: hidden;
+      transition: all 0.25s ease;
+    }
+    .section-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 24px;
+      background: #ffffff;
+      border-bottom: 1px solid #f1f5f9;
+      cursor: pointer;
+      user-select: none;
+    }
+    .section-card-header:hover {
+      background: #fafafb;
+    }
+    .section-badge-id {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 28px;
+      padding: 0 6px;
+      background: #f1f5f9;
+      color: #475569;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      margin-right: 12px;
+    }
+    .section-title-wrap {
+      display: flex;
+      align-items: center;
+    }
+    .section-title-wrap h3 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title-wrap span.desc {
+      font-size: 0.82rem;
+      color: #64748b;
+      font-weight: 400;
+      margin-left: 10px;
+    }
+    .section-header-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 26px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e1;
+      transition: .3s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #10b981;
+    }
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+    .status-text {
+      font-size: 0.82rem;
+      font-weight: 700;
+      min-width: 65px;
+    }
+    .status-active { color: #10b981; }
+    .status-disabled { color: #94a3b8; }
+
+    .section-card-body {
+      padding: 24px;
+      background: #fafafb;
+    }
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .field-group label {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .field-group input[type="text"],
+    .field-group select,
+    .field-group textarea {
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      background: #ffffff;
+      color: #1e293b;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .field-group input[type="text"]:focus,
+    .field-group select:focus,
+    .field-group textarea:focus {
+      border-color: #C41E3A;
+      box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
+    }
+    .field-helper {
+      font-size: 0.74rem;
+      color: #64748b;
+    }
+    .count-highlight-box {
+      background: #eff6ff;
+      border: 1px dashed #3b82f6;
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .count-highlight-box strong {
+      font-size: 0.9rem;
+      color: #1e3a8a;
+      display: block;
+    }
+    .count-highlight-box span {
+      font-size: 0.78rem;
+      color: #3b82f6;
+    }
+
+    /* Fixed item cards for Category & Navbar */
+    .edit-item-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #ffffff;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      transition: all 0.2s ease;
+    }
+    .edit-item-row:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .item-num-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: #64748b;
+      font-weight: 700;
+      font-size: 0.78rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .cat-thumb-box {
+      width: 58px;
+      height: 58px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
+      flex-shrink: 0;
+      background: #f8fafc;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: all 0.2s ease;
+    }
+    .cat-thumb-box:hover {
+      border-color: #3b82f6;
+      transform: scale(1.03);
+    }
+    .cat-thumb-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .cat-thumb-hover-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.68rem;
+      font-weight: 700;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .cat-thumb-box:hover .cat-thumb-hover-overlay {
+      opacity: 1;
+    }
+    .cat-card-editor {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .btn-upload-photo {
+      background: #f8fafc;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn-upload-photo:hover {
+      background: #e2e8f0;
+      border-color: #94a3b8;
+    }
+    .btn-cat-upload {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #1e40af;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      transition: all 0.15s ease;
+    }
+    .btn-cat-upload:hover {
+      background: #eff6ff;
+      border-color: #3b82f6;
+    }
+  </style>
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-brand">
+        <img src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Logo" class="admin-logo" onerror="this.style.display='none'">
+        <div class="admin-brand-text">
+          <h2>Inithan Gifts</h2>
+          <span>Admin Panel</span>
+        </div>
+      </div>
+      
+      <nav class="admin-nav">
+          <a href="admin-dashboard.html" class="admin-nav-link">
+            <span>📊</span> Dashboard
+          </a>
+          <a href="admin-orders.html" class="admin-nav-link">
+            <span>📦</span> Orders
+          </a>
+          <a href="admin-products.html" class="admin-nav-link">
+            <span>🛍️</span> Products
+          </a>
+          <a href="admin-homepage.html" class="admin-nav-link active">
+            <span>🏠</span> Homepage Sections
+          </a>
+          <a href="admin-offers.html" class="admin-nav-link">
+            <span>🏷️</span> Occasion Offers
+          </a>
+          <a href="admin-categories.html" class="admin-nav-link">
+            <span>🗂️</span> Categories & Occasions
+          </a>
+          <a href="admin-users.html" class="admin-nav-link">
+            <span>👥</span> Users
+          </a>
+          <a href="admin-inquiries.html" class="admin-nav-link">
+            <span>📝</span> Bulk Inquiries
+          </a>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <a href="index.html" target="_blank" class="admin-nav-link">
+          <span class="icon">🏠</span> Live Storefront ↗
+        </a>
+        <a href="#" class="admin-nav-link logout-link" onclick="logout()">
+          <span class="icon">🚪</span> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <header class="admin-header">
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <div class="header-title" id="headerTitle">Homepage Section Manager</div>
+        <div class="header-user">
+          <span id="adminName">Admin User</span>
+          <div class="admin-avatar" id="adminAvatar">A</div>
+        </div>
+      </header>
+
+      <div class="admin-content" style="padding: 24px;">
+        
+        <!-- Sticky Action Bar -->
+        <div class="hp-top-bar">
+          <div class="hp-top-title">
+            <h2>🏠 Homepage Layout &amp; Content Manager</h2>
+            <p>Customize Header Navbar, Category Cards, and all homepage sections without altering fixed layout counts.</p>
+          </div>
+          <div class="hp-top-actions">
+            <button type="button" class="btn-preview-hp" id="btnResetHp">🔄 Reset Defaults</button>
+            <a href="index.html" target="_blank" class="btn-preview-hp">👁️ View Live Store ↗</a>
+            <button type="button" class="btn-save-hp" id="btnSaveHomepage">
+              <span>💾 Save Homepage Changes</span>
+            </button>
+          </div>
+        </div>
+
+        <form id="homepageConfigForm">
+          <div class="hp-sections-grid">
+
+            <!-- ========================================== -->
+            <!-- SECTION 00: TOP HEADER NAVIGATION BAR (NAVBAR) -->
+            <!-- ========================================== -->
+            <div class="section-card" style="border: 2px solid #cbd5e1;">
+              <div class="section-card-header" style="background: #f8fafc;" onclick="toggleCardBody('navBarBody')">
+                <div class="section-title-wrap">
+                  <span class="section-badge-id" style="background:#e0f2fe; color:#0369a1;">NAV</span>
+                  <h3>
+                    <span>🌐 Top Header Navigation Bar (Navbar)</span>
+                    <span class="desc">— Logo photo, brand text &amp; 8 main menu links</span>
+                  </h3>
+                </div>
+                <div class="section-header-right" onclick="event.stopPropagation()">
+                  <span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:700; font-size:0.75rem; padding:4px 8px; border-radius:6px;">🔒 Fixed 8 Links</span>
+                  <span class="status-text status-active" id="navBarStatusText">Active</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="hp_nav_enabled" checked onchange="updateToggleStatus(this, 'navBarStatusText')">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="section-card-body" id="navBarBody">
+                <div class="count-highlight-box" style="margin-bottom: 20px;">
+                  <div>
+                    <strong>🖼️ Header Brand Identity (Logo &amp; Brand Text)</strong>
+                    <span>Change the logo image photo, brand title, and tagline displayed on your storefront header.</span>
+                  </div>
+                </div>
+
+                <div class="form-grid-3" style="align-items:flex-end; margin-bottom: 22px;">
+                  <div class="field-group" style="margin-bottom:0;">
+                    <label style="display:block; margin-bottom:6px; font-weight:700;">Logo Photo</label>
+                    <div style="display:flex; gap:12px; align-items:center;">
+                      <div class="cat-thumb-box" style="width:52px; height:52px; border-radius:10px; padding:2px;" onclick="document.getElementById('hp_nav_logo_file').click()" title="Click to upload new logo photo">
+                        <img id="hp_nav_logo_preview" src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Logo Preview" style="object-fit:contain;">
+                        <div class="cat-thumb-hover-overlay">📁 Upload</div>
+                      </div>
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <input type="hidden" id="hp_nav_logo" value="">
+                        <input type="file" id="hp_nav_logo_file" accept="image/*" style="display:none;" onchange="handleLogoUpload(this)">
+                        <button type="button" class="btn-upload-photo" onclick="document.getElementById('hp_nav_logo_file').click()">
+                          <span>📁 Upload Logo Photo</span>
+                        </button>
+                        <span id="hp_nav_logo_status" style="font-size:0.75rem; color:#64748b;">Click to choose photo</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field-group" style="margin-bottom:0;">
+                    <label>Brand Name</label>
+                    <input type="text" id="hp_nav_brand" placeholder="e.g. Inithan Custom Gifts">
+                  </div>
+                  <div class="field-group" style="margin-bottom:0;">
+                    <label>Brand Tagline</label>
+                    <input type="text" id="hp_nav_tagline" placeholder="e.g. Made with Love">
+                  </div>
+                </div>
+
+                <div class="count-highlight-box" style="margin-bottom: 16px; background:#f0fdf4; border-color:#86efac;">
+                  <div>
+                    <strong style="color:#166534;">📋 Navigation Menu Links (8 Fixed Links)</strong>
+                    <span style="color:#15803d;">You can edit the Text and Page URL for each existing navigation link without altering the count.</span>
+                  </div>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:10px;" id="navLinksInputsContainer">
+                  <!-- Generated 8 rows for Link 1 to 8 -->
+                </div>
+              </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION 1: HERO BANNER -->
+            <!-- ========================================== -->
+            <div class="section-card">
+              <div class="section-card-header" onclick="toggleCardBody('heroBody')">
+                <div class="section-title-wrap">
+                  <span class="section-badge-id">01</span>
+                  <h3>
+                    <span>⚡ Hero Showcase Banner</span>
+                    <span class="desc">— Top introduction, mascot, headlines &amp; CTA buttons</span>
+                  </h3>
+                </div>
+                <div class="section-header-right" onclick="event.stopPropagation()">
+                  <span class="status-text status-active" id="heroStatusText">Active</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="hp_hero_enabled" checked onchange="updateToggleStatus(this, 'heroStatusText')">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="section-card-body" id="heroBody">
+                <!-- Mascot Image (Left side) -->
+                <div class="count-highlight-box" style="margin-bottom: 16px; background:#fdf2f8; border-color:#f472b6;">
+                  <div>
+                    <strong style="color:#9d174d;">🧸 Hero Mascot Character Image (Left Side)</strong>
+                    <span style="color:#be185d;">Upload the cartoon mascot image shown on the left side of the Hero section.</span>
+                  </div>
+                </div>
+
+                <div style="display:flex; gap:16px; align-items:center; margin-bottom: 22px; background:#fff; padding:12px 16px; border-radius:10px; border:1px solid #e2e8f0;">
+                  <div class="cat-thumb-box" style="width:64px; height:64px; border-radius:10px; padding:4px;" onclick="document.getElementById('hp_hero_mascot_file').click()" title="Click to upload new mascot image">
+                    <img id="hp_hero_mascot_preview" src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logoman.png" alt="Mascot Preview" style="object-fit:contain;">
+                    <div class="cat-thumb-hover-overlay">📁 Upload</div>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <input type="hidden" id="hp_hero_mascot" value="">
+                    <input type="file" id="hp_hero_mascot_file" accept="image/*" style="display:none;" onchange="handleMascotUpload(this)">
+                    <div style="display:flex; gap:10px; align-items:center;">
+                      <button type="button" class="btn-upload-photo" onclick="document.getElementById('hp_hero_mascot_file').click()">
+                        <span>📁 Upload Mascot Image</span>
+                      </button>
+                      <span id="hp_hero_mascot_status" style="font-size:0.78rem; color:#64748b; font-weight:600;">Mascot Ready</span>
+                    </div>
+                    <span style="font-size:0.75rem; color:#94a3b8;">Recommended transparent PNG mascot image</span>
+                  </div>
+                </div>
+
+                <!-- Text Content -->
+                <div class="form-grid-2">
+                  <div class="field-group">
+                    <label>Script Pill Tagline</label>
+                    <input type="text" id="hp_hero_script" placeholder="e.g. Turning Memories">
+                    <span class="field-helper">Appears in cursive font above the big red headline.</span>
+                  </div>
+                  <div class="field-group">
+                    <label>Main Large Headline</label>
+                    <input type="text" id="hp_hero_headline" placeholder="e.g. INTO GIFTS">
+                    <span class="field-helper">Bold primary headline in the center of the hero.</span>
+                  </div>
+                </div>
+
+                <div class="field-group">
+                  <label>Hero Subtitle / Description</label>
+                  <textarea id="hp_hero_subheadline" rows="2" placeholder="e.g. Personalized Gifts Crafted With Love For Every Occasion"></textarea>
+                </div>
+
+                <div class="form-grid-2">
+                  <div class="field-group">
+                    <label>Primary CTA Button Label</label>
+                    <input type="text" id="hp_hero_cta1_text" placeholder="e.g. Explore Gifts">
+                  </div>
+                  <div class="field-group">
+                    <label>Primary CTA Link</label>
+                    <input type="text" id="hp_hero_cta1_link" placeholder="e.g. products.html">
+                  </div>
+                </div>
+
+                <div class="form-grid-2" style="margin-bottom:20px;">
+                  <div class="field-group" style="margin-bottom:0;">
+                    <label>Secondary CTA Button Label</label>
+                    <input type="text" id="hp_hero_cta2_text" placeholder="e.g. Customize Now">
+                  </div>
+                  <div class="field-group" style="margin-bottom:0;">
+                    <label>Secondary CTA Link</label>
+                    <input type="text" id="hp_hero_cta2_link" placeholder="e.g. customize-product.html">
+                  </div>
+                </div>
+
+                <!-- 5 Running Showcase Banners (Right Side) -->
+                <div class="count-highlight-box" style="margin-top:22px; margin-bottom: 16px; background:#eff6ff; border-color:#93c5fd;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                    <div>
+                      <strong style="color:#1e40af;">🖼️ 5 Featured Hero Showcase Banners (Upload Photos &amp; Change Text)</strong>
+                      <span style="color:#2563eb;">Upload banner photos and edit titles/links for the 5 auto-cycling cards on the right side of the hero.</span>
+                    </div>
+                    <span class="badge" style="background:#dbeafe; color:#1e40af; font-weight:700; font-size:0.75rem; padding:4px 8px; border-radius:6px; flex-shrink:0;">🔒 Fixed 5 Slides</span>
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:16px;" id="heroSlidesContainer">
+                  <!-- Generated 5 hero slides -->
+                </div>
+              </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION 2: SHOP BY CATEGORY (10 CARDS EDITABLE) -->
+            <!-- ========================================== -->
+            <div class="section-card" style="border: 2px solid #cbd5e1;">
+              <div class="section-card-header" style="background:#f8fafc;" onclick="toggleCardBody('catBody')">
+                <div class="section-title-wrap">
+                  <span class="section-badge-id" style="background:#e0e7ff; color:#3730a3;">02</span>
+                  <h3>
+                    <span>🛍️ Shop By Category Bar (10 Collection Cards)</span>
+                    <span class="desc">— Edit photo &amp; text of the 10 collection cards (#shop-category)</span>
+                  </h3>
+                </div>
+                <div class="section-header-right" onclick="event.stopPropagation()">
+                  <span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700; font-size:0.75rem; padding:4px 8px; border-radius:6px;">🔒 Fixed 10 Cards</span>
+                  <span class="status-text status-active" id="catStatusText">Active</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="hp_cat_enabled" checked onchange="updateToggleStatus(this, 'catStatusText')">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="section-card-body" id="catBody">
+                <div class="form-grid-2">
+                  <div class="field-group">
+                    <label>Section Heading</label>
+                    <input type="text" id="hp_cat_title" placeholder="e.g. Every Style, Every Kind of Love 💝">
+                  </div>
+                  <div class="field-group">
+                    <label>Section Subtitle</label>
+                    <input type="text" id="hp_cat_subtitle" placeholder="e.g. Discover handcrafted, personalized gifts designed to make every memory unforgettable.">
+                  </div>
+                </div>
+
+                <div class="count-highlight-box" style="margin-top: 10px; margin-bottom: 16px; background:#eff6ff; border-color:#93c5fd;">
+                  <div>
+                    <strong style="color:#1e40af;">🖼️ 10 Category Collection Cards (Photo &amp; Text Editing)</strong>
+                    <span style="color:#2563eb;">Edit the Photo URL, Title, and Search Link of each of the 10 existing category cards without changing the count.</span>
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:14px;" id="categoryItemsInputsContainer">
+                  <!-- Generated 10 category cards -->
+                </div>
+              </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION 3: SHOP BY RELATIONSHIP -->
+            <!-- ========================================== -->
+            <div class="section-card">
+              <div class="section-card-header" onclick="toggleCardBody('relBody')">
+                <div class="section-title-wrap">
+                  <span class="section-badge-id">03</span>
+                  <h3>
+                    <span>💖 For Relationship</span>
+                    <span class="desc">— Gifts For Boyfriend, Girlfriend, Husband, Wife, Best Friend</span>
+                  </h3>
+                </div>
+                <div class="section-header-right" onclick="event.stopPropagation()">
+                  <span class="status-text status-active" id="relStatusText">Active</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="hp_rel_enabled" checked onchange="updateToggleStatus(this, 'relStatusText')">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="section-card-body" id="relBody">
+                <div class="field-group">
+                  <label>Section Heading</label>
+                  <input type="text" id="hp_rel_title" placeholder="e.g. For Relationship ❤️">
+                </div>
+                <div class="field-group">
+                  <label>Section Subtitle</label>
+                  <input type="text" id="hp_rel_subtitle" placeholder="e.g. Find the perfect match for the people who matter most.">
+                </div>
+              </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION 4: GIFTS FOR EVERY BUDGET -->
+            <!-- ========================================== -->
+            <div class="section-card">
+              <div class="section-card-header" onclick="toggleCardBody('budgetBody')">
+                <div class="section-title-wrap">
+                  <span class="section-badge-id">04</span>
+                  <h3>
+                    <span>🏷️ Gifts for Every Budget</span>
+                    <span class="desc">— Pocket picks from Under ₹99 up to Luxury ₹1,499</span>
+                  </h3>
+                </div>
+                <div class="section-header-right" onclick="event.stopPropagation()">
+                  <span class="status-text status-active" id="budStatusText">Active</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="hp_bud_enabled" checked onchange="updateToggleStatus(this, 'budStatusText')">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="section-card-body" id="budgetBody">
+                <div class="field-group">
+                  <label>Section Heading</label>
+                  <input type="text" id="hp_bud_title" placeholder="e.g. Gifts for Every Budget 🎁">
+                </div>
+                <div class="field-group">
+                  <label>Section Subtitle</label>
+                  <input type="text" id="hp_bud_subtitle" placeholder="e.g. Thoughtful personalized surprises tailored to fit every budget.">
+                </div>
+              </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION 5: CELEBRATE EVERY OCCASION (COUNT EDITABLE!) -->
+            <!-- ========================================== -->
+            <div class="section-card" style="border: 2px solid #cbd5e1;">
+              <div class="section-card-header" style="background: #f8fafc;" onclick="toggleCardBody('occBody')">
+                <div class="section-title-wrap">
+                  <span class="section-badge-id" style="background:#e0e7ff; color:#3730a3;">05</span>
+                  <h3>
+                    <span>🎉 Celebrate Every Occasion</span>
+                    <span class="desc">— Interactive tabs for Birthday, Anniversary, Valentine, Love</span>
+                  </h3>
+                </div>
+                <div class="section-header-right" onclick="event.stopPropagation()">
+                  <span class="status-text status-active" id="occStatusText">Active</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="hp_occ_enabled" checked onchange="updateToggleStatus(this, 'occStatusText')">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="section-card-body" id="occBody">
+                <div class="count-highlight-box" style="margin-bottom: 18px;">
+                  <div>
+                    <strong>📦 Occasion Showcase Product Display Count</strong>
+                    <span>Admin Controls: Choose how many products are shown in the Occasions landscape marquee</span>
+                  </div>
+                  <div>
+                    <select id="hp_occ_max" style="padding: 9px 16px; font-weight:700; border-color:#3b82f6; border-radius:8px; background:white; color:#1e3a8a; cursor:pointer;">
+                      <option value="4">Show 4 Products</option>
+                      <option value="6">Show 6 Products</option>
+                      <option value="8" selected>Show 8 Products (Recommended)</option>
+                      <option value="12">Show 12 Products</option>
+                      <option value="16">Show 16 Products</option>
+                      <option value="50">Show All Available Products</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-grid-2">
+                  <div class="field-group">
+                    <label>Section Heading</label>
+                    <input type="text" id="hp_occ_title" placeholder="e.g. Celebrate Every Occasion 🎉">
+                  </div>
+                  <div class="field-group">
+                    <label>Section Subtitle</label>
+                    <input type="text" id="hp_occ_subtitle" placeholder="e.g. Thoughtful personalized gifts crafted to make every celebration truly unforgettable.">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION 6: DISCOVER UNIQUE CREATIONS (COUNT EDITABLE!) -->
+            <!-- ========================================== -->
+            <div class="section-card" style="border: 2px solid #cbd5e1;">
+              <div class="section-card-header" style="background: #f8fafc;" onclick="toggleCardBody('uniqBody')">
+                <div class="section-title-wrap">
+                  <span class="section-badge-id" style="background:#fef3c7; color:#92400e;">06</span>
+                  <h3>
+                    <span>✨ Discover Unique Creations</span>
+                    <span class="desc">— Featured artisan keepsakes, glow frames, acrylic song plaques</span>
+                  </h3>
+                </div>
+                <div class="section-header-right" onclick="event.stopPropagation()">
+                  <span class="status-text status-active" id="uniqStatusText">Active</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="hp_uniq_enabled" checked onchange="updateToggleStatus(this, 'uniqStatusText')">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="section-card-body" id="uniqBody">
+                <div class="count-highlight-box" style="margin-bottom: 18px; background:#fffbeb; border-color:#f59e0b;">
+                  <div>
+                    <strong style="color:#78350f;">✨ Unique Creations Product Display Count</strong>
+                    <span style="color:#b45309;">Admin Controls: Choose how many featured items appear in this curated showcase</span>
+                  </div>
+                  <div>
+                    <select id="hp_uniq_max" style="padding: 9px 16px; font-weight:700; border-color:#f59e0b; border-radius:8px; background:white; color:#78350f; cursor:pointer;">
+                      <option value="4">Show 4 Products</option>
+                      <option value="6">Show 6 Products</option>
+                      <option value="8" selected>Show 8 Products (Recommended)</option>
+                      <option value="12">Show 12 Products</option>
+                      <option value="16">Show 16 Products</option>
+                      <option value="50">Show All Available Products</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-grid-2">
+                  <div class="field-group">
+                    <label>Section Heading</label>
+                    <input type="text" id="hp_uniq_title" placeholder="e.g. Discover Unique Creations ✨">
+                  </div>
+                  <div class="field-group">
+                    <label>Section Subtitle</label>
+                    <input type="text" id="hp_uniq_subtitle" placeholder="e.g. Artisan keepsakes, illuminated wonders &amp; handcrafted gifts you won't find anywhere else.">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION 7: CUSTOMER REVIEWS SPOTLIGHT -->
+            <!-- ========================================== -->
+            <div class="section-card">
+              <div class="section-card-header" onclick="toggleCardBody('revBody')">
+                <div class="section-title-wrap">
+                  <span class="section-badge-id">07</span>
+                  <h3>
+                    <span>⭐ Customer Reviews Spotlight</span>
+                    <span class="desc">— Verified customer feedback, ratings &amp; real customer photos</span>
+                  </h3>
+                </div>
+                <div class="section-header-right" onclick="event.stopPropagation()">
+                  <span class="status-text status-active" id="revStatusText">Active</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="hp_rev_enabled" checked onchange="updateToggleStatus(this, 'revStatusText')">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="section-card-body" id="revBody">
+                <div class="form-grid-2">
+                  <div class="field-group">
+                    <label>Section Heading</label>
+                    <input type="text" id="hp_rev_title" placeholder="e.g. Made With Love. Loved By You. ❤️">
+                  </div>
+                  <div class="field-group">
+                    <label>Max Reviews to Display</label>
+                    <select id="hp_rev_max">
+                      <option value="3" selected>3 Spotlight Reviews</option>
+                      <option value="6">6 Spotlight Reviews</option>
+                      <option value="9">9 Spotlight Reviews</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label>Section Subtitle</label>
+                  <input type="text" id="hp_rev_subtitle" placeholder="e.g. Real smiles and authentic stories from over 25,000+ happy customers across India.">
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </form>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    // Expand / collapse card body
+    function toggleCardBody(bodyId) {
+      const el = document.getElementById(bodyId);
+      if (!el) return;
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // Update status text on toggle
+    function updateToggleStatus(checkbox, textId) {
+      const textEl = document.getElementById(textId);
+      if (!textEl) return;
+      if (checkbox.checked) {
+        textEl.textContent = 'Active';
+        textEl.className = 'status-text status-active';
+      } else {
+        textEl.textContent = 'Hidden';
+        textEl.className = 'status-text status-disabled';
+      }
+    }
+
+    // Default 8 navbar links
+    const DEFAULT_NAV_LINKS = [
+      { id: 1, text: 'Home', url: 'index.html' },
+      { id: 2, text: 'All Products', url: 'products.html' },
+      { id: 3, text: 'Love & Romance', url: 'love-romance.html' },
+      { id: 4, text: 'Birthday', url: 'birthday.html' },
+      { id: 5, text: 'Special Occasions', url: 'special-occasions.html' },
+      { id: 6, text: 'For Her & Him', url: 'for-her-and-him.html' },
+      { id: 7, text: 'Corporate Gifts', url: 'corporate-gifts.html' },
+      { id: 8, text: 'Personalize', url: 'personalize.html' }
+    ];
+
+    // Default 10 category cards
+    const DEFAULT_CAT_ITEMS = [
+      { id: 1, title: 'Puzzles', imageUrl: 'images/categories/puzzles.jpg', link: 'products.html?search=Puzzle' },
+      { id: 2, title: 'Frames', imageUrl: 'images/categories/frames.jpg', link: 'products.html?search=Frame' },
+      { id: 3, title: 'Mugs', imageUrl: 'images/categories/mugs.jpg', link: 'products.html?search=Mug' },
+      { id: 4, title: 'Engravings', imageUrl: 'images/categories/engravings.jpg', link: 'products.html?search=Engraving' },
+      { id: 5, title: 'Calendar', imageUrl: 'images/categories/calendar.jpg', link: 'products.html?search=Calendar' },
+      { id: 6, title: 'Name Gifts', imageUrl: 'images/categories/name-gifts.jpg', link: 'products.html?search=Name' },
+      { id: 7, title: 'Hampers', imageUrl: 'images/categories/hampers.jpg', link: 'products.html?search=Hamper' },
+      { id: 8, title: 'Combo', imageUrl: 'images/categories/combo.jpg', link: 'products.html?search=Combo' },
+      { id: 9, title: 'Long Distance', imageUrl: 'images/categories/long-distance.jpg', link: 'products.html?search=Long+Distance' },
+      { id: 10, title: 'Licence', imageUrl: 'images/categories/licence.jpg', link: 'products.html?search=Licence' }
+    ];
+
+    // Default Mascot & 5 Hero Showcase Banner Slides (from index.html)
+    const DEFAULT_MASCOT_URL = 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logoman.png';
+
+    const DEFAULT_HERO_SLIDES = [
+      {
+        id: 1,
+        badge: '🎁 Signature Box',
+        title: 'Complete Surprise Gift Box',
+        subtitle: 'Photo Mugs, Constellation Frames & Chocolates',
+        ctaText: 'Shop Collection →',
+        imageUrl: 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/hero.jpeg',
+        link: 'products.html?search=Hamper'
+      },
+      {
+        id: 2,
+        badge: '✨ Grand Combo • 41% OFF',
+        title: 'Luxury Curated Hamper',
+        subtitle: 'Premium Satin Ribbon Luxury Box',
+        ctaText: 'View Hamper →',
+        imageUrl: 'images/occasions/occ_luxury_hamper.jpg',
+        link: 'products.html?search=Hamper'
+      },
+      {
+        id: 3,
+        badge: '🎵 Viral Hit • Scan & Play',
+        title: '3D Spotify Acrylic Plaque',
+        subtitle: 'Warm Wooden LED Light Stand',
+        ctaText: 'Customize Song →',
+        imageUrl: 'images/unique/unique_spotify_acrylic.jpg',
+        link: 'products.html?search=Spotify'
+      },
+      {
+        id: 4,
+        badge: '👑 Top Rated • 5.0 Star',
+        title: 'LED Illuminated Wooden Frame',
+        subtitle: 'Crisp HD Fade-Proof Photo Print',
+        ctaText: 'Personalize Now →',
+        imageUrl: 'images/occasions/occ_wooden_frame.jpg',
+        link: 'products.html?search=Frame'
+      },
+      {
+        id: 5,
+        badge: '☕ Magic Reveal Surprise',
+        title: 'Thermal Color-Changing Mug',
+        subtitle: 'Pour Hot Coffee to Reveal Memories',
+        ctaText: 'Create Mug →',
+        imageUrl: 'images/unique/unique_magic_mug.jpg',
+        link: 'products.html?search=Mug'
+      }
+    ];
+
+    // Render 8 Navbar Link Rows
+    function renderNavLinksInputs(links) {
+      const container = document.getElementById('navLinksInputsContainer');
+      if (!container) return;
+      const list = (Array.isArray(links) && links.length === 8) ? links : DEFAULT_NAV_LINKS;
+
+      container.innerHTML = list.map((item, idx) => `
+        <div class="edit-item-row" data-nav-idx="${idx}">
+          <span class="item-num-badge">${idx + 1}</span>
+          <div style="flex:1;">
+            <label style="font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:4px; display:block;">Menu Link Title</label>
+            <input type="text" class="nav-link-text-input" value="${item.text || ''}" placeholder="e.g. Home" style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.86rem;">
+          </div>
+          <div style="flex:1.5;">
+            <label style="font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:4px; display:block;">Target Page URL</label>
+            <input type="text" class="nav-link-url-input" value="${item.url || ''}" placeholder="e.g. index.html" style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.86rem;">
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Upload logo photo
+    async function handleLogoUpload(input) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+
+      // Instant preview
+      const previewImg = document.getElementById('hp_nav_logo_preview');
+      if (previewImg) previewImg.src = URL.createObjectURL(file);
+
+      const statusEl = document.getElementById('hp_nav_logo_status');
+      if (statusEl) statusEl.innerHTML = '<span style="color:#d97706; font-weight:700;">⏳ Uploading...</span>';
+
+      try {
+        const formData = new FormData();
+        formData.append('photo', file);
+
+        const apiBase = window.location.origin;
+        const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+        const res = await fetch(`${apiBase}/api/homepage-config/upload`, {
+          method: 'POST',
+          headers,
+          body: formData
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success && data.url) {
+          document.getElementById('hp_nav_logo').value = data.url;
+          if (previewImg) previewImg.src = data.url;
+          if (statusEl) statusEl.innerHTML = '<span style="color:#16a34a; font-weight:700;">✅ Logo uploaded!</span>';
+        } else {
+          throw new Error(data.message || 'Upload failed');
+        }
+      } catch (err) {
+        console.error('Logo upload error:', err);
+        if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626; font-weight:700;">❌ Upload failed, please retry</span>';
+      }
+    }
+
+    // Upload category card photo
+    async function handleCategoryPhotoUpload(idx, input) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+
+      // Instant preview
+      const previewImg = document.getElementById(`cat_img_preview_${idx}`);
+      if (previewImg) previewImg.src = URL.createObjectURL(file);
+
+      const statusEl = document.getElementById(`cat_upload_status_${idx}`);
+      if (statusEl) statusEl.innerHTML = '<span style="color:#d97706; font-weight:700;">⏳ Uploading...</span>';
+
+      try {
+        const formData = new FormData();
+        formData.append('photo', file);
+
+        const apiBase = window.location.origin;
+        const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+        const res = await fetch(`${apiBase}/api/homepage-config/upload`, {
+          method: 'POST',
+          headers,
+          body: formData
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success && data.url) {
+          const hiddenInput = document.getElementById(`cat_img_val_${idx}`);
+          if (hiddenInput) hiddenInput.value = data.url;
+          if (previewImg) previewImg.src = data.url;
+          if (statusEl) statusEl.innerHTML = '<span style="color:#16a34a; font-weight:700;">✅ Photo uploaded!</span>';
+        } else {
+          throw new Error(data.message || 'Upload failed');
+        }
+      } catch (err) {
+        console.error('Category photo upload error:', err);
+        if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626; font-weight:700;">❌ Upload failed</span>';
+      }
+    }
+
+    // Upload mascot photo
+    async function handleMascotUpload(input) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+
+      const previewImg = document.getElementById('hp_hero_mascot_preview');
+      if (previewImg) previewImg.src = URL.createObjectURL(file);
+
+      const statusEl = document.getElementById('hp_hero_mascot_status');
+      if (statusEl) statusEl.innerHTML = '<span style="color:#d97706; font-weight:700;">⏳ Uploading...</span>';
+
+      try {
+        const formData = new FormData();
+        formData.append('photo', file);
+
+        const apiBase = window.location.origin;
+        const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+        const res = await fetch(`${apiBase}/api/homepage-config/upload`, {
+          method: 'POST',
+          headers,
+          body: formData
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success && data.url) {
+          document.getElementById('hp_hero_mascot').value = data.url;
+          if (previewImg) previewImg.src = data.url;
+          if (statusEl) statusEl.innerHTML = '<span style="color:#16a34a; font-weight:700;">✅ Mascot uploaded!</span>';
+        } else {
+          throw new Error(data.message || 'Upload failed');
+        }
+      } catch (err) {
+        console.error('Mascot upload error:', err);
+        if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626; font-weight:700;">❌ Upload failed</span>';
+      }
+    }
+
+    // Upload hero slide banner photo
+    async function handleHeroSlidePhotoUpload(idx, input) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+
+      const previewImg = document.getElementById(`hero_slide_preview_${idx}`);
+      if (previewImg) previewImg.src = URL.createObjectURL(file);
+
+      const statusEl = document.getElementById(`hero_slide_status_${idx}`);
+      if (statusEl) statusEl.innerHTML = '<span style="color:#d97706; font-weight:700;">⏳ Uploading...</span>';
+
+      try {
+        const formData = new FormData();
+        formData.append('photo', file);
+
+        const apiBase = window.location.origin;
+        const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+        const res = await fetch(`${apiBase}/api/homepage-config/upload`, {
+          method: 'POST',
+          headers,
+          body: formData
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success && data.url) {
+          const hiddenInput = document.getElementById(`hero_slide_img_${idx}`);
+          if (hiddenInput) hiddenInput.value = data.url;
+          if (previewImg) previewImg.src = data.url;
+          if (statusEl) statusEl.innerHTML = '<span style="color:#16a34a; font-weight:700;">✅ Banner uploaded!</span>';
+        } else {
+          throw new Error(data.message || 'Upload failed');
+        }
+      } catch (err) {
+        console.error('Hero slide upload error:', err);
+        if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626; font-weight:700;">❌ Upload failed</span>';
+      }
+    }
+
+    // Render 5 Hero Showcase Banner Slides with direct upload button (no path input)
+    function renderHeroSlidesInputs(slides) {
+      const container = document.getElementById('heroSlidesContainer');
+      if (!container) return;
+      const list = (Array.isArray(slides) && slides.length === 5) ? slides : DEFAULT_HERO_SLIDES;
+
+      container.innerHTML = list.map((item, idx) => `
+        <div class="cat-card-editor" data-slide-idx="${idx}" style="border:1px solid #cbd5e1; background:#ffffff;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.82rem; font-weight:800; color:#1e40af;">Banner Slide #${idx + 1}</span>
+            <span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700; font-size:0.72rem; padding:3px 8px; border-radius:6px;">Slide ${idx + 1} of 5</span>
+          </div>
+
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="cat-thumb-box" style="width:72px; height:58px; border-radius:8px;" onclick="document.getElementById('hero_slide_file_${idx}').click()" title="Click to upload new banner photo">
+              <img id="hero_slide_preview_${idx}" src="${item.imageUrl || ''}" alt="${item.title || ''}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/hero.jpeg'">
+              <div class="cat-thumb-hover-overlay">📁 Upload</div>
+            </div>
+            <div style="flex:1;">
+              <label style="font-size:0.74rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Badge Tag</label>
+              <input type="text" class="hero-slide-badge-input" value="${item.badge || ''}" placeholder="e.g. 🎁 Signature Box" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+            </div>
+          </div>
+
+          <div style="background:#f8fafc; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <span id="hero_slide_status_${idx}" style="font-size:0.75rem; color:#475569; font-weight:600;">Banner Ready</span>
+            <input type="hidden" class="hero-slide-img-input" id="hero_slide_img_${idx}" value="${item.imageUrl || ''}">
+            <input type="file" id="hero_slide_file_${idx}" accept="image/*" style="display:none;" onchange="handleHeroSlidePhotoUpload(${idx}, this)">
+            <button type="button" class="btn-cat-upload" onclick="document.getElementById('hero_slide_file_${idx}').click()">
+              <span>📁 Upload Photo</span>
+            </button>
+          </div>
+
+          <div>
+            <label style="font-size:0.74rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Slide Title</label>
+            <input type="text" class="hero-slide-title-input" value="${item.title || ''}" placeholder="e.g. Complete Surprise Gift Box" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.84rem;">
+          </div>
+
+          <div>
+            <label style="font-size:0.74rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Slide Subtitle / Description</label>
+            <input type="text" class="hero-slide-sub-input" value="${item.subtitle || ''}" placeholder="e.g. Photo Mugs, Constellation Frames & Chocolates" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem;">
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+            <div>
+              <label style="font-size:0.72rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">CTA Button Text</label>
+              <input type="text" class="hero-slide-cta-input" value="${item.ctaText || 'Shop Collection →'}" placeholder="Shop Collection →" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.8rem;">
+            </div>
+            <div>
+              <label style="font-size:0.72rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Target Page Link</label>
+              <input type="text" class="hero-slide-link-input" value="${item.link || ''}" placeholder="products.html?search=..." style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.8rem;">
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Collect 5 Hero Slides
+    function collectHeroSlides() {
+      const cards = document.querySelectorAll('#heroSlidesContainer .cat-card-editor');
+      const slides = [];
+      cards.forEach((card, idx) => {
+        const imgInput = card.querySelector('.hero-slide-img-input');
+        const badgeInput = card.querySelector('.hero-slide-badge-input');
+        const titleInput = card.querySelector('.hero-slide-title-input');
+        const subInput = card.querySelector('.hero-slide-sub-input');
+        const ctaInput = card.querySelector('.hero-slide-cta-input');
+        const linkInput = card.querySelector('.hero-slide-link-input');
+        slides.push({
+          id: idx + 1,
+          badge: badgeInput ? badgeInput.value.trim() : DEFAULT_HERO_SLIDES[idx].badge,
+          title: titleInput ? titleInput.value.trim() : DEFAULT_HERO_SLIDES[idx].title,
+          subtitle: subInput ? subInput.value.trim() : DEFAULT_HERO_SLIDES[idx].subtitle,
+          ctaText: ctaInput ? ctaInput.value.trim() : DEFAULT_HERO_SLIDES[idx].ctaText,
+          imageUrl: imgInput ? imgInput.value.trim() : DEFAULT_HERO_SLIDES[idx].imageUrl,
+          link: linkInput ? linkInput.value.trim() : DEFAULT_HERO_SLIDES[idx].link
+        });
+      });
+      return slides.slice(0, 5); // strictly keep count 5
+    }
+
+    // Render 10 Category Cards with direct upload button (no path input)
+    function renderCategoryCardsInputs(items) {
+      const container = document.getElementById('categoryItemsInputsContainer');
+      if (!container) return;
+      const list = (Array.isArray(items) && items.length === 10) ? items : DEFAULT_CAT_ITEMS;
+
+      container.innerHTML = list.map((item, idx) => `
+        <div class="cat-card-editor" data-cat-idx="${idx}">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.8rem; font-weight:800; color:#1e40af;">Card #${idx + 1}</span>
+            <span style="font-size:0.75rem; color:#64748b;">Fixed Slot</span>
+          </div>
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="cat-thumb-box" onclick="document.getElementById('cat_file_input_${idx}').click()" title="Click to upload new photo">
+              <img id="cat_img_preview_${idx}" src="${item.imageUrl || ''}" alt="${item.title || ''}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
+              <div class="cat-thumb-hover-overlay">📁 Upload</div>
+            </div>
+            <div style="flex:1;">
+              <label style="font-size:0.74rem; font-weight:700; color:#475569; display:block; margin-bottom:4px;">Card Title</label>
+              <input type="text" class="cat-card-title-input" value="${item.title || ''}" placeholder="e.g. Puzzles" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+          </div>
+          <div style="background:#f8fafc; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span id="cat_upload_status_${idx}" style="font-size:0.75rem; color:#475569; font-weight:600;">Photo Ready</span>
+            </div>
+            <!-- Hidden input holding actual image URL (no path typing required) -->
+            <input type="hidden" class="cat-card-img-input" id="cat_img_val_${idx}" value="${item.imageUrl || ''}">
+            <input type="file" id="cat_file_input_${idx}" accept="image/*" style="display:none;" onchange="handleCategoryPhotoUpload(${idx}, this)">
+            <button type="button" class="btn-cat-upload" onclick="document.getElementById('cat_file_input_${idx}').click()">
+              <span>📁 Upload Photo</span>
+            </button>
+          </div>
+          <div>
+            <label style="font-size:0.74rem; font-weight:700; color:#475569; display:block; margin-bottom:4px;">Target URL / Category Link</label>
+            <input type="text" class="cat-card-link-input" value="${item.link || ''}" placeholder="products.html?search=..." style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem;">
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Load current config from server
+    async function loadHomepageConfig() {
+      try {
+        const apiBase = window.location.origin;
+        const res = await fetch(`${apiBase}/api/homepage-config`);
+        const data = await res.json();
+        if (data.success && data.config) {
+          const cfg = data.config;
+
+          // 0. Navbar
+          if (cfg.navbar) {
+            document.getElementById('hp_nav_enabled').checked = cfg.navbar.enabled !== false;
+            document.getElementById('hp_nav_logo').value = cfg.navbar.logoUrl || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png';
+            document.getElementById('hp_nav_logo_preview').src = cfg.navbar.logoUrl || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png';
+            document.getElementById('hp_nav_brand').value = cfg.navbar.brandName || 'Inithan Custom Gifts';
+            document.getElementById('hp_nav_tagline').value = cfg.navbar.brandTagline || 'Made with Love';
+            renderNavLinksInputs(cfg.navbar.links);
+            updateToggleStatus(document.getElementById('hp_nav_enabled'), 'navBarStatusText');
+          } else {
+            renderNavLinksInputs(DEFAULT_NAV_LINKS);
+          }
+
+          // 1. Hero
+          if (cfg.hero) {
+            document.getElementById('hp_hero_enabled').checked = cfg.hero.enabled !== false;
+            document.getElementById('hp_hero_mascot').value = cfg.hero.mascotImageUrl || DEFAULT_MASCOT_URL;
+            document.getElementById('hp_hero_mascot_preview').src = cfg.hero.mascotImageUrl || DEFAULT_MASCOT_URL;
+            document.getElementById('hp_hero_script').value = cfg.hero.scriptText || 'Turning Memories';
+            document.getElementById('hp_hero_headline').value = cfg.hero.headline || 'INTO GIFTS';
+            document.getElementById('hp_hero_subheadline').value = cfg.hero.subheadline || '';
+            document.getElementById('hp_hero_cta1_text').value = cfg.hero.ctaPrimaryText || 'Explore Gifts';
+            document.getElementById('hp_hero_cta1_link').value = cfg.hero.ctaPrimaryLink || 'products.html';
+            document.getElementById('hp_hero_cta2_text').value = cfg.hero.ctaSecondaryText || 'Customize Now';
+            document.getElementById('hp_hero_cta2_link').value = cfg.hero.ctaSecondaryLink || 'customize-product.html';
+            renderHeroSlidesInputs(cfg.hero.slides);
+            updateToggleStatus(document.getElementById('hp_hero_enabled'), 'heroStatusText');
+          } else {
+            document.getElementById('hp_hero_mascot').value = DEFAULT_MASCOT_URL;
+            document.getElementById('hp_hero_mascot_preview').src = DEFAULT_MASCOT_URL;
+            renderHeroSlidesInputs(DEFAULT_HERO_SLIDES);
+          }
+
+          // 2. Category
+          if (cfg.shopCategory) {
+            document.getElementById('hp_cat_enabled').checked = cfg.shopCategory.enabled !== false;
+            document.getElementById('hp_cat_title').value = cfg.shopCategory.title || 'Every Style, Every Kind of Love 💝';
+            document.getElementById('hp_cat_subtitle').value = cfg.shopCategory.subtitle || '';
+            renderCategoryCardsInputs(cfg.shopCategory.items);
+            updateToggleStatus(document.getElementById('hp_cat_enabled'), 'catStatusText');
+          } else {
+            renderCategoryCardsInputs(DEFAULT_CAT_ITEMS);
+          }
+
+          // 3. Relationship
+          if (cfg.shopRelationship) {
+            document.getElementById('hp_rel_enabled').checked = cfg.shopRelationship.enabled !== false;
+            document.getElementById('hp_rel_title').value = cfg.shopRelationship.title || 'For Relationship ❤️';
+            document.getElementById('hp_rel_subtitle').value = cfg.shopRelationship.subtitle || '';
+            updateToggleStatus(document.getElementById('hp_rel_enabled'), 'relStatusText');
+          }
+
+          // 4. Budget
+          if (cfg.giftsBudget) {
+            document.getElementById('hp_bud_enabled').checked = cfg.giftsBudget.enabled !== false;
+            document.getElementById('hp_bud_title').value = cfg.giftsBudget.title || 'Gifts for Every Budget 🎁';
+            document.getElementById('hp_bud_subtitle').value = cfg.giftsBudget.subtitle || '';
+            updateToggleStatus(document.getElementById('hp_bud_enabled'), 'budStatusText');
+          }
+
+          // 5. Occasions (Product Count)
+          if (cfg.homeOccasions) {
+            document.getElementById('hp_occ_enabled').checked = cfg.homeOccasions.enabled !== false;
+            document.getElementById('hp_occ_title').value = cfg.homeOccasions.title || 'Celebrate Every Occasion 🎉';
+            document.getElementById('hp_occ_subtitle').value = cfg.homeOccasions.subtitle || '';
+            document.getElementById('hp_occ_max').value = cfg.homeOccasions.maxProductsCount || 8;
+            updateToggleStatus(document.getElementById('hp_occ_enabled'), 'occStatusText');
+          }
+
+          // 6. Unique (Product Count)
+          if (cfg.uniqueCollection) {
+            document.getElementById('hp_uniq_enabled').checked = cfg.uniqueCollection.enabled !== false;
+            document.getElementById('hp_uniq_title').value = cfg.uniqueCollection.title || 'Discover Unique Creations ✨';
+            document.getElementById('hp_uniq_subtitle').value = cfg.uniqueCollection.subtitle || '';
+            document.getElementById('hp_uniq_max').value = cfg.uniqueCollection.maxProductsCount || 8;
+            updateToggleStatus(document.getElementById('hp_uniq_enabled'), 'uniqStatusText');
+          }
+
+          // 7. Reviews
+          if (cfg.customerReviews) {
+            document.getElementById('hp_rev_enabled').checked = cfg.customerReviews.enabled !== false;
+            document.getElementById('hp_rev_title').value = cfg.customerReviews.title || 'Made With Love. Loved By You. ❤️';
+            document.getElementById('hp_rev_subtitle').value = cfg.customerReviews.subtitle || '';
+            document.getElementById('hp_rev_max').value = cfg.customerReviews.maxReviewsCount || 3;
+            updateToggleStatus(document.getElementById('hp_rev_enabled'), 'revStatusText');
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load homepage config:', err);
+      }
+    }
+
+    // Collect 8 Navbar Links
+    function collectNavLinks() {
+      const rows = document.querySelectorAll('#navLinksInputsContainer .edit-item-row');
+      const links = [];
+      rows.forEach((row, idx) => {
+        const textInput = row.querySelector('.nav-link-text-input');
+        const urlInput = row.querySelector('.nav-link-url-input');
+        links.push({
+          id: idx + 1,
+          text: textInput ? textInput.value.trim() : DEFAULT_NAV_LINKS[idx].text,
+          url: urlInput ? urlInput.value.trim() : DEFAULT_NAV_LINKS[idx].url
+        });
+      });
+      return links.slice(0, 8); // strictly keep count 8
+    }
+
+    // Collect 10 Category Cards
+    function collectCategoryItems() {
+      const cards = document.querySelectorAll('#categoryItemsInputsContainer .cat-card-editor');
+      const items = [];
+      cards.forEach((card, idx) => {
+        const titleInput = card.querySelector('.cat-card-title-input');
+        const imgInput = card.querySelector('.cat-card-img-input');
+        const linkInput = card.querySelector('.cat-card-link-input');
+        items.push({
+          id: idx + 1,
+          title: titleInput ? titleInput.value.trim() : DEFAULT_CAT_ITEMS[idx].title,
+          imageUrl: imgInput ? imgInput.value.trim() : DEFAULT_CAT_ITEMS[idx].imageUrl,
+          link: linkInput ? linkInput.value.trim() : DEFAULT_CAT_ITEMS[idx].link
+        });
+      });
+      return items.slice(0, 10); // strictly keep count 10
+    }
+
+    // Save Homepage Config
+    document.getElementById('btnSaveHomepage').addEventListener('click', async () => {
+      const btn = document.getElementById('btnSaveHomepage');
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳ Saving Changes...</span>';
+
+      const payload = {
+        navbar: {
+          enabled: document.getElementById('hp_nav_enabled').checked,
+          logoUrl: document.getElementById('hp_nav_logo').value.trim(),
+          brandName: document.getElementById('hp_nav_brand').value.trim(),
+          brandTagline: document.getElementById('hp_nav_tagline').value.trim(),
+          links: collectNavLinks()
+        },
+        hero: {
+          enabled: document.getElementById('hp_hero_enabled').checked,
+          mascotImageUrl: document.getElementById('hp_hero_mascot').value.trim() || DEFAULT_MASCOT_URL,
+          scriptText: document.getElementById('hp_hero_script').value.trim(),
+          headline: document.getElementById('hp_hero_headline').value.trim(),
+          subheadline: document.getElementById('hp_hero_subheadline').value.trim(),
+          ctaPrimaryText: document.getElementById('hp_hero_cta1_text').value.trim(),
+          ctaPrimaryLink: document.getElementById('hp_hero_cta1_link').value.trim(),
+          ctaSecondaryText: document.getElementById('hp_hero_cta2_text').value.trim(),
+          ctaSecondaryLink: document.getElementById('hp_hero_cta2_link').value.trim(),
+          slides: collectHeroSlides()
+        },
+        shopCategory: {
+          enabled: document.getElementById('hp_cat_enabled').checked,
+          title: document.getElementById('hp_cat_title').value.trim(),
+          subtitle: document.getElementById('hp_cat_subtitle').value.trim(),
+          maxItems: 10,
+          items: collectCategoryItems()
+        },
+        shopRelationship: {
+          enabled: document.getElementById('hp_rel_enabled').checked,
+          title: document.getElementById('hp_rel_title').value.trim(),
+          subtitle: document.getElementById('hp_rel_subtitle').value.trim()
+        },
+        giftsBudget: {
+          enabled: document.getElementById('hp_bud_enabled').checked,
+          title: document.getElementById('hp_bud_title').value.trim(),
+          subtitle: document.getElementById('hp_bud_subtitle').value.trim()
+        },
+        homeOccasions: {
+          enabled: document.getElementById('hp_occ_enabled').checked,
+          title: document.getElementById('hp_occ_title').value.trim(),
+          subtitle: document.getElementById('hp_occ_subtitle').value.trim(),
+          maxProductsCount: Number(document.getElementById('hp_occ_max').value) || 8
+        },
+        uniqueCollection: {
+          enabled: document.getElementById('hp_uniq_enabled').checked,
+          title: document.getElementById('hp_uniq_title').value.trim(),
+          subtitle: document.getElementById('hp_uniq_subtitle').value.trim(),
+          maxProductsCount: Number(document.getElementById('hp_uniq_max').value) || 8
+        },
+        customerReviews: {
+          enabled: document.getElementById('hp_rev_enabled').checked,
+          title: document.getElementById('hp_rev_title').value.trim(),
+          subtitle: document.getElementById('hp_rev_subtitle').value.trim(),
+          maxReviewsCount: Number(document.getElementById('hp_rev_max').value) || 3
+        }
+      };
+
+      try {
+        const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
+        const apiBase = window.location.origin;
+        const headers = { 'Content-Type': 'application/json' };
+        if (token && token !== 'null' && token !== 'undefined') {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const res = await fetch(`${apiBase}/api/homepage-config`, {
+          method: 'PUT',
+          headers,
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          alert('🎉 Homepage changes saved successfully! Open index.html to see your updated Navbar and Category cards live.');
+        } else {
+          alert(data.message || 'Error saving changes');
+        }
+      } catch (err) {
+        console.error('Save error:', err);
+        alert('Server error saving homepage config');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>💾 Save Homepage Changes</span>';
+      }
+    });
+
+    // Reset to defaults
+    document.getElementById('btnResetHp').addEventListener('click', async () => {
+      if (!confirm('Are you sure you want to reset all homepage sections to factory defaults?')) return;
+      try {
+        const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
+        const apiBase = window.location.origin;
+        const headers = {};
+        if (token && token !== 'null' && token !== 'undefined') {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+        const res = await fetch(`${apiBase}/api/homepage-config/reset`, {
+          method: 'POST',
+          headers
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+          alert('Homepage settings reset to defaults!');
+          loadHomepageConfig();
+        } else {
+          alert('Error resetting homepage settings');
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    // On Load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadHomepageConfig();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Personalize Studio at Inithan Custom Gifts. Customize your own mugs, photo frames, 3D lamps, engraved wooden plaques, keychains, and apparel.">
+  <meta name="keywords" content="personalize gifts, custom gift maker, customize mug, personalize photo frame, engraved wooden plaque, 3d photo lamp, custom t-shirt">
+  <title>Personalize Studio | Inithan Custom Gifts</title>
+  
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/mobile.css">
+  <link rel="stylesheet" href="css/category-pages.css">
+  <link rel="icon" type="image/png" href="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png">
+  <meta name="theme-color" content="#7E22CE">
+</head>
+
+<body data-page-type="personalize">
+
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <img id="navLogoImg" src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Inithan Custom Gifts Logo">
+      <div class="nav-brand-text">
+        <span class="nav-brand-name">Inithan Custom Gifts</span>
+        <span class="nav-brand-tagline">Made with Love</span>
+      </div>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="products.html">All Products</a>
+      <a href="love-romance.html">Love & Romance</a>
+      <a href="birthday.html">Birthday</a>
+      <a href="special-occasions.html">Special Occasions</a>
+      <a href="for-her-and-him.html">For Her & Him</a>
+      <a href="corporate-gifts.html">Corporate Gifts</a>
+      <a href="personalize.html" class="active">Personalize</a>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Auth State -->
+      <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
+      <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
+      <span id="navUserGreet" style="display:none; color:var(--gold); font-weight:600; font-size:0.85rem;"></span>
+      <button class="nav-auth-btn login-btn" id="navLogoutBtn" style="display:none; cursor:pointer; border:none;" onclick="logout()">LOGOUT</button>
+      <div class="nav-cart" id="navCart" style="cursor:pointer;" onclick="window.location.href='cart.html'">
+        <span class="cart-icon">🛒</span>
+        <span>CART</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page Wrapper -->
+  <main class="cat-page-wrapper">
+    <div class="cat-container">
+
+      <!-- Hero Banner -->
+      <section class="cat-hero theme-personalize">
+        <div class="cat-hero-content">
+          <span class="cat-hero-badge">🎨 Personalize Studio</span>
+          <h1 class="cat-hero-title">
+            You Imagine It, <span class="gold-text">We Craft It!</span>
+          </h1>
+          <p class="cat-hero-desc">
+            Your photos, your words, your story. Turn any blank canvas into an unforgettable customized treasure in just a few clicks with our studio customizer.
+          </p>
+          <div class="cat-hero-actions">
+            <a href="customize-product.html" class="cat-btn-primary">🚀 Launch Live Customizer</a>
+            <a href="#pick-canvas" class="cat-btn-outline">Browse Blank Canvases ↓</a>
+          </div>
+        </div>
+
+        <div class="cat-hero-decor">
+          <img src="images/unique/unique_glow_frame.jpg" alt="Personalize Studio Gifts" class="cat-hero-decor-img" onerror="this.src='images/gift-box.png'">
+        </div>
+      </section>
+
+      <!-- 3-Step Interactive Workflow -->
+      <section class="curated-showcase-section">
+        <div class="section-head">
+          <div>
+            <h2 class="section-head-title">How Personalization Works</h2>
+            <p class="section-head-sub">Creating your one-of-a-kind gift is simple, fun, and fast</p>
+          </div>
+        </div>
+
+        <div class="pers-steps-grid">
+          <div class="pers-step-card">
+            <div class="pers-step-num">1</div>
+            <h3 class="pers-step-title">Choose Your Canvas</h3>
+            <p class="pers-step-desc">Pick from custom ceramic mugs, wooden plaques, acrylic LED lamps, keychains, and pillows.</p>
+          </div>
+
+          <div class="pers-step-card">
+            <div class="pers-step-num">2</div>
+            <h3 class="pers-step-title">Upload Photo &amp; Text</h3>
+            <p class="pers-step-desc">Upload your high-resolution photos, add custom names, special dates, or a favorite song.</p>
+          </div>
+
+          <div class="pers-step-card">
+            <div class="pers-step-num">3</div>
+            <h3 class="pers-step-title">Handcrafted &amp; Shipped</h3>
+            <p class="pers-step-desc">Our studio team prints and laser-engraves your gift with love, packed securely and shipped fast.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Canvas Showcase -->
+      <section id="pick-canvas" class="curated-showcase-section">
+        <div class="section-head">
+          <div>
+            <h2 class="section-head-title">Explore Custom Canvases</h2>
+            <p class="section-head-sub">Select a category to design your personalized item</p>
+          </div>
+        </div>
+
+        <div class="curated-cards-grid">
+          <a href="customize-product.html?category=mugs" class="curated-card">
+            <div class="curated-card-icon">
+              <img src="images/unique/unique_magic_mug.jpg" alt="Custom Mugs">
+            </div>
+            <span class="curated-card-title">Custom Mugs</span>
+            <span class="curated-card-sub">Magic &amp; Ceramic</span>
+          </a>
+
+          <a href="customize-product.html?category=frames" class="curated-card">
+            <div class="curated-card-icon">
+              <img src="images/categories/frames.jpg" alt="Photo Frames">
+            </div>
+            <span class="curated-card-title">Photo Frames</span>
+            <span class="curated-card-sub">Wood, Acrylic &amp; LED</span>
+          </a>
+
+          <a href="customize-product.html?category=lamps" class="curated-card">
+            <div class="curated-card-icon">
+              <img src="images/unique/unique_glow_frame.jpg" alt="LED Lamps">
+            </div>
+            <span class="curated-card-title">3D Illusion Lamps</span>
+            <span class="curated-card-sub">Glow Name Art</span>
+          </a>
+
+          <a href="customize-product.html?category=keychains" class="curated-card">
+            <div class="curated-card-icon">
+              <img src="images/unique/unique_photo_keychain.jpg" alt="Keychains">
+            </div>
+            <span class="curated-card-title">Keychains</span>
+            <span class="curated-card-sub">Engraved Metal</span>
+          </a>
+
+          <a href="customize-product.html?category=wood" class="curated-card">
+            <div class="curated-card-icon">
+              <img src="images/unique/unique_wood_engraving.jpg" alt="Wood Art">
+            </div>
+            <span class="curated-card-title">Wood Plaques</span>
+            <span class="curated-card-sub">Natural Pine Engraved</span>
+          </a>
+
+          <a href="customize-product.html?category=apparel" class="curated-card">
+            <div class="curated-card-icon">
+              <img src="images/custom-tshirt.png" alt="Custom Apparel">
+            </div>
+            <span class="curated-card-title">T-Shirts &amp; Pillows</span>
+            <span class="curated-card-sub">Vibrant Sublimation</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Filter Pills Bar -->
+      <section id="catalog">
+        <div class="section-head">
+          <div>
+            <h2 class="section-head-title">Customizable Products Catalog</h2>
+            <p class="section-head-sub">Items ready for your photos, text, and artwork</p>
+          </div>
+        </div>
+
+        <div class="cat-pills-bar">
+          <button class="cat-pill active" onclick="switchCategoryFilter('all', this)">🎨 All Customizable</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('mug', this)">☕ Magic &amp; Custom Mugs</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('frame', this)">🖼️ Photo &amp; Collage Frames</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('lamp', this)">💡 Glowing Acrylic Lamps</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('wood', this)">🪵 Natural Wood Plaques</button>
+          <button class="cat-pill" onclick="switchCategoryFilter('keychain', this)">🔑 Custom Keychains</button>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="cat-products-grid" id="categoryProductsGrid">
+          <!-- Dynamically populated by category-pages.js -->
+        </div>
+      </section>
+
+      <!-- Trust Strip -->
+      <section class="cat-trust-strip">
+        <div class="cat-trust-item">
+          <div class="cat-trust-icon">👁️</div>
+          <div>
+            <div class="cat-trust-title">Pre-Print Review</div>
+            <div class="cat-trust-sub">We verify every image resolution for sharpness</div>
+          </div>
+        </div>
+        <div class="cat-trust-item">
+          <div class="cat-trust-icon">🌈</div>
+          <div>
+            <div class="cat-trust-title">Fade-Proof HD Color</div>
+            <div class="cat-trust-sub">Japanese UV printing with vibrant saturation</div>
+          </div>
+        </div>
+        <div class="cat-trust-item">
+          <div class="cat-trust-icon">⚡</div>
+          <div>
+            <div class="cat-trust-title">Same-Day Processing</div>
+            <div class="cat-trust-sub">Orders processed immediately in our studio</div>
+          </div>
+        </div>
+        <div class="cat-trust-item">
+          <div class="cat-trust-icon">💬</div>
+          <div>
+            <div class="cat-trust-title">Custom Design Support</div>
+            <div class="cat-trust-sub">Our graphic designers help format your photos</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo-link">
+          <img src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Inithan Custom Gifts" class="footer-logo-img">
+          <div class="footer-brand-text">
+            <span class="footer-brand-name">Inithan Custom Gifts</span>
+            <span class="footer-brand-tagline">Made with Love</span>
+          </div>
+        </a>
+        <p>Your creative destination for personalized gifts, bespoke mementos, and custom prints.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <div class="footer-heading-bar"></div>
+        <ul class="footer-links-list">
+          <li><a href="index.html"><span class="chevron-arrow">›</span> Home</a></li>
+          <li><a href="products.html"><span class="chevron-arrow">›</span> All Products</a></li>
+          <li><a href="love-romance.html"><span class="chevron-arrow">›</span> Love &amp; Romance</a></li>
+          <li><a href="birthday.html"><span class="chevron-arrow">›</span> Birthday Gifts</a></li>
+          <li><a href="special-occasions.html"><span class="chevron-arrow">›</span> Special Occasions</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Studio Services</h4>
+        <div class="footer-heading-bar"></div>
+        <ul class="footer-links-list">
+          <li><a href="personalize.html"><span class="chevron-arrow">›</span> Personalize Studio</a></li>
+          <li><a href="customize-product.html"><span class="chevron-arrow">›</span> Live Customizer</a></li>
+          <li><a href="for-her-and-him.html"><span class="chevron-arrow">›</span> For Her &amp; Him</a></li>
+          <li><a href="corporate-gifts.html"><span class="chevron-arrow">›</span> Corporate Gifts</a></li>
+          <li><a href="contact.html"><span class="chevron-arrow">›</span> Design Support</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-contact">
+        <h4>Studio Desk</h4>
+        <div class="footer-heading-bar"></div>
+        <ul class="footer-contact">
+          <li><span class="contact-icon">📍</span> Gandhipuram, Coimbatore - 641012, India</li>
+          <li><span class="contact-icon">📞</span> <a href="tel:+919944444834">+91 99444 44834</a></li>
+          <li><span class="contact-icon">✉️</span> <a href="mailto:inithancustomgifts@gmail.com">inithancustomgifts@gmail.com</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">
+        <p>© 2026 <a href="index.html">Inithan Custom Gifts</a>. All rights reserved.</p>
+      </div>
+      <div class="footer-bottom-right">
+        <div class="secure-payments-title"><span class="lock-icon">🔒</span> 100% Safe Checkout</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="index.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🏠</span>
+      <span class="mob-nav-label">Home</span>
+    </a>
+    <a href="products.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🛍️</span>
+      <span class="mob-nav-label">Products</span>
+    </a>
+    <a href="personalize.html" class="mob-nav-item active">
+      <span class="mob-nav-icon">🎨</span>
+      <span class="mob-nav-label">Personalize</span>
+    </a>
+    <a href="customize-product.html" class="mob-nav-item">
+      <span class="mob-nav-icon">✨</span>
+      <span class="mob-nav-label">Customizer</span>
+    </a>
+    <a href="cart.html" class="mob-nav-item mob-cart-link" id="mobCartLink">
+      <span class="mob-nav-icon">🛒</span>
+      <span class="mob-nav-label">Cart</span>
+      <span class="mob-cart-badge" id="mobCartBadge" style="display:none;">0</span>
+    </a>
+  </nav>
+
+  <!-- WhatsApp Floating Action Button -->
+  <a href="https://wa.me/919944444834?text=Hi%20Inithan%20Custom%20Gifts!%20I'd%20like%20help%20personalizing%20a%20gift." class="whatsapp-fab" target="_blank" aria-label="Chat on WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+    </svg>
+  </a>
+
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/category-pages.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCategoryPageProducts('personalize', 'all');
+    });
+  </script>
+</body>
+</html>
