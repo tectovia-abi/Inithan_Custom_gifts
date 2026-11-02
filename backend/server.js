@@ -94,7 +94,7 @@ app.use('/api/bulk-inquiry', inquiryLimiter);
 app.use(compression());
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ limit: '1mb', extended: true }));
-app.use(mongoSanitize());
+app.use(mongoSanitize({ allowDots: true }));
 
 // ── Serve frontend static files from ../frontend ────────────────────────────
 const frontendPath = path.join(__dirname, '..', 'frontend');

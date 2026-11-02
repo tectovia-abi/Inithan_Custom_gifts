@@ -7,26 +7,36 @@ const whatsappService = require('../services/whatsappService');
  */
 const verifyWebhook = (req, res) => {
   try {
-    const mode = req.query['hub.mode'];
-    const token = req.query['hub.verify_token'];
-    const challenge = req.query['hub.challenge'];
+    let mode = req.query ? req.query['hub.mode'] : undefined;
+    let token = req.query ? req.query['hub.verify_token'] : undefined;
+    let challenge = req.query ? req.query['hub.challenge'] : undefined;
+
+    // Fallback: extract directly from originalUrl in case middleware stripped keys containing dots (e.g. express-mongo-sanitize)
+    if (!mode || !token || !challenge) {
+      try {
+        const parsedUrl = new URL(req.originalUrl || req.url, 'http://localhost');
+        mode = mode || parsedUrl.searchParams.get('hub.mode');
+        token = token || parsedUrl.searchParams.get('hub.verify_token');
+        challenge = challenge || parsedUrl.searchParams.get('hub.challenge');
+      } catch (_) {}
+    }
 
     const expectedToken = (process.env.WHATSAPP_VERIFY_TOKEN || 'inithan_wa_verify_token_2026').trim();
 
     if (mode && token) {
       if (mode === 'subscribe' && token === expectedToken) {
         console.log('✅ [WhatsApp Webhook] Meta handshake verified successfully!');
-        return res.status(200).send(challenge);
+        return res.status(200).type('text/plain').send(challenge);
       } else {
-        console.warn('❌ [WhatsApp Webhook] Verification token mismatch. Received:', token);
-        return res.status(403).json({ error: 'Verification token mismatch' });
+        console.warn('❌ [WhatsApp Webhook] Verification token mismatch. Received:', token, 'Expected:', expectedToken);
+        return res.status(403).type('text/plain').send('Verification token mismatch');
       }
     }
 
-    return res.status(400).json({ error: 'Missing required hub parameters' });
+    return res.status(400).type('text/plain').send('Missing required hub parameters');
   } catch (error) {
     console.error('❌ [WhatsApp Webhook] Error during verification:', error);
-    return res.status(500).json({ error: 'Internal verification error' });
+    return res.status(500).type('text/plain').send('Internal verification error');
   }
 };
 
