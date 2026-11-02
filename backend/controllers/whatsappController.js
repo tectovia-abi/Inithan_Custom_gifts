@@ -76,7 +76,7 @@ const verifyWebhook = (req, res) => {
 
     // 2. Meta verification handshake
     if (mode && token) {
-      if (mode === 'subscribe' && token === expectedToken) {
+      if (mode.trim() === 'subscribe' && token.trim() === expectedToken) {
         console.log('✅ [WhatsApp Webhook] Meta handshake verified successfully!');
         return res.status(200).type('text/plain').send(challenge);
       } else {

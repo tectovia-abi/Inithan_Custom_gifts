@@ -49,21 +49,26 @@ const allowedOrigins = [
   'https://inithancustomgifts.com',
   'https://www.inithancustomgifts.com'
 ];
-app.use(cors({
-  origin: (origin, callback) => {
-    if (
-      !origin || 
-      origin === 'null' || 
-      allowedOrigins.includes(origin) ||
-      /^http:\/\/localhost:\d+$/.test(origin) ||
-      /^http:\/\/127\.0\.0\.1:\d+$/.test(origin)
-    ) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
+app.use(cors((req, callback) => {
+  // Always permit WhatsApp webhook requests regardless of Origin (Meta Developer Dashboard, Facebook, etc.)
+  if (req.originalUrl && req.originalUrl.startsWith('/api/whatsapp')) {
+    return callback(null, { origin: true, credentials: true });
+  }
+
+  const origin = req.header('Origin');
+  if (
+    !origin || 
+    origin === 'null' || 
+    allowedOrigins.includes(origin) ||
+    /^http:\/\/localhost:\d+$/.test(origin) ||
+    /^http:\/\/127\.0\.0\.1:\d+$/.test(origin) ||
+    (origin && (origin.includes('facebook.com') || origin.includes('meta.com')))
+  ) {
+    callback(null, { origin: true, credentials: true });
+  } else {
+    // Return origin: false instead of throwing Error to prevent crashing into HTTP 500
+    callback(null, { origin: false });
+  }
 }));
 
 // ── Rate Limiting ────────────────────────────────────────────────────────────
