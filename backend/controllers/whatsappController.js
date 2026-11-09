@@ -22,10 +22,15 @@ const verifyWebhook = (req, res) => {
     }
 
     const expectedToken = (process.env.WHATSAPP_VERIFY_TOKEN || 'inithan_wa_verify_token_2026').trim();
+    const currentHost = req.get('host') || 'inithan-backend.onrender.com';
+    const callbackUrl = process.env.RENDER_EXTERNAL_URL 
+      ? `${process.env.RENDER_EXTERNAL_URL}/api/whatsapp/webhook`
+      : `${req.protocol}://${currentHost}/api/whatsapp/webhook`;
 
-    // 1. If accessed directly in a browser (without Meta query params), show a friendly status page
+    // 1. If accessed directly in a browser without Meta query params, show friendly status page
     if (!mode && !token && !challenge) {
-      if (req.accepts && req.accepts('html')) {
+      const acceptHeader = req.headers['accept'] || '';
+      if (acceptHeader.includes('text/html')) {
         return res.status(200).send(`
 <!DOCTYPE html>
 <html lang="en">
@@ -52,7 +57,7 @@ const verifyWebhook = (req, res) => {
     <p>This endpoint receives automated webhook messages and delivery status receipts from Meta WhatsApp Business Platform.</p>
     <div class="box">
       <div class="label">Callback URL (for Meta Developer Dashboard)</div>
-      <div class="value">https://inithancustomgifts.com/api/whatsapp/webhook</div>
+      <div class="value">${callbackUrl}</div>
     </div>
     <div class="box">
       <div class="label">Verify Token (for Meta Developer Dashboard)</div>
@@ -66,12 +71,7 @@ const verifyWebhook = (req, res) => {
 </html>
         `);
       }
-      return res.status(200).json({
-        status: 'active',
-        message: 'WhatsApp Webhook is active and waiting for Meta requests.',
-        callbackUrl: 'https://inithancustomgifts.com/api/whatsapp/webhook',
-        verifyToken: expectedToken
-      });
+      return res.status(400).type('text/plain').send('Missing required hub parameters');
     }
 
     // 2. Meta verification handshake
@@ -217,9 +217,12 @@ const handleWebhook = async (req, res) => {
  */
 const getStatus = (req, res) => {
   const config = whatsappService.getWhatsAppConfig();
+  const callbackUrl = process.env.RENDER_EXTERNAL_URL 
+    ? `${process.env.RENDER_EXTERNAL_URL}/api/whatsapp/webhook`
+    : `${req.protocol}://${req.get('host') || 'inithan-backend.onrender.com'}/api/whatsapp/webhook`;
   res.json({
     status: 'active',
-    endpoint: 'https://inithancustomgifts.com/api/whatsapp/webhook',
+    endpoint: callbackUrl,
     features: {
       incomingMessages: true,
       statusUpdates: true,
