@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Homepage Section Manager | Inithan Custom Gifts Admin</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/admin.css">
   <link rel="icon" type="image/png" href="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png">
   <style>
+    /* Top Sticky Bar */
     .hp-top-bar {
       display: flex;
       justify-content: space-between;
@@ -17,7 +18,7 @@
       padding: 16px 24px;
       border-radius: 14px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       border: 1px solid #e2e8f0;
       position: sticky;
       top: 15px;
@@ -80,6 +81,62 @@
       background: #e2e8f0;
     }
 
+    /* Quick Jump Navigation Bar */
+    .quick-jump-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 22px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .quick-jump-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .quick-jump-pills {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: nowrap;
+    }
+    .quick-pill {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #e2e8f0;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .quick-pill:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+      transform: translateY(-1px);
+    }
+    .quick-pill.active {
+      background: #C41E3A;
+      color: #ffffff;
+      border-color: #C41E3A;
+    }
+
     /* Section Accordion / Cards */
     .hp-sections-grid {
       display: flex;
@@ -93,6 +150,7 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.03);
       overflow: hidden;
       transition: all 0.25s ease;
+      scroll-margin-top: 100px;
     }
     .section-card-header {
       display: flex;
@@ -113,7 +171,7 @@
       justify-content: center;
       min-width: 32px;
       height: 28px;
-      padding: 0 6px;
+      padding: 0 8px;
       background: #f1f5f9;
       color: #475569;
       border-radius: 8px;
@@ -333,8 +391,13 @@
       padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      transition: all 0.2s ease;
+    }
+    .cat-card-editor:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
     }
     .btn-upload-photo {
       background: #f8fafc;
@@ -373,6 +436,135 @@
       background: #eff6ff;
       border-color: #3b82f6;
     }
+
+    /* Product Catalog Picker Box */
+    .product-picker-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .product-picker-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .product-picker-header span {
+      font-size: 0.73rem;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .product-search-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 4px 8px;
+    }
+    .product-search-input-wrap input {
+      border: none !important;
+      outline: none !important;
+      padding: 3px 0 !important;
+      font-size: 0.8rem !important;
+      width: 100%;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+    .btn-clear-search {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 0 2px;
+    }
+    .btn-clear-search:hover {
+      color: #C41E3A;
+    }
+    .prod-select-dropdown {
+      width: 100%;
+      padding: 6px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      background: #ffffff;
+      color: #1e293b;
+      outline: none;
+    }
+    .prod-select-dropdown:focus {
+      border-color: #C41E3A;
+    }
+
+    /* Customer Reviews Editor Cards */
+    .review-editor-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      transition: all 0.2s ease;
+    }
+    .review-editor-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+    }
+    .review-editor-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 10px;
+    }
+    .btn-delete-rev {
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-delete-rev:hover {
+      background: #fee2e2;
+      border-color: #f87171;
+    }
+    .toast-popup {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1e293b;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+    .toast-popup.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
   </style>
 </head>
 <body class="admin-body">
@@ -405,7 +597,7 @@
             <span>🏷️</span> Occasion Offers
           </a>
           <a href="admin-categories.html" class="admin-nav-link">
-            <span>🗂️</span> Categories & Occasions
+            <span>🗂️</span> Categories &amp; Occasions
           </a>
           <a href="admin-users.html" class="admin-nav-link">
             <span>👥</span> Users
@@ -442,7 +634,7 @@
         <div class="hp-top-bar">
           <div class="hp-top-title">
             <h2>🏠 Homepage Layout &amp; Content Manager</h2>
-            <p>Customize Header Navbar, Category Cards, and all homepage sections without altering fixed layout counts.</p>
+            <p>Customize and manage all 7 homepage sections with catalog live search and instant photo uploads.</p>
           </div>
           <div class="hp-top-actions">
             <button type="button" class="btn-preview-hp" id="btnResetHp">🔄 Reset Defaults</button>
@@ -453,90 +645,33 @@
           </div>
         </div>
 
-        <form id="homepageConfigForm">
+        <!-- Quick Jump Navigation Bar -->
+        <div class="quick-jump-bar">
+          <span class="quick-jump-label">⚡ Quick Jump:</span>
+          <div class="quick-jump-pills">
+            <button type="button" class="quick-pill" onclick="jumpToSection('card_hero')">01 Hero</button>
+            <button type="button" class="quick-pill" onclick="jumpToSection('card_cat')">02 Categories</button>
+            <button type="button" class="quick-pill" onclick="jumpToSection('card_rel')">03 Relationships</button>
+            <button type="button" class="quick-pill" onclick="jumpToSection('card_budget')">04 Budget</button>
+            <button type="button" class="quick-pill" onclick="jumpToSection('card_occ')">05 Occasions</button>
+            <button type="button" class="quick-pill" onclick="jumpToSection('card_uniq')">06 Unique</button>
+            <button type="button" class="quick-pill" onclick="jumpToSection('card_rev')">07 Reviews</button>
+          </div>
+        </div>
+
+        <form id="homepageConfigForm" onsubmit="return false;">
           <div class="hp-sections-grid">
 
             <!-- ========================================== -->
-            <!-- SECTION 00: TOP HEADER NAVIGATION BAR (NAVBAR) -->
+            <!-- SECTION 1: HERO SHOWCASE BANNER -->
             <!-- ========================================== -->
-            <div class="section-card" style="border: 2px solid #cbd5e1;">
-              <div class="section-card-header" style="background: #f8fafc;" onclick="toggleCardBody('navBarBody')">
-                <div class="section-title-wrap">
-                  <span class="section-badge-id" style="background:#e0f2fe; color:#0369a1;">NAV</span>
-                  <h3>
-                    <span>🌐 Top Header Navigation Bar (Navbar)</span>
-                    <span class="desc">— Logo photo, brand text &amp; 8 main menu links</span>
-                  </h3>
-                </div>
-                <div class="section-header-right" onclick="event.stopPropagation()">
-                  <span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:700; font-size:0.75rem; padding:4px 8px; border-radius:6px;">🔒 Fixed 8 Links</span>
-                  <span class="status-text status-active" id="navBarStatusText">Active</span>
-                  <label class="toggle-switch">
-                    <input type="checkbox" id="hp_nav_enabled" checked onchange="updateToggleStatus(this, 'navBarStatusText')">
-                    <span class="slider"></span>
-                  </label>
-                </div>
-              </div>
-
-              <div class="section-card-body" id="navBarBody">
-                <div class="count-highlight-box" style="margin-bottom: 20px;">
-                  <div>
-                    <strong>🖼️ Header Brand Identity (Logo &amp; Brand Text)</strong>
-                    <span>Change the logo image photo, brand title, and tagline displayed on your storefront header.</span>
-                  </div>
-                </div>
-
-                <div class="form-grid-3" style="align-items:flex-end; margin-bottom: 22px;">
-                  <div class="field-group" style="margin-bottom:0;">
-                    <label style="display:block; margin-bottom:6px; font-weight:700;">Logo Photo</label>
-                    <div style="display:flex; gap:12px; align-items:center;">
-                      <div class="cat-thumb-box" style="width:52px; height:52px; border-radius:10px; padding:2px;" onclick="document.getElementById('hp_nav_logo_file').click()" title="Click to upload new logo photo">
-                        <img id="hp_nav_logo_preview" src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png" alt="Logo Preview" style="object-fit:contain;">
-                        <div class="cat-thumb-hover-overlay">📁 Upload</div>
-                      </div>
-                      <div style="display:flex; flex-direction:column; gap:4px;">
-                        <input type="hidden" id="hp_nav_logo" value="">
-                        <input type="file" id="hp_nav_logo_file" accept="image/*" style="display:none;" onchange="handleLogoUpload(this)">
-                        <button type="button" class="btn-upload-photo" onclick="document.getElementById('hp_nav_logo_file').click()">
-                          <span>📁 Upload Logo Photo</span>
-                        </button>
-                        <span id="hp_nav_logo_status" style="font-size:0.75rem; color:#64748b;">Click to choose photo</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="field-group" style="margin-bottom:0;">
-                    <label>Brand Name</label>
-                    <input type="text" id="hp_nav_brand" placeholder="e.g. Inithan Custom Gifts">
-                  </div>
-                  <div class="field-group" style="margin-bottom:0;">
-                    <label>Brand Tagline</label>
-                    <input type="text" id="hp_nav_tagline" placeholder="e.g. Made with Love">
-                  </div>
-                </div>
-
-                <div class="count-highlight-box" style="margin-bottom: 16px; background:#f0fdf4; border-color:#86efac;">
-                  <div>
-                    <strong style="color:#166534;">📋 Navigation Menu Links (8 Fixed Links)</strong>
-                    <span style="color:#15803d;">You can edit the Text and Page URL for each existing navigation link without altering the count.</span>
-                  </div>
-                </div>
-
-                <div style="display:flex; flex-direction:column; gap:10px;" id="navLinksInputsContainer">
-                  <!-- Generated 8 rows for Link 1 to 8 -->
-                </div>
-              </div>
-            </div>
-
-            <!-- ========================================== -->
-            <!-- SECTION 1: HERO BANNER -->
-            <!-- ========================================== -->
-            <div class="section-card">
+            <div class="section-card" id="card_hero">
               <div class="section-card-header" onclick="toggleCardBody('heroBody')">
                 <div class="section-title-wrap">
                   <span class="section-badge-id">01</span>
                   <h3>
                     <span>⚡ Hero Showcase Banner</span>
-                    <span class="desc">— Top introduction, mascot, headlines &amp; CTA buttons</span>
+                    <span class="desc">— Top introduction, mascot, headlines &amp; 5 runner showcase banners</span>
                   </h3>
                 </div>
                 <div class="section-header-right" onclick="event.stopPropagation()">
@@ -620,8 +755,8 @@
                 <div class="count-highlight-box" style="margin-top:22px; margin-bottom: 16px; background:#eff6ff; border-color:#93c5fd;">
                   <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
                     <div>
-                      <strong style="color:#1e40af;">🖼️ 5 Featured Hero Showcase Banners (Upload Photos &amp; Change Text)</strong>
-                      <span style="color:#2563eb;">Upload banner photos and edit titles/links for the 5 auto-cycling cards on the right side of the hero.</span>
+                      <strong style="color:#1e40af;">🖼️ 5 Featured Hero Showcase Banners (Catalog Picker &amp; Photo Upload)</strong>
+                      <span style="color:#2563eb;">Search products (mug, bag, frame, hamper) to auto-fill or upload custom banner photos.</span>
                     </div>
                     <span class="badge" style="background:#dbeafe; color:#1e40af; font-weight:700; font-size:0.75rem; padding:4px 8px; border-radius:6px; flex-shrink:0;">🔒 Fixed 5 Slides</span>
                   </div>
@@ -634,15 +769,15 @@
             </div>
 
             <!-- ========================================== -->
-            <!-- SECTION 2: SHOP BY CATEGORY (10 CARDS EDITABLE) -->
+            <!-- SECTION 2: SHOP BY CATEGORY (10 CARDS) -->
             <!-- ========================================== -->
-            <div class="section-card" style="border: 2px solid #cbd5e1;">
+            <div class="section-card" id="card_cat" style="border: 2px solid #cbd5e1;">
               <div class="section-card-header" style="background:#f8fafc;" onclick="toggleCardBody('catBody')">
                 <div class="section-title-wrap">
                   <span class="section-badge-id" style="background:#e0e7ff; color:#3730a3;">02</span>
                   <h3>
                     <span>🛍️ Shop By Category Bar (10 Collection Cards)</span>
-                    <span class="desc">— Edit photo &amp; text of the 10 collection cards (#shop-category)</span>
+                    <span class="desc">— Edit photo, title, link &amp; catalog picker for the 10 cards</span>
                   </h3>
                 </div>
                 <div class="section-header-right" onclick="event.stopPropagation()">
@@ -669,30 +804,31 @@
 
                 <div class="count-highlight-box" style="margin-top: 10px; margin-bottom: 16px; background:#eff6ff; border-color:#93c5fd;">
                   <div>
-                    <strong style="color:#1e40af;">🖼️ 10 Category Collection Cards (Photo &amp; Text Editing)</strong>
-                    <span style="color:#2563eb;">Edit the Photo URL, Title, and Search Link of each of the 10 existing category cards without changing the count.</span>
+                    <strong style="color:#1e40af;">🖼️ 10 Category Collection Cards (Photo Upload &amp; Catalog Picker)</strong>
+                    <span style="color:#2563eb;">Search products (e.g. puzzle, frame, mug) or upload photos for each category card.</span>
                   </div>
                 </div>
 
-                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:14px;" id="categoryItemsInputsContainer">
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap:14px;" id="categoryItemsInputsContainer">
                   <!-- Generated 10 category cards -->
                 </div>
               </div>
             </div>
 
             <!-- ========================================== -->
-            <!-- SECTION 3: SHOP BY RELATIONSHIP -->
+            <!-- SECTION 3: SHOP BY RELATIONSHIP (10 CARDS) -->
             <!-- ========================================== -->
-            <div class="section-card">
+            <div class="section-card" id="card_rel">
               <div class="section-card-header" onclick="toggleCardBody('relBody')">
                 <div class="section-title-wrap">
-                  <span class="section-badge-id">03</span>
+                  <span class="section-badge-id" style="background:#fce7f3; color:#9d174d;">03</span>
                   <h3>
-                    <span>💖 For Relationship</span>
-                    <span class="desc">— Gifts For Boyfriend, Girlfriend, Husband, Wife, Best Friend</span>
+                    <span>💖 For Relationship (10 Cards)</span>
+                    <span class="desc">— Mother, Father, Husband, Wife, Sister, Brother, Couple, Boyfriend, Girlfriend, Friend</span>
                   </h3>
                 </div>
                 <div class="section-header-right" onclick="event.stopPropagation()">
+                  <span class="badge" style="background:#fce7f3; color:#9d174d; font-weight:700; font-size:0.75rem; padding:4px 8px; border-radius:6px;">🔒 Fixed 10 Cards</span>
                   <span class="status-text status-active" id="relStatusText">Active</span>
                   <label class="toggle-switch">
                     <input type="checkbox" id="hp_rel_enabled" checked onchange="updateToggleStatus(this, 'relStatusText')">
@@ -702,30 +838,44 @@
               </div>
 
               <div class="section-card-body" id="relBody">
-                <div class="field-group">
-                  <label>Section Heading</label>
-                  <input type="text" id="hp_rel_title" placeholder="e.g. For Relationship ❤️">
+                <div class="form-grid-2">
+                  <div class="field-group">
+                    <label>Section Heading</label>
+                    <input type="text" id="hp_rel_title" placeholder="e.g. For Relationship ❤️">
+                  </div>
+                  <div class="field-group">
+                    <label>Section Subtitle</label>
+                    <input type="text" id="hp_rel_subtitle" placeholder="e.g. Find the perfect match for the people who matter most.">
+                  </div>
                 </div>
-                <div class="field-group">
-                  <label>Section Subtitle</label>
-                  <input type="text" id="hp_rel_subtitle" placeholder="e.g. Find the perfect match for the people who matter most.">
+
+                <div class="count-highlight-box" style="margin-top: 10px; margin-bottom: 16px; background:#fdf2f8; border-color:#f472b6;">
+                  <div>
+                    <strong style="color:#9d174d;">💖 10 Relationship Showcase Cards (Photo Upload &amp; Catalog Picker)</strong>
+                    <span style="color:#be185d;">Customize cards for Mother, Father, Husband, Wife, Sister, Brother, Couple, Boyfriend, Girlfriend, Friend.</span>
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap:14px;" id="relationshipItemsInputsContainer">
+                  <!-- Generated 10 relationship cards -->
                 </div>
               </div>
             </div>
 
             <!-- ========================================== -->
-            <!-- SECTION 4: GIFTS FOR EVERY BUDGET -->
+            <!-- SECTION 4: GIFTS FOR EVERY BUDGET (7 CARDS) -->
             <!-- ========================================== -->
-            <div class="section-card">
+            <div class="section-card" id="card_budget">
               <div class="section-card-header" onclick="toggleCardBody('budgetBody')">
                 <div class="section-title-wrap">
-                  <span class="section-badge-id">04</span>
+                  <span class="section-badge-id" style="background:#ecfdf5; color:#065f46;">04</span>
                   <h3>
-                    <span>🏷️ Gifts for Every Budget</span>
+                    <span>🏷️ Gifts for Every Budget (7 Tier Cards)</span>
                     <span class="desc">— Pocket picks from Under ₹99 up to Luxury ₹1,499</span>
                   </h3>
                 </div>
                 <div class="section-header-right" onclick="event.stopPropagation()">
+                  <span class="badge" style="background:#ecfdf5; color:#065f46; font-weight:700; font-size:0.75rem; padding:4px 8px; border-radius:6px;">🔒 Fixed 7 Tiers</span>
                   <span class="status-text status-active" id="budStatusText">Active</span>
                   <label class="toggle-switch">
                     <input type="checkbox" id="hp_bud_enabled" checked onchange="updateToggleStatus(this, 'budStatusText')">
@@ -735,26 +885,39 @@
               </div>
 
               <div class="section-card-body" id="budgetBody">
-                <div class="field-group">
-                  <label>Section Heading</label>
-                  <input type="text" id="hp_bud_title" placeholder="e.g. Gifts for Every Budget 🎁">
+                <div class="form-grid-2">
+                  <div class="field-group">
+                    <label>Section Heading</label>
+                    <input type="text" id="hp_bud_title" placeholder="e.g. Gifts for Every Budget 🎁">
+                  </div>
+                  <div class="field-group">
+                    <label>Section Subtitle</label>
+                    <input type="text" id="hp_bud_subtitle" placeholder="e.g. Thoughtful personalized surprises tailored to fit every budget.">
+                  </div>
                 </div>
-                <div class="field-group">
-                  <label>Section Subtitle</label>
-                  <input type="text" id="hp_bud_subtitle" placeholder="e.g. Thoughtful personalized surprises tailored to fit every budget.">
+
+                <div class="count-highlight-box" style="margin-top: 10px; margin-bottom: 16px; background:#ecfdf5; border-color:#a7f3d0;">
+                  <div>
+                    <strong style="color:#065f46;">🏷️ 7 Budget Tier Showcase Cards (Price, Tag, Photo &amp; Catalog Picker)</strong>
+                    <span style="color:#047857;">Search products (mug, bag, keychain) to auto-fill prices &amp; photos or customize manually.</span>
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap:14px;" id="budgetItemsInputsContainer">
+                  <!-- Generated 7 budget cards -->
                 </div>
               </div>
             </div>
 
             <!-- ========================================== -->
-            <!-- SECTION 5: CELEBRATE EVERY OCCASION (COUNT EDITABLE!) -->
+            <!-- SECTION 5: CELEBRATE EVERY OCCASION (8 CARDS) -->
             <!-- ========================================== -->
-            <div class="section-card" style="border: 2px solid #cbd5e1;">
+            <div class="section-card" id="card_occ" style="border: 2px solid #cbd5e1;">
               <div class="section-card-header" style="background: #f8fafc;" onclick="toggleCardBody('occBody')">
                 <div class="section-title-wrap">
                   <span class="section-badge-id" style="background:#e0e7ff; color:#3730a3;">05</span>
                   <h3>
-                    <span>🎉 Celebrate Every Occasion</span>
+                    <span>🎉 Celebrate Every Occasion (8 Showcase Cards)</span>
                     <span class="desc">— Interactive tabs for Birthday, Anniversary, Valentine, Love</span>
                   </h3>
                 </div>
@@ -795,18 +958,29 @@
                     <input type="text" id="hp_occ_subtitle" placeholder="e.g. Thoughtful personalized gifts crafted to make every celebration truly unforgettable.">
                   </div>
                 </div>
+
+                <div class="count-highlight-box" style="margin-top: 16px; margin-bottom: 16px; background:#f5f3ff; border-color:#c4b5fd;">
+                  <div>
+                    <strong style="color:#5b21b6;">🎉 8 Occasion Showcase Cards (Occasions Dropdown &amp; Catalog Picker)</strong>
+                    <span style="color:#6d28d9;">Select occasion categories from your database and search products to link cards seamlessly.</span>
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:16px;" id="occasionItemsInputsContainer">
+                  <!-- Generated 8 occasion cards -->
+                </div>
               </div>
             </div>
 
             <!-- ========================================== -->
-            <!-- SECTION 6: DISCOVER UNIQUE CREATIONS (COUNT EDITABLE!) -->
+            <!-- SECTION 6: DISCOVER UNIQUE CREATIONS (8 CARDS) -->
             <!-- ========================================== -->
-            <div class="section-card" style="border: 2px solid #cbd5e1;">
+            <div class="section-card" id="card_uniq" style="border: 2px solid #cbd5e1;">
               <div class="section-card-header" style="background: #f8fafc;" onclick="toggleCardBody('uniqBody')">
                 <div class="section-title-wrap">
                   <span class="section-badge-id" style="background:#fef3c7; color:#92400e;">06</span>
                   <h3>
-                    <span>✨ Discover Unique Creations</span>
+                    <span>✨ Discover Unique Creations (8 Showcase Cards)</span>
                     <span class="desc">— Featured artisan keepsakes, glow frames, acrylic song plaques</span>
                   </h3>
                 </div>
@@ -847,19 +1021,30 @@
                     <input type="text" id="hp_uniq_subtitle" placeholder="e.g. Artisan keepsakes, illuminated wonders &amp; handcrafted gifts you won't find anywhere else.">
                   </div>
                 </div>
+
+                <div class="count-highlight-box" style="margin-top: 16px; margin-bottom: 16px; background:#fffbeb; border-color:#fde68a;">
+                  <div>
+                    <strong style="color:#92400e;">✨ 8 Unique Artisan Creations Showcase Cards</strong>
+                    <span style="color:#b45309;">Feature high-converting keepsakes with badge, discount, live catalog search, and photo upload.</span>
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:16px;" id="uniqueCollectionItemsInputsContainer">
+                  <!-- Generated 8 unique cards -->
+                </div>
               </div>
             </div>
 
             <!-- ========================================== -->
             <!-- SECTION 7: CUSTOMER REVIEWS SPOTLIGHT -->
             <!-- ========================================== -->
-            <div class="section-card">
+            <div class="section-card" id="card_rev">
               <div class="section-card-header" onclick="toggleCardBody('revBody')">
                 <div class="section-title-wrap">
-                  <span class="section-badge-id">07</span>
+                  <span class="section-badge-id" style="background:#ccfbf1; color:#0f766e;">07</span>
                   <h3>
                     <span>⭐ Customer Reviews Spotlight</span>
-                    <span class="desc">— Verified customer feedback, ratings &amp; real customer photos</span>
+                    <span class="desc">— Verified customer feedback, ratings, quotes &amp; review management</span>
                   </h3>
                 </div>
                 <div class="section-header-right" onclick="event.stopPropagation()">
@@ -883,12 +1068,33 @@
                       <option value="3" selected>3 Spotlight Reviews</option>
                       <option value="6">6 Spotlight Reviews</option>
                       <option value="9">9 Spotlight Reviews</option>
+                      <option value="12">12 Spotlight Reviews</option>
                     </select>
                   </div>
                 </div>
                 <div class="field-group">
                   <label>Section Subtitle</label>
                   <input type="text" id="hp_rev_subtitle" placeholder="e.g. Real smiles and authentic stories from over 25,000+ happy customers across India.">
+                </div>
+
+                <div class="count-highlight-box" style="margin-top: 16px; margin-bottom: 16px; background:#f0fdfa; border-color:#99f6e4; display:flex; justify-content:space-between; align-items:center;">
+                  <div>
+                    <strong style="color:#115e59;">⭐ Customer Reviews Management</strong>
+                    <span style="color:#0f766e;">Add, edit customer quotes, ratings, city, verified badges, or remove reviews.</span>
+                  </div>
+                  <button type="button" class="btn-save-hp" style="background:#0d9488; padding:8px 16px; font-size:0.84rem;" onclick="addNewCustomerReview()">
+                    <span>➕ Add New Review</span>
+                  </button>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:14px;" id="customerReviewsInputsContainer">
+                  <!-- Generated dynamic review cards -->
+                </div>
+
+                <div style="margin-top:16px; text-align:center;">
+                  <button type="button" class="btn-preview-hp" style="border-color:#0d9488; color:#0d9488; font-weight:700;" onclick="addNewCustomerReview()">
+                    <span>➕ Add Another Review</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -900,13 +1106,60 @@
     </main>
   </div>
 
+  <!-- Toast Notification -->
+  <div id="hpToast" class="toast-popup">
+    <span id="hpToastIcon">✅</span>
+    <span id="hpToastMsg">Homepage updated successfully!</span>
+  </div>
+
   <script src="js/auth.js"></script>
   <script>
+    // Globals
+    let ALL_PRODUCTS = [];
+    let ALL_OCCASIONS = [];
+    let CURRENT_NAVBAR = null;
+
+    // Helper: Escape HTML
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // Toast Popup
+    function showToast(msg, icon = '✅') {
+      const toast = document.getElementById('hpToast');
+      const msgEl = document.getElementById('hpToastMsg');
+      const iconEl = document.getElementById('hpToastIcon');
+      if (!toast) return;
+      msgEl.textContent = msg;
+      iconEl.textContent = icon;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+
     // Expand / collapse card body
     function toggleCardBody(bodyId) {
       const el = document.getElementById(bodyId);
       if (!el) return;
       el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // Quick jump to section
+    function jumpToSection(cardId) {
+      const card = document.getElementById(cardId);
+      if (!card) return;
+      const body = card.querySelector('.section-card-body');
+      if (body && body.style.display === 'none') {
+        body.style.display = 'block';
+      }
+      card.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     // Update status text on toggle
@@ -922,33 +1175,9 @@
       }
     }
 
-    // Default 8 navbar links
-    const DEFAULT_NAV_LINKS = [
-      { id: 1, text: 'Home', url: 'index.html' },
-      { id: 2, text: 'All Products', url: 'products.html' },
-      { id: 3, text: 'Love & Romance', url: 'love-romance.html' },
-      { id: 4, text: 'Birthday', url: 'birthday.html' },
-      { id: 5, text: 'Special Occasions', url: 'special-occasions.html' },
-      { id: 6, text: 'For Her & Him', url: 'for-her-and-him.html' },
-      { id: 7, text: 'Corporate Gifts', url: 'corporate-gifts.html' },
-      { id: 8, text: 'Personalize', url: 'personalize.html' }
-    ];
-
-    // Default 10 category cards
-    const DEFAULT_CAT_ITEMS = [
-      { id: 1, title: 'Puzzles', imageUrl: 'images/categories/puzzles.jpg', link: 'products.html?search=Puzzle' },
-      { id: 2, title: 'Frames', imageUrl: 'images/categories/frames.jpg', link: 'products.html?search=Frame' },
-      { id: 3, title: 'Mugs', imageUrl: 'images/categories/mugs.jpg', link: 'products.html?search=Mug' },
-      { id: 4, title: 'Engravings', imageUrl: 'images/categories/engravings.jpg', link: 'products.html?search=Engraving' },
-      { id: 5, title: 'Calendar', imageUrl: 'images/categories/calendar.jpg', link: 'products.html?search=Calendar' },
-      { id: 6, title: 'Name Gifts', imageUrl: 'images/categories/name-gifts.jpg', link: 'products.html?search=Name' },
-      { id: 7, title: 'Hampers', imageUrl: 'images/categories/hampers.jpg', link: 'products.html?search=Hamper' },
-      { id: 8, title: 'Combo', imageUrl: 'images/categories/combo.jpg', link: 'products.html?search=Combo' },
-      { id: 9, title: 'Long Distance', imageUrl: 'images/categories/long-distance.jpg', link: 'products.html?search=Long+Distance' },
-      { id: 10, title: 'Licence', imageUrl: 'images/categories/licence.jpg', link: 'products.html?search=Licence' }
-    ];
-
-    // Default Mascot & 5 Hero Showcase Banner Slides (from index.html)
+    // ==========================================
+    // DEFAULTS
+    // ==========================================
     const DEFAULT_MASCOT_URL = 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logoman.png';
 
     const DEFAULT_HERO_SLIDES = [
@@ -999,77 +1228,239 @@
       }
     ];
 
-    // Render 8 Navbar Link Rows
-    function renderNavLinksInputs(links) {
-      const container = document.getElementById('navLinksInputsContainer');
-      if (!container) return;
-      const list = (Array.isArray(links) && links.length === 8) ? links : DEFAULT_NAV_LINKS;
+    const DEFAULT_CAT_ITEMS = [
+      { id: 1, title: 'Puzzles', imageUrl: 'images/categories/puzzles.jpg', link: 'products.html?search=Puzzle' },
+      { id: 2, title: 'Frames', imageUrl: 'images/categories/frames.jpg', link: 'products.html?search=Frame' },
+      { id: 3, title: 'Mugs', imageUrl: 'images/categories/mugs.jpg', link: 'products.html?search=Mug' },
+      { id: 4, title: 'Engravings', imageUrl: 'images/categories/engravings.jpg', link: 'products.html?search=Engraving' },
+      { id: 5, title: 'Calendar', imageUrl: 'images/categories/calendar.jpg', link: 'products.html?search=Calendar' },
+      { id: 6, title: 'Name Gifts', imageUrl: 'images/categories/name-gifts.jpg', link: 'products.html?search=Name' },
+      { id: 7, title: 'Hampers', imageUrl: 'images/categories/hampers.jpg', link: 'products.html?search=Hamper' },
+      { id: 8, title: 'Combo', imageUrl: 'images/categories/combo.jpg', link: 'products.html?search=Combo' },
+      { id: 9, title: 'Long Distance', imageUrl: 'images/categories/long-distance.jpg', link: 'products.html?search=Long+Distance' },
+      { id: 10, title: 'Licence', imageUrl: 'images/categories/licence.jpg', link: 'products.html?search=Licence' }
+    ];
 
-      container.innerHTML = list.map((item, idx) => `
-        <div class="edit-item-row" data-nav-idx="${idx}">
-          <span class="item-num-badge">${idx + 1}</span>
-          <div style="flex:1;">
-            <label style="font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:4px; display:block;">Menu Link Title</label>
-            <input type="text" class="nav-link-text-input" value="${item.text || ''}" placeholder="e.g. Home" style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.86rem;">
+    const DEFAULT_REL_ITEMS = [
+      { id: 1, title: 'Mother', imageUrl: 'images/relationships/mother.jpg', link: 'products.html?search=Mother' },
+      { id: 2, title: 'Father', imageUrl: 'images/relationships/father.jpg', link: 'products.html?search=Father' },
+      { id: 3, title: 'Husband', imageUrl: 'images/relationships/husband.jpg', link: 'products.html?search=Husband' },
+      { id: 4, title: 'Wife', imageUrl: 'images/relationships/wife.jpg', link: 'products.html?search=Wife' },
+      { id: 5, title: 'Sister', imageUrl: 'images/relationships/sister.jpg', link: 'products.html?search=Sister' },
+      { id: 6, title: 'Brother', imageUrl: 'images/relationships/brother.jpg', link: 'products.html?search=Brother' },
+      { id: 7, title: 'Couple', imageUrl: 'images/relationships/couple.jpg', link: 'products.html?search=Couple' },
+      { id: 8, title: 'Boyfriend', imageUrl: 'images/relationships/boyfriend.jpg', link: 'products.html?search=Boyfriend' },
+      { id: 9, title: 'Girlfriend', imageUrl: 'images/relationships/girlfriend.jpg', link: 'products.html?search=Girlfriend' },
+      { id: 10, title: 'Friend', imageUrl: 'images/relationships/friend.jpg', link: 'products.html?search=Friend' }
+    ];
+
+    const DEFAULT_BUDGET_ITEMS = [
+      { id: 1, pill: 'Pocket Pick', tag: 'Pocket Friendly', price: '₹99', imageUrl: 'images/budget/under99.jpg', link: 'products.html?budget=99' },
+      { id: 2, pill: 'Everyday Fav', tag: 'Ceramic & Metal', price: '₹199', imageUrl: 'images/budget/under199.jpg', link: 'products.html?budget=199' },
+      { id: 3, pill: 'Trending', tag: 'Sweet Moments', price: '₹299', imageUrl: 'images/budget/under299.jpg', link: 'products.html?budget=299' },
+      { id: 4, pill: 'Most Popular', tag: 'Warm & Cozy', price: '₹499', imageUrl: 'images/budget/under499.jpg', link: 'products.html?budget=499' },
+      { id: 5, pill: 'Best Value', tag: 'LED & Keepsakes', price: '₹799', imageUrl: 'images/budget/under799.jpg', link: 'products.html?budget=799' },
+      { id: 6, pill: 'Signature', tag: 'Premium Picks', price: '₹999', imageUrl: 'images/budget/under999.jpg', link: 'products.html?budget=999' },
+      { id: 7, pill: 'Luxury Hamper', tag: 'Grand Gift Sets', price: '₹1,499', imageUrl: 'images/budget/under1499.jpg', link: 'products.html?budget=1499' }
+    ];
+
+    const DEFAULT_OCC_ITEMS = [
+      { id: 1, badge: '🎂 Birthday Pick', discount: '23% OFF', title: 'Personalized Photo Puzzle Cube', curPrice: '₹890.00', mrpPrice: '₹1,150.00', imageUrl: 'images/occasions/occ_puzzle_cube.jpg', link: 'products.html?search=Puzzle', tags: 'birthday special anniversary', rating: '★ 4.9 (1,240)' },
+      { id: 2, badge: '🎵 Scan & Play', discount: '27% OFF', title: 'Custom Star Constellation Frame', curPrice: '₹599.00', mrpPrice: '₹820.00', imageUrl: 'images/occasions/occ_spotify_frame.jpg', link: 'products.html?search=Spotify', tags: 'love anniversary valentine', rating: '★ 4.9 (2,180)' },
+      { id: 3, badge: '✨ Top Rated', discount: '38% OFF', title: 'LED Illuminated Wooden Frame', curPrice: '₹799.00', mrpPrice: '₹1,299.00', imageUrl: 'images/occasions/occ_wooden_frame.jpg', link: 'products.html?search=Frame', tags: 'anniversary birthday housewarming love', rating: '★ 5.0 (3,410)' },
+      { id: 4, badge: '💝 Most Loved', discount: '44% OFF', title: 'Custom Satin Heart Photo Cushion', curPrice: '₹499.00', mrpPrice: '₹899.00', imageUrl: 'images/occasions/occ_heart_cushion.jpg', link: 'products.html?search=Pillow', tags: 'love valentine smile', rating: '★ 4.8 (1,650)' },
+      { id: 5, badge: '📅 New Arrival', discount: '47% OFF', title: 'Acrylic Daily Photo Calendar Stand', curPrice: '₹798.00', mrpPrice: '₹1,499.00', imageUrl: 'images/occasions/occ_daily_calendar.jpg', link: 'products.html?search=Calendar', tags: 'housewarming farewell special', rating: '★ 4.8 (720)' },
+      { id: 6, badge: '🎁 Grand Combo', discount: '41% OFF', title: 'Grand Luxury Couple Hamper', curPrice: '₹1,299.00', mrpPrice: '₹2,199.00', imageUrl: 'images/occasions/occ_luxury_hamper.jpg', link: 'products.html?search=Hamper', tags: 'anniversary love special', rating: '★ 5.0 (2,150)' },
+      { id: 7, badge: '👑 Handcrafted', discount: '55% OFF', title: 'Custom Engraved Photo Pendant', curPrice: '₹490.00', mrpPrice: '₹1,099.00', imageUrl: 'images/occasions/occ_engraved_pendant.jpg', link: 'products.html?search=Jewelry', tags: 'women birthday farewell love', rating: '★ 4.7 (980)' },
+      { id: 8, badge: '✨ Ambient Glow', discount: '42% OFF', title: 'Magical Glowing Snow Globe Lamp', curPrice: '₹699.00', mrpPrice: '₹1,199.00', imageUrl: 'images/occasions/occ_snowglobe_lamp.jpg', link: 'products.html?search=Lamp', tags: 'smile birthday special housewarming', rating: '★ 4.9 (1,340)' }
+    ];
+
+    const DEFAULT_UNIQUE_ITEMS = [
+      { id: 1, badge: '💡 Ambient Glow', discount: '57% OFF', title: 'Couple Glow Name Magnet', curPrice: '₹299.00', mrpPrice: '₹699.00', imageUrl: 'images/unique/unique_glow_magnet.jpg', link: 'products.html?search=Magnet', rating: '★ 4.9 (1,850)' },
+      { id: 2, badge: '✨ Top Rated', discount: '55% OFF', title: 'Illuminated Glow Photo Frame', curPrice: '₹299.00', mrpPrice: '₹670.00', imageUrl: 'images/unique/unique_glow_frame.jpg', link: 'products.html?search=Glow', rating: '★ 4.8 (1,420)' },
+      { id: 3, badge: '🗺️ Coordinates', discount: '37% OFF', title: 'Customized Landsat Map Frame', curPrice: '₹490.00', mrpPrice: '₹780.00', imageUrl: 'images/unique/unique_landsat_frame.jpg', link: 'products.html?search=Landsat', rating: '★ 4.9 (980)' },
+      { id: 4, badge: '📻 Retro Beats', discount: '37% OFF', title: 'Own Retro Radio Music Frame', curPrice: '₹490.00', mrpPrice: '₹777.00', imageUrl: 'images/unique/unique_radio_frame.jpg', link: 'products.html?search=Radio', rating: '★ 4.8 (1,150)' },
+      { id: 5, badge: '💎 Crystal Clear', discount: '71% OFF', title: 'Transparent Photo Crystal Keychain', curPrice: '₹100.00', mrpPrice: '₹350.00', imageUrl: 'images/unique/unique_photo_keychain.jpg', link: 'products.html?search=Keychain', rating: '★ 4.9 (2,650)' },
+      { id: 6, badge: '☕ Magic Reveal', discount: '42% OFF', title: 'Thermal Color-Changing Magic Mug', curPrice: '₹349.00', mrpPrice: '₹599.00', imageUrl: 'images/unique/unique_magic_mug.jpg', link: 'products.html?search=Mug', rating: '★ 4.9 (1,740)' },
+      { id: 7, badge: '🪵 Laser Art', discount: '47% OFF', title: 'Laser Engraved Wooden Memory Plaque', curPrice: '₹449.00', mrpPrice: '₹849.00', imageUrl: 'images/unique/unique_wood_engraving.jpg', link: 'products.html?search=Engraving', rating: '★ 4.8 (890)' },
+      { id: 8, badge: '🎵 Scan & Play', discount: '45% OFF', title: 'Illuminated Spotify Acrylic Song Plaque', curPrice: '₹599.00', mrpPrice: '₹1,099.00', imageUrl: 'images/unique/unique_spotify_acrylic.jpg', link: 'products.html?search=Spotify', rating: '★ 5.0 (3,120)' }
+    ];
+
+    const DEFAULT_REVIEWS = [
+      { id: 1, userName: 'Priya S.', userCity: 'Coimbatore', stars: 5, quote: 'Beautifully made and exactly what I wanted. The perfect gift!', verified: true },
+      { id: 2, userName: 'Karthik & Divya', userCity: 'Chennai', stars: 5, quote: 'Ordered an anniversary frame with our photos. The wood finish and photo print exceeded all expectations. Fast delivery too!', verified: true },
+      { id: 3, userName: 'Sneha M.', userCity: 'Bengaluru', stars: 5, quote: 'The magic mug surprise was priceless! When hot coffee was poured, our family photo appeared so vibrantly. Loved it!', verified: true }
+    ];
+
+    // ==========================================
+    // PRODUCT CATALOG PICKER COMPONENT
+    // ==========================================
+    function createProductPickerHtml(type, idx) {
+      return `
+        <div class="product-picker-box">
+          <div class="product-picker-header">
+            <span>🛍️ Link from Product Catalog</span>
+            <small style="color:#64748b; font-size:0.7rem;">Auto-fills photo &amp; details</small>
           </div>
-          <div style="flex:1.5;">
-            <label style="font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:4px; display:block;">Target Page URL</label>
-            <input type="text" class="nav-link-url-input" value="${item.url || ''}" placeholder="e.g. index.html" style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.86rem;">
+          <div class="product-search-input-wrap">
+            <span>🔍</span>
+            <input type="text" 
+                   class="prod-search-input" 
+                   id="prod_search_${type}_${idx}"
+                   placeholder="Type to search products (mug, bag, frame)..." 
+                   oninput="handleProductSearch(this, '${type}', ${idx})">
+            <button type="button" class="btn-clear-search" onclick="clearProductSearch('${type}', ${idx})" title="Clear">✕</button>
           </div>
+          <select class="prod-select-dropdown" 
+                  id="prod_select_${type}_${idx}" 
+                  onchange="handleProductSelectChange(this, '${type}', ${idx})">
+            <option value="">-- Choose from ${ALL_PRODUCTS.length} products --</option>
+            ${ALL_PRODUCTS.map(p => `
+              <option value="${p._id}" 
+                      data-name="${escapeHtml(p.name)}" 
+                      data-img="${p.imageUrl || ''}" 
+                      data-price="${p.discountPrice || p.price || ''}" 
+                      data-mrp="${p.price || ''}" 
+                      data-cat="${p.category || ''}" 
+                      data-slug="${p.urlSlug || ''}">
+                ${escapeHtml(p.name)} — ₹${p.discountPrice || p.price}
+              </option>
+            `).join('')}
+          </select>
         </div>
-      `).join('');
+      `;
     }
 
-    // Upload logo photo
-    async function handleLogoUpload(input) {
-      if (!input.files || !input.files[0]) return;
-      const file = input.files[0];
+    // Filter product dropdown by query
+    function handleProductSearch(inputEl, type, idx) {
+      const q = (inputEl.value || '').trim().toLowerCase();
+      const select = document.getElementById(`prod_select_${type}_${idx}`);
+      if (!select) return;
 
-      // Instant preview
-      const previewImg = document.getElementById('hp_nav_logo_preview');
-      if (previewImg) previewImg.src = URL.createObjectURL(file);
+      const filtered = q 
+        ? ALL_PRODUCTS.filter(p => (p.name && p.name.toLowerCase().includes(q)) || (p.category && p.category.toLowerCase().includes(q)))
+        : ALL_PRODUCTS;
 
-      const statusEl = document.getElementById('hp_nav_logo_status');
-      if (statusEl) statusEl.innerHTML = '<span style="color:#d97706; font-weight:700;">⏳ Uploading...</span>';
+      select.innerHTML = `
+        <option value="">-- ${filtered.length} products found ${q ? `for "${escapeHtml(q)}"` : ''} --</option>
+        ${filtered.map(p => `
+          <option value="${p._id}" 
+                  data-name="${escapeHtml(p.name)}" 
+                  data-img="${p.imageUrl || ''}" 
+                  data-price="${p.discountPrice || p.price || ''}" 
+                  data-mrp="${p.price || ''}" 
+                  data-cat="${p.category || ''}" 
+                  data-slug="${p.urlSlug || ''}">
+            ${escapeHtml(p.name)} — ₹${p.discountPrice || p.price}
+          </option>
+        `).join('')}
+      `;
+    }
 
-      try {
-        const formData = new FormData();
-        formData.append('photo', file);
-
-        const apiBase = window.location.origin;
-        const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
-        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-
-        const res = await fetch(`${apiBase}/api/homepage-config/upload`, {
-          method: 'POST',
-          headers,
-          body: formData
-        });
-
-        const data = await res.json();
-        if (res.ok && data.success && data.url) {
-          document.getElementById('hp_nav_logo').value = data.url;
-          if (previewImg) previewImg.src = data.url;
-          if (statusEl) statusEl.innerHTML = '<span style="color:#16a34a; font-weight:700;">✅ Logo uploaded!</span>';
-        } else {
-          throw new Error(data.message || 'Upload failed');
-        }
-      } catch (err) {
-        console.error('Logo upload error:', err);
-        if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626; font-weight:700;">❌ Upload failed, please retry</span>';
+    // Clear search
+    function clearProductSearch(type, idx) {
+      const input = document.getElementById(`prod_search_${type}_${idx}`);
+      if (input) {
+        input.value = '';
+        handleProductSearch(input, type, idx);
       }
     }
 
-    // Upload category card photo
-    async function handleCategoryPhotoUpload(idx, input) {
-      if (!input.files || !input.files[0]) return;
-      const file = input.files[0];
+    // Handle product selection change
+    function handleProductSelectChange(selectEl, type, idx) {
+      const val = selectEl.value;
+      if (!val) return;
+      const opt = selectEl.options[selectEl.selectedIndex];
+      if (!opt) return;
 
-      // Instant preview
-      const previewImg = document.getElementById(`cat_img_preview_${idx}`);
+      const pName = opt.getAttribute('data-name') || '';
+      const pImg = opt.getAttribute('data-img') || '';
+      const pPrice = opt.getAttribute('data-price') || '';
+      const pMrp = opt.getAttribute('data-mrp') || '';
+      const pSlug = opt.getAttribute('data-slug') || '';
+      const pCat = opt.getAttribute('data-cat') || '';
+
+      const targetLink = pSlug ? `product.html?slug=${pSlug}` : `products.html?search=${encodeURIComponent(pName)}`;
+
+      // Update image
+      const imgVal = document.getElementById(`${type}_img_${idx}`);
+      const imgPreview = document.getElementById(`${type}_preview_${idx}`);
+      const statusEl = document.getElementById(`${type}_status_${idx}`);
+      if (imgVal && pImg) imgVal.value = pImg;
+      if (imgPreview && pImg) imgPreview.src = pImg;
+      if (statusEl) statusEl.innerHTML = '<span style="color:#16a34a; font-weight:700;">✅ Catalog Linked</span>';
+
+      // Update title
+      const titleInput = document.getElementById(`${type}_title_${idx}`);
+      if (titleInput && pName) titleInput.value = pName;
+
+      // Update link
+      const linkInput = document.getElementById(`${type}_link_${idx}`);
+      if (linkInput) linkInput.value = targetLink;
+
+      // Section-specific fields
+      if (type === 'budget') {
+        const priceInput = document.getElementById(`budget_price_${idx}`);
+        if (priceInput && pPrice) priceInput.value = `₹${pPrice}`;
+      } else if (type === 'occ' || type === 'uniq') {
+        const curPriceInput = document.getElementById(`${type}_cur_${idx}`);
+        const mrpPriceInput = document.getElementById(`${type}_mrp_${idx}`);
+        if (curPriceInput && pPrice) curPriceInput.value = `₹${pPrice}.00`;
+        if (mrpPriceInput && pMrp) mrpPriceInput.value = `₹${pMrp}.00`;
+      }
+
+      showToast(`Linked: ${pName} to card!`, '🛍️');
+    }
+
+    // ==========================================
+    // OCCASIONS DROPDOWN HELPER (FOR SECTION 05)
+    // ==========================================
+    function createOccasionDropdownHtml(idx, selectedTag) {
+      const current = (selectedTag || '').toLowerCase();
+      return `
+        <div class="field-group" style="margin-bottom:6px;">
+          <label style="font-size:0.72rem; font-weight:700; color:#475569;">Occasion Category Tag</label>
+          <select class="occ-tag-dropdown" id="occ_tag_select_${idx}" onchange="handleOccasionSelectChange(this, ${idx})" style="padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem; background:#fff; color:#1e293b;">
+            <option value="">-- Choose Occasion --</option>
+            ${ALL_OCCASIONS.map(occ => {
+              const slug = (occ.slug || occ.name || '').toLowerCase();
+              const isSel = current.includes(slug) ? 'selected' : '';
+              return `<option value="${slug}" ${isSel}>${escapeHtml(occ.name)}</option>`;
+            }).join('')}
+          </select>
+        </div>
+      `;
+    }
+
+    function handleOccasionSelectChange(selectEl, idx) {
+      const slug = selectEl.value;
+      if (!slug) return;
+      const tagsInput = document.getElementById(`occ_tags_${idx}`);
+      if (tagsInput) {
+        const existing = (tagsInput.value || '').trim();
+        if (!existing.toLowerCase().includes(slug)) {
+          tagsInput.value = existing ? `${existing} ${slug}` : slug;
+        }
+      }
+      const optName = selectEl.options[selectEl.selectedIndex].text;
+      const badgeInput = document.getElementById(`occ_badge_${idx}`);
+      if (badgeInput && (!badgeInput.value || badgeInput.value.includes('Pick') || badgeInput.value.includes('Special'))) {
+        badgeInput.value = `🎉 ${optName} Special`;
+      }
+    }
+
+    // ==========================================
+    // UNIVERSAL PHOTO UPLOAD HANDLER
+    // ==========================================
+    async function handleUniversalPhotoUpload(type, idx, fileInput) {
+      if (!fileInput.files || !fileInput.files[0]) return;
+      const file = fileInput.files[0];
+
+      // Local preview
+      const previewImg = document.getElementById(`${type}_preview_${idx}`);
       if (previewImg) previewImg.src = URL.createObjectURL(file);
 
-      const statusEl = document.getElementById(`cat_upload_status_${idx}`);
+      const statusEl = document.getElementById(`${type}_status_${idx}`);
       if (statusEl) statusEl.innerHTML = '<span style="color:#d97706; font-weight:700;">⏳ Uploading...</span>';
 
       try {
@@ -1088,16 +1479,18 @@
 
         const data = await res.json();
         if (res.ok && data.success && data.url) {
-          const hiddenInput = document.getElementById(`cat_img_val_${idx}`);
+          const hiddenInput = document.getElementById(`${type}_img_${idx}`);
           if (hiddenInput) hiddenInput.value = data.url;
           if (previewImg) previewImg.src = data.url;
           if (statusEl) statusEl.innerHTML = '<span style="color:#16a34a; font-weight:700;">✅ Photo uploaded!</span>';
+          showToast('Photo uploaded successfully!');
         } else {
           throw new Error(data.message || 'Upload failed');
         }
       } catch (err) {
-        console.error('Category photo upload error:', err);
+        console.error('Photo upload error:', err);
         if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626; font-weight:700;">❌ Upload failed</span>';
+        alert('Photo upload failed. Please try again.');
       }
     }
 
@@ -1131,6 +1524,7 @@
           document.getElementById('hp_hero_mascot').value = data.url;
           if (previewImg) previewImg.src = data.url;
           if (statusEl) statusEl.innerHTML = '<span style="color:#16a34a; font-weight:700;">✅ Mascot uploaded!</span>';
+          showToast('Hero mascot uploaded!');
         } else {
           throw new Error(data.message || 'Upload failed');
         }
@@ -1140,47 +1534,11 @@
       }
     }
 
-    // Upload hero slide banner photo
-    async function handleHeroSlidePhotoUpload(idx, input) {
-      if (!input.files || !input.files[0]) return;
-      const file = input.files[0];
+    // ==========================================
+    // RENDER FUNCTIONS FOR ALL 7 SECTIONS
+    // ==========================================
 
-      const previewImg = document.getElementById(`hero_slide_preview_${idx}`);
-      if (previewImg) previewImg.src = URL.createObjectURL(file);
-
-      const statusEl = document.getElementById(`hero_slide_status_${idx}`);
-      if (statusEl) statusEl.innerHTML = '<span style="color:#d97706; font-weight:700;">⏳ Uploading...</span>';
-
-      try {
-        const formData = new FormData();
-        formData.append('photo', file);
-
-        const apiBase = window.location.origin;
-        const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
-        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-
-        const res = await fetch(`${apiBase}/api/homepage-config/upload`, {
-          method: 'POST',
-          headers,
-          body: formData
-        });
-
-        const data = await res.json();
-        if (res.ok && data.success && data.url) {
-          const hiddenInput = document.getElementById(`hero_slide_img_${idx}`);
-          if (hiddenInput) hiddenInput.value = data.url;
-          if (previewImg) previewImg.src = data.url;
-          if (statusEl) statusEl.innerHTML = '<span style="color:#16a34a; font-weight:700;">✅ Banner uploaded!</span>';
-        } else {
-          throw new Error(data.message || 'Upload failed');
-        }
-      } catch (err) {
-        console.error('Hero slide upload error:', err);
-        if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626; font-weight:700;">❌ Upload failed</span>';
-      }
-    }
-
-    // Render 5 Hero Showcase Banner Slides with direct upload button (no path input)
+    // 1. Hero 5 Slides
     function renderHeroSlidesInputs(slides) {
       const container = document.getElementById('heroSlidesContainer');
       if (!container) return;
@@ -1193,51 +1551,412 @@
             <span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700; font-size:0.72rem; padding:3px 8px; border-radius:6px;">Slide ${idx + 1} of 5</span>
           </div>
 
+          ${createProductPickerHtml('hero', idx)}
+
           <div style="display:flex; gap:12px; align-items:center;">
-            <div class="cat-thumb-box" style="width:72px; height:58px; border-radius:8px;" onclick="document.getElementById('hero_slide_file_${idx}').click()" title="Click to upload new banner photo">
-              <img id="hero_slide_preview_${idx}" src="${item.imageUrl || ''}" alt="${item.title || ''}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/hero.jpeg'">
+            <div class="cat-thumb-box" style="width:72px; height:58px; border-radius:8px;" onclick="document.getElementById('hero_file_${idx}').click()" title="Click to upload new banner photo">
+              <img id="hero_preview_${idx}" src="${item.imageUrl || ''}" alt="${escapeHtml(item.title || '')}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/hero.jpeg'">
               <div class="cat-thumb-hover-overlay">📁 Upload</div>
             </div>
             <div style="flex:1;">
               <label style="font-size:0.74rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Badge Tag</label>
-              <input type="text" class="hero-slide-badge-input" value="${item.badge || ''}" placeholder="e.g. 🎁 Signature Box" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+              <input type="text" class="hero-slide-badge-input" id="hero_badge_${idx}" value="${escapeHtml(item.badge || '')}" placeholder="e.g. 🎁 Signature Box" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
             </div>
           </div>
 
           <div style="background:#f8fafc; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; gap:8px;">
-            <span id="hero_slide_status_${idx}" style="font-size:0.75rem; color:#475569; font-weight:600;">Banner Ready</span>
-            <input type="hidden" class="hero-slide-img-input" id="hero_slide_img_${idx}" value="${item.imageUrl || ''}">
-            <input type="file" id="hero_slide_file_${idx}" accept="image/*" style="display:none;" onchange="handleHeroSlidePhotoUpload(${idx}, this)">
-            <button type="button" class="btn-cat-upload" onclick="document.getElementById('hero_slide_file_${idx}').click()">
+            <span id="hero_status_${idx}" style="font-size:0.75rem; color:#475569; font-weight:600;">Banner Ready</span>
+            <input type="hidden" class="hero-slide-img-input" id="hero_img_${idx}" value="${item.imageUrl || ''}">
+            <input type="file" id="hero_file_${idx}" accept="image/*" style="display:none;" onchange="handleUniversalPhotoUpload('hero', ${idx}, this)">
+            <button type="button" class="btn-cat-upload" onclick="document.getElementById('hero_file_${idx}').click()">
               <span>📁 Upload Photo</span>
             </button>
           </div>
 
           <div>
             <label style="font-size:0.74rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Slide Title</label>
-            <input type="text" class="hero-slide-title-input" value="${item.title || ''}" placeholder="e.g. Complete Surprise Gift Box" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.84rem;">
+            <input type="text" class="hero-slide-title-input" id="hero_title_${idx}" value="${escapeHtml(item.title || '')}" placeholder="e.g. Complete Surprise Gift Box" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.84rem;">
           </div>
 
           <div>
             <label style="font-size:0.74rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Slide Subtitle / Description</label>
-            <input type="text" class="hero-slide-sub-input" value="${item.subtitle || ''}" placeholder="e.g. Photo Mugs, Constellation Frames & Chocolates" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem;">
+            <input type="text" class="hero-slide-sub-input" id="hero_sub_${idx}" value="${escapeHtml(item.subtitle || '')}" placeholder="e.g. Photo Mugs, Constellation Frames & Chocolates" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem;">
           </div>
 
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-            <div>
-              <label style="font-size:0.72rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">CTA Button Text</label>
-              <input type="text" class="hero-slide-cta-input" value="${item.ctaText || 'Shop Collection →'}" placeholder="Shop Collection →" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.8rem;">
-            </div>
-            <div>
-              <label style="font-size:0.72rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Target Page Link</label>
-              <input type="text" class="hero-slide-link-input" value="${item.link || ''}" placeholder="products.html?search=..." style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.8rem;">
-            </div>
+          <div>
+            <label style="font-size:0.72rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">CTA Button Text</label>
+            <input type="text" class="hero-slide-cta-input" id="hero_cta_${idx}" value="${escapeHtml(item.ctaText || 'Shop Collection →')}" placeholder="Shop Collection →" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem;">
+            <input type="hidden" class="hero-slide-link-input" id="hero_link_${idx}" value="${escapeHtml(item.link || '')}">
           </div>
         </div>
       `).join('');
     }
 
-    // Collect 5 Hero Slides
+    // 2. Category Cards (10 cards)
+    function renderCategoryCardsInputs(items) {
+      const container = document.getElementById('categoryItemsInputsContainer');
+      if (!container) return;
+      const list = (Array.isArray(items) && items.length === 10) ? items : DEFAULT_CAT_ITEMS;
+
+      container.innerHTML = list.map((item, idx) => `
+        <div class="cat-card-editor" data-cat-idx="${idx}">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.8rem; font-weight:800; color:#1e40af;">Category Card #${idx + 1}</span>
+            <span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:700; font-size:0.7rem; padding:2px 6px; border-radius:4px;">Fixed Slot</span>
+          </div>
+
+          ${createProductPickerHtml('cat', idx)}
+
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="cat-thumb-box" onclick="document.getElementById('cat_file_${idx}').click()" title="Click to upload new photo">
+              <img id="cat_preview_${idx}" src="${item.imageUrl || ''}" alt="${escapeHtml(item.title || '')}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
+              <div class="cat-thumb-hover-overlay">📁 Upload</div>
+            </div>
+            <div style="flex:1;">
+              <label style="font-size:0.74rem; font-weight:700; color:#475569; display:block; margin-bottom:4px;">Card Title</label>
+              <input type="text" class="cat-card-title-input" id="cat_title_${idx}" value="${escapeHtml(item.title || '')}" placeholder="e.g. Puzzles" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+          </div>
+
+          <div style="background:#f8fafc; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <span id="cat_status_${idx}" style="font-size:0.75rem; color:#475569; font-weight:600;">Photo Ready</span>
+            <input type="hidden" class="cat-card-img-input" id="cat_img_${idx}" value="${item.imageUrl || ''}">
+            <input type="file" id="cat_file_${idx}" accept="image/*" style="display:none;" onchange="handleUniversalPhotoUpload('cat', ${idx}, this)">
+            <button type="button" class="btn-cat-upload" onclick="document.getElementById('cat_file_${idx}').click()">
+              <span>📁 Upload Photo</span>
+            </button>
+          </div>
+
+          <input type="hidden" class="cat-card-link-input" id="cat_link_${idx}" value="${escapeHtml(item.link || '')}">
+        </div>
+      `).join('');
+    }
+
+    // 3. Relationship Cards (10 cards)
+    function renderRelationshipCardsInputs(items) {
+      const container = document.getElementById('relationshipItemsInputsContainer');
+      if (!container) return;
+      const list = (Array.isArray(items) && items.length === 10) ? items : DEFAULT_REL_ITEMS;
+
+      container.innerHTML = list.map((item, idx) => `
+        <div class="cat-card-editor" data-rel-idx="${idx}">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.8rem; font-weight:800; color:#9d174d;">Relationship Card #${idx + 1}</span>
+            <span class="badge" style="background:#fce7f3; color:#9d174d; font-weight:700; font-size:0.7rem; padding:2px 6px; border-radius:4px;">Fixed Slot</span>
+          </div>
+
+          ${createProductPickerHtml('rel', idx)}
+
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="cat-thumb-box" onclick="document.getElementById('rel_file_${idx}').click()" title="Click to upload new photo">
+              <img id="rel_preview_${idx}" src="${item.imageUrl || ''}" alt="${escapeHtml(item.title || '')}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
+              <div class="cat-thumb-hover-overlay">📁 Upload</div>
+            </div>
+            <div style="flex:1;">
+              <label style="font-size:0.74rem; font-weight:700; color:#475569; display:block; margin-bottom:4px;">Relation Title</label>
+              <input type="text" class="rel-card-title-input" id="rel_title_${idx}" value="${escapeHtml(item.title || '')}" placeholder="e.g. Boyfriend" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+          </div>
+
+          <div style="background:#f8fafc; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <span id="rel_status_${idx}" style="font-size:0.75rem; color:#475569; font-weight:600;">Photo Ready</span>
+            <input type="hidden" class="rel-card-img-input" id="rel_img_${idx}" value="${item.imageUrl || ''}">
+            <input type="file" id="rel_file_${idx}" accept="image/*" style="display:none;" onchange="handleUniversalPhotoUpload('rel', ${idx}, this)">
+            <button type="button" class="btn-cat-upload" onclick="document.getElementById('rel_file_${idx}').click()">
+              <span>📁 Upload Photo</span>
+            </button>
+          </div>
+
+          <input type="hidden" class="rel-card-link-input" id="rel_link_${idx}" value="${escapeHtml(item.link || '')}">
+        </div>
+      `).join('');
+    }
+
+    // 4. Budget Tier Cards (7 cards)
+    function renderBudgetCardsInputs(items) {
+      const container = document.getElementById('budgetItemsInputsContainer');
+      if (!container) return;
+      const list = (Array.isArray(items) && items.length === 7) ? items : DEFAULT_BUDGET_ITEMS;
+
+      container.innerHTML = list.map((item, idx) => `
+        <div class="cat-card-editor" data-budget-idx="${idx}">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.8rem; font-weight:800; color:#065f46;">Budget Tier #${idx + 1}</span>
+            <span class="badge" style="background:#ecfdf5; color:#065f46; font-weight:700; font-size:0.7rem; padding:2px 6px; border-radius:4px;">${escapeHtml(item.price || '')}</span>
+          </div>
+
+          ${createProductPickerHtml('budget', idx)}
+
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="cat-thumb-box" onclick="document.getElementById('budget_file_${idx}').click()" title="Click to upload new photo">
+              <img id="budget_preview_${idx}" src="${item.imageUrl || ''}" alt="${escapeHtml(item.pill || '')}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
+              <div class="cat-thumb-hover-overlay">📁 Upload</div>
+            </div>
+            <div style="flex:1;">
+              <label style="font-size:0.74rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Tier Pill Text</label>
+              <input type="text" class="budget-card-pill-input" id="budget_pill_${idx}" value="${escapeHtml(item.pill || '')}" placeholder="e.g. Pocket Pick" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+            </div>
+          </div>
+
+          <div style="background:#f8fafc; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <span id="budget_status_${idx}" style="font-size:0.75rem; color:#475569; font-weight:600;">Photo Ready</span>
+            <input type="hidden" class="budget-card-img-input" id="budget_img_${idx}" value="${item.imageUrl || ''}">
+            <input type="file" id="budget_file_${idx}" accept="image/*" style="display:none;" onchange="handleUniversalPhotoUpload('budget', ${idx}, this)">
+            <button type="button" class="btn-cat-upload" onclick="document.getElementById('budget_file_${idx}').click()">
+              <span>📁 Upload Photo</span>
+            </button>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+            <div>
+              <label style="font-size:0.72rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Display Price</label>
+              <input type="text" class="budget-card-price-input" id="budget_price_${idx}" value="${escapeHtml(item.price || '')}" placeholder="e.g. ₹99" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem;">
+            </div>
+            <div>
+              <label style="font-size:0.72rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Sub-tag Description</label>
+              <input type="text" class="budget-card-tag-input" id="budget_tag_${idx}" value="${escapeHtml(item.tag || '')}" placeholder="e.g. Pocket Friendly" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem;">
+            </div>
+          </div>
+
+          <input type="hidden" class="budget-card-link-input" id="budget_link_${idx}" value="${escapeHtml(item.link || '')}">
+        </div>
+      `).join('');
+    }
+
+    // 5. Celebrate Every Occasion (8 cards)
+    function renderOccasionCardsInputs(items) {
+      const container = document.getElementById('occasionItemsInputsContainer');
+      if (!container) return;
+      const list = (Array.isArray(items) && items.length === 8) ? items : DEFAULT_OCC_ITEMS;
+
+      container.innerHTML = list.map((item, idx) => `
+        <div class="cat-card-editor" data-occ-idx="${idx}" style="border:1px solid #cbd5e1; background:#ffffff;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.82rem; font-weight:800; color:#5b21b6;">Occasion Card #${idx + 1}</span>
+            <span class="badge" style="background:#f5f3ff; color:#5b21b6; font-weight:700; font-size:0.72rem; padding:3px 8px; border-radius:6px;">Card ${idx + 1} of 8</span>
+          </div>
+
+          ${createOccasionDropdownHtml(idx, item.tags || '')}
+          ${createProductPickerHtml('occ', idx)}
+
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="cat-thumb-box" style="width:72px; height:60px; border-radius:8px;" onclick="document.getElementById('occ_file_${idx}').click()" title="Click to upload photo">
+              <img id="occ_preview_${idx}" src="${item.imageUrl || ''}" alt="${escapeHtml(item.title || '')}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
+              <div class="cat-thumb-hover-overlay">📁 Upload</div>
+            </div>
+            <div style="flex:1;">
+              <label style="font-size:0.72rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Badge Pill</label>
+              <input type="text" class="occ-badge-input" id="occ_badge_${idx}" value="${escapeHtml(item.badge || '')}" placeholder="e.g. 🎂 Birthday Pick" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem;">
+            </div>
+          </div>
+
+          <div style="background:#f8fafc; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <span id="occ_status_${idx}" style="font-size:0.75rem; color:#475569; font-weight:600;">Photo Ready</span>
+            <input type="hidden" class="occ-img-input" id="occ_img_${idx}" value="${item.imageUrl || ''}">
+            <input type="file" id="occ_file_${idx}" accept="image/*" style="display:none;" onchange="handleUniversalPhotoUpload('occ', ${idx}, this)">
+            <button type="button" class="btn-cat-upload" onclick="document.getElementById('occ_file_${idx}').click()">
+              <span>📁 Upload Photo</span>
+            </button>
+          </div>
+
+          <div>
+            <label style="font-size:0.72rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Product Title</label>
+            <input type="text" class="occ-title-input" id="occ_title_${idx}" value="${escapeHtml(item.title || '')}" placeholder="e.g. Personalized Photo Puzzle Cube" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:6px;">
+            <div>
+              <label style="font-size:0.7rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Current Price</label>
+              <input type="text" class="occ-cur-price-input" id="occ_cur_${idx}" value="${escapeHtml(item.curPrice || '')}" placeholder="₹890.00" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.8rem;">
+            </div>
+            <div>
+              <label style="font-size:0.7rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">MRP Price</label>
+              <input type="text" class="occ-mrp-price-input" id="occ_mrp_${idx}" value="${escapeHtml(item.mrpPrice || '')}" placeholder="₹1,150.00" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.8rem;">
+            </div>
+            <div>
+              <label style="font-size:0.7rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Discount Tag</label>
+              <input type="text" class="occ-discount-input" id="occ_disc_${idx}" value="${escapeHtml(item.discount || '')}" placeholder="23% OFF" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.8rem;">
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+            <div>
+              <label style="font-size:0.7rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Filter Tags (space separated)</label>
+              <input type="text" class="occ-tags-input" id="occ_tags_${idx}" value="${escapeHtml(item.tags || '')}" placeholder="birthday special anniversary" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.78rem;">
+            </div>
+            <div>
+              <label style="font-size:0.7rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Rating String</label>
+              <input type="text" class="occ-rating-input" id="occ_rating_${idx}" value="${escapeHtml(item.rating || '★ 4.9 (1,240)')}" placeholder="★ 4.9 (1,240)" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.78rem;">
+            </div>
+          </div>
+
+          <input type="hidden" class="occ-link-input" id="occ_link_${idx}" value="${escapeHtml(item.link || '')}">
+        </div>
+      `).join('');
+    }
+
+    // 6. Discover Unique Creations (8 cards)
+    function renderUniqueCardsInputs(items) {
+      const container = document.getElementById('uniqueCollectionItemsInputsContainer');
+      if (!container) return;
+      const list = (Array.isArray(items) && items.length === 8) ? items : DEFAULT_UNIQUE_ITEMS;
+
+      container.innerHTML = list.map((item, idx) => `
+        <div class="cat-card-editor" data-uniq-idx="${idx}" style="border:1px solid #cbd5e1; background:#ffffff;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.82rem; font-weight:800; color:#92400e;">Unique Item #${idx + 1}</span>
+            <span class="badge" style="background:#fef3c7; color:#92400e; font-weight:700; font-size:0.72rem; padding:3px 8px; border-radius:6px;">Item ${idx + 1} of 8</span>
+          </div>
+
+          ${createProductPickerHtml('uniq', idx)}
+
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="cat-thumb-box" style="width:72px; height:60px; border-radius:8px;" onclick="document.getElementById('uniq_file_${idx}').click()" title="Click to upload photo">
+              <img id="uniq_preview_${idx}" src="${item.imageUrl || ''}" alt="${escapeHtml(item.title || '')}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
+              <div class="cat-thumb-hover-overlay">📁 Upload</div>
+            </div>
+            <div style="flex:1;">
+              <label style="font-size:0.72rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Badge Pill</label>
+              <input type="text" class="uniq-badge-input" id="uniq_badge_${idx}" value="${escapeHtml(item.badge || '')}" placeholder="e.g. 💡 Ambient Glow" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem;">
+            </div>
+          </div>
+
+          <div style="background:#f8fafc; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <span id="uniq_status_${idx}" style="font-size:0.75rem; color:#475569; font-weight:600;">Photo Ready</span>
+            <input type="hidden" class="uniq-img-input" id="uniq_img_${idx}" value="${item.imageUrl || ''}">
+            <input type="file" id="uniq_file_${idx}" accept="image/*" style="display:none;" onchange="handleUniversalPhotoUpload('uniq', ${idx}, this)">
+            <button type="button" class="btn-cat-upload" onclick="document.getElementById('uniq_file_${idx}').click()">
+              <span>📁 Upload Photo</span>
+            </button>
+          </div>
+
+          <div>
+            <label style="font-size:0.72rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Product Title</label>
+            <input type="text" class="uniq-title-input" id="uniq_title_${idx}" value="${escapeHtml(item.title || '')}" placeholder="e.g. Couple Glow Name Magnet" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:6px;">
+            <div>
+              <label style="font-size:0.7rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Current Price</label>
+              <input type="text" class="uniq-cur-price-input" id="uniq_cur_${idx}" value="${escapeHtml(item.curPrice || '')}" placeholder="₹299.00" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.8rem;">
+            </div>
+            <div>
+              <label style="font-size:0.7rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">MRP Price</label>
+              <input type="text" class="uniq-mrp-price-input" id="uniq_mrp_${idx}" value="${escapeHtml(item.mrpPrice || '')}" placeholder="₹699.00" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.8rem;">
+            </div>
+            <div>
+              <label style="font-size:0.7rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Discount Tag</label>
+              <input type="text" class="uniq-discount-input" id="uniq_disc_${idx}" value="${escapeHtml(item.discount || '')}" placeholder="57% OFF" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.8rem;">
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size:0.7rem; font-weight:700; color:#475569; display:block; margin-bottom:3px;">Rating String</label>
+            <input type="text" class="uniq-rating-input" id="uniq_rating_${idx}" value="${escapeHtml(item.rating || '★ 4.9 (1,850)')}" placeholder="★ 4.9 (1,850)" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.8rem;">
+            <input type="hidden" class="uniq-link-input" id="uniq_link_${idx}" value="${escapeHtml(item.link || '')}">
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // 7. Customer Reviews Spotlight (Add/Edit/Delete)
+    let CURRENT_REVIEWS = [];
+
+    function renderCustomerReviewsInputs(reviews) {
+      CURRENT_REVIEWS = (Array.isArray(reviews) && reviews.length > 0) ? reviews : [...DEFAULT_REVIEWS];
+      renderCustomerReviewsList();
+    }
+
+    function renderCustomerReviewsList() {
+      const container = document.getElementById('customerReviewsInputsContainer');
+      if (!container) return;
+
+      if (CURRENT_REVIEWS.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:30px; background:#ffffff; border-radius:10px; border:1px dashed #cbd5e1;">
+            <p style="color:#64748b; margin-bottom:12px;">No customer reviews yet.</p>
+            <button type="button" class="btn-save-hp" style="background:#0d9488;" onclick="addNewCustomerReview()">
+              <span>➕ Add First Review</span>
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = CURRENT_REVIEWS.map((rev, idx) => `
+        <div class="review-editor-card" data-rev-idx="${idx}">
+          <div class="review-editor-top">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="item-num-badge" style="background:#ccfbf1; color:#0f766e;">${idx + 1}</span>
+              <strong style="color:#1e293b; font-size:0.92rem;">Review by ${escapeHtml(rev.userName || 'Customer')}</strong>
+            </div>
+            <button type="button" class="btn-delete-rev" onclick="removeCustomerReview(${idx})">
+              <span>🗑️ Delete Review</span>
+            </button>
+          </div>
+
+          <div class="form-grid-3">
+            <div>
+              <label style="font-size:0.75rem; font-weight:700; color:#475569; display:block; margin-bottom:4px;">Customer Name</label>
+              <input type="text" class="rev-name-input" value="${escapeHtml(rev.userName || '')}" placeholder="e.g. Priya S." style="width:100%; padding:8px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.86rem;">
+            </div>
+            <div>
+              <label style="font-size:0.75rem; font-weight:700; color:#475569; display:block; margin-bottom:4px;">City / State</label>
+              <input type="text" class="rev-city-input" value="${escapeHtml(rev.userCity || '')}" placeholder="e.g. Coimbatore, TN" style="width:100%; padding:8px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.86rem;">
+            </div>
+            <div>
+              <label style="font-size:0.75rem; font-weight:700; color:#475569; display:block; margin-bottom:4px;">Rating (Stars)</label>
+              <select class="rev-stars-select" style="width:100%; padding:8px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.86rem; background:#fff;">
+                <option value="5" ${Number(rev.stars) === 5 ? 'selected' : ''}>⭐⭐⭐⭐⭐ (5 Stars)</option>
+                <option value="4" ${Number(rev.stars) === 4 ? 'selected' : ''}>⭐⭐⭐⭐ (4 Stars)</option>
+                <option value="3" ${Number(rev.stars) === 3 ? 'selected' : ''}>⭐⭐⭐ (3 Stars)</option>
+                <option value="2" ${Number(rev.stars) === 2 ? 'selected' : ''}>⭐⭐ (2 Stars)</option>
+                <option value="1" ${Number(rev.stars) === 1 ? 'selected' : ''}>⭐ (1 Star)</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size:0.75rem; font-weight:700; color:#475569; display:block; margin-bottom:4px;">Customer Feedback / Quote</label>
+            <textarea class="rev-quote-input" rows="2" placeholder="Write the customer testimonial quote..." style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.86rem; font-family:inherit;">${escapeHtml(rev.quote || '')}</textarea>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" class="rev-verified-check" id="rev_verified_${idx}" ${rev.verified !== false ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px;">
+            <label for="rev_verified_${idx}" style="font-size:0.8rem; font-weight:700; color:#0f766e; cursor:pointer;">
+              ✓ Show "Verified Buyer" badge on this review
+            </label>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addNewCustomerReview() {
+      // Sync current inputs before adding
+      CURRENT_REVIEWS = collectReviewItems();
+      CURRENT_REVIEWS.push({
+        id: Date.now(),
+        userName: 'New Customer',
+        userCity: 'City, India',
+        stars: 5,
+        quote: 'Delighted with the quality and quick delivery! Highly recommend Inithan Gifts.',
+        verified: true
+      });
+      renderCustomerReviewsList();
+      showToast('New review added to editor!', '⭐');
+    }
+
+    function removeCustomerReview(idx) {
+      if (!confirm('Are you sure you want to delete this customer review?')) return;
+      CURRENT_REVIEWS = collectReviewItems();
+      CURRENT_REVIEWS.splice(idx, 1);
+      renderCustomerReviewsList();
+      showToast('Review removed.', '🗑️');
+    }
+
+    // ==========================================
+    // DATA COLLECTION FUNCTIONS
+    // ==========================================
     function collectHeroSlides() {
       const cards = document.querySelectorAll('#heroSlidesContainer .cat-card-editor');
       const slides = [];
@@ -1258,70 +1977,173 @@
           link: linkInput ? linkInput.value.trim() : DEFAULT_HERO_SLIDES[idx].link
         });
       });
-      return slides.slice(0, 5); // strictly keep count 5
+      return slides.slice(0, 5);
     }
 
-    // Render 10 Category Cards with direct upload button (no path input)
-    function renderCategoryCardsInputs(items) {
-      const container = document.getElementById('categoryItemsInputsContainer');
-      if (!container) return;
-      const list = (Array.isArray(items) && items.length === 10) ? items : DEFAULT_CAT_ITEMS;
-
-      container.innerHTML = list.map((item, idx) => `
-        <div class="cat-card-editor" data-cat-idx="${idx}">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:0.8rem; font-weight:800; color:#1e40af;">Card #${idx + 1}</span>
-            <span style="font-size:0.75rem; color:#64748b;">Fixed Slot</span>
-          </div>
-          <div style="display:flex; gap:12px; align-items:center;">
-            <div class="cat-thumb-box" onclick="document.getElementById('cat_file_input_${idx}').click()" title="Click to upload new photo">
-              <img id="cat_img_preview_${idx}" src="${item.imageUrl || ''}" alt="${item.title || ''}" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
-              <div class="cat-thumb-hover-overlay">📁 Upload</div>
-            </div>
-            <div style="flex:1;">
-              <label style="font-size:0.74rem; font-weight:700; color:#475569; display:block; margin-bottom:4px;">Card Title</label>
-              <input type="text" class="cat-card-title-input" value="${item.title || ''}" placeholder="e.g. Puzzles" style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
-            </div>
-          </div>
-          <div style="background:#f8fafc; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; gap:8px;">
-            <div style="display:flex; align-items:center; gap:6px;">
-              <span id="cat_upload_status_${idx}" style="font-size:0.75rem; color:#475569; font-weight:600;">Photo Ready</span>
-            </div>
-            <!-- Hidden input holding actual image URL (no path typing required) -->
-            <input type="hidden" class="cat-card-img-input" id="cat_img_val_${idx}" value="${item.imageUrl || ''}">
-            <input type="file" id="cat_file_input_${idx}" accept="image/*" style="display:none;" onchange="handleCategoryPhotoUpload(${idx}, this)">
-            <button type="button" class="btn-cat-upload" onclick="document.getElementById('cat_file_input_${idx}').click()">
-              <span>📁 Upload Photo</span>
-            </button>
-          </div>
-          <div>
-            <label style="font-size:0.74rem; font-weight:700; color:#475569; display:block; margin-bottom:4px;">Target URL / Category Link</label>
-            <input type="text" class="cat-card-link-input" value="${item.link || ''}" placeholder="products.html?search=..." style="width:100%; padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem;">
-          </div>
-        </div>
-      `).join('');
+    function collectCategoryItems() {
+      const cards = document.querySelectorAll('#categoryItemsInputsContainer .cat-card-editor');
+      const items = [];
+      cards.forEach((card, idx) => {
+        const titleInput = card.querySelector('.cat-card-title-input');
+        const imgInput = card.querySelector('.cat-card-img-input');
+        const linkInput = card.querySelector('.cat-card-link-input');
+        items.push({
+          id: idx + 1,
+          title: titleInput ? titleInput.value.trim() : DEFAULT_CAT_ITEMS[idx].title,
+          imageUrl: imgInput ? imgInput.value.trim() : DEFAULT_CAT_ITEMS[idx].imageUrl,
+          link: linkInput ? linkInput.value.trim() : DEFAULT_CAT_ITEMS[idx].link
+        });
+      });
+      return items.slice(0, 10);
     }
 
-    // Load current config from server
+    function collectRelationshipItems() {
+      const cards = document.querySelectorAll('#relationshipItemsInputsContainer .cat-card-editor');
+      const items = [];
+      cards.forEach((card, idx) => {
+        const titleInput = card.querySelector('.rel-card-title-input');
+        const imgInput = card.querySelector('.rel-card-img-input');
+        const linkInput = card.querySelector('.rel-card-link-input');
+        items.push({
+          id: idx + 1,
+          title: titleInput ? titleInput.value.trim() : (DEFAULT_REL_ITEMS[idx] ? DEFAULT_REL_ITEMS[idx].title : 'Relation'),
+          imageUrl: imgInput ? imgInput.value.trim() : (DEFAULT_REL_ITEMS[idx] ? DEFAULT_REL_ITEMS[idx].imageUrl : ''),
+          link: linkInput ? linkInput.value.trim() : (DEFAULT_REL_ITEMS[idx] ? DEFAULT_REL_ITEMS[idx].link : 'products.html')
+        });
+      });
+      return items.slice(0, 10);
+    }
+
+    function collectBudgetItems() {
+      const cards = document.querySelectorAll('#budgetItemsInputsContainer .cat-card-editor');
+      const items = [];
+      cards.forEach((card, idx) => {
+        const pillInput = card.querySelector('.budget-card-pill-input');
+        const tagInput = card.querySelector('.budget-card-tag-input');
+        const priceInput = card.querySelector('.budget-card-price-input');
+        const imgInput = card.querySelector('.budget-card-img-input');
+        const linkInput = card.querySelector('.budget-card-link-input');
+        items.push({
+          id: idx + 1,
+          pill: pillInput ? pillInput.value.trim() : DEFAULT_BUDGET_ITEMS[idx].pill,
+          tag: tagInput ? tagInput.value.trim() : DEFAULT_BUDGET_ITEMS[idx].tag,
+          price: priceInput ? priceInput.value.trim() : DEFAULT_BUDGET_ITEMS[idx].price,
+          imageUrl: imgInput ? imgInput.value.trim() : DEFAULT_BUDGET_ITEMS[idx].imageUrl,
+          link: linkInput ? linkInput.value.trim() : DEFAULT_BUDGET_ITEMS[idx].link
+        });
+      });
+      return items.slice(0, 7);
+    }
+
+    function collectOccasionItems() {
+      const cards = document.querySelectorAll('#occasionItemsInputsContainer .cat-card-editor');
+      const items = [];
+      cards.forEach((card, idx) => {
+        const badgeInput = card.querySelector('.occ-badge-input');
+        const discInput = card.querySelector('.occ-discount-input');
+        const titleInput = card.querySelector('.occ-title-input');
+        const curInput = card.querySelector('.occ-cur-price-input');
+        const mrpInput = card.querySelector('.occ-mrp-price-input');
+        const imgInput = card.querySelector('.occ-img-input');
+        const linkInput = card.querySelector('.occ-link-input');
+        const tagsInput = card.querySelector('.occ-tags-input');
+        const ratingInput = card.querySelector('.occ-rating-input');
+        items.push({
+          id: idx + 1,
+          badge: badgeInput ? badgeInput.value.trim() : DEFAULT_OCC_ITEMS[idx].badge,
+          discount: discInput ? discInput.value.trim() : DEFAULT_OCC_ITEMS[idx].discount,
+          title: titleInput ? titleInput.value.trim() : DEFAULT_OCC_ITEMS[idx].title,
+          curPrice: curInput ? curInput.value.trim() : DEFAULT_OCC_ITEMS[idx].curPrice,
+          mrpPrice: mrpInput ? mrpInput.value.trim() : DEFAULT_OCC_ITEMS[idx].mrpPrice,
+          imageUrl: imgInput ? imgInput.value.trim() : DEFAULT_OCC_ITEMS[idx].imageUrl,
+          link: linkInput ? linkInput.value.trim() : DEFAULT_OCC_ITEMS[idx].link,
+          tags: tagsInput ? tagsInput.value.trim() : DEFAULT_OCC_ITEMS[idx].tags,
+          rating: ratingInput ? ratingInput.value.trim() : DEFAULT_OCC_ITEMS[idx].rating
+        });
+      });
+      return items.slice(0, 8);
+    }
+
+    function collectUniqueItems() {
+      const cards = document.querySelectorAll('#uniqueCollectionItemsInputsContainer .cat-card-editor');
+      const items = [];
+      cards.forEach((card, idx) => {
+        const badgeInput = card.querySelector('.uniq-badge-input');
+        const discInput = card.querySelector('.uniq-discount-input');
+        const titleInput = card.querySelector('.uniq-title-input');
+        const curInput = card.querySelector('.uniq-cur-price-input');
+        const mrpInput = card.querySelector('.uniq-mrp-price-input');
+        const imgInput = card.querySelector('.uniq-img-input');
+        const linkInput = card.querySelector('.uniq-link-input');
+        const ratingInput = card.querySelector('.uniq-rating-input');
+        items.push({
+          id: idx + 1,
+          badge: badgeInput ? badgeInput.value.trim() : DEFAULT_UNIQUE_ITEMS[idx].badge,
+          discount: discInput ? discInput.value.trim() : DEFAULT_UNIQUE_ITEMS[idx].discount,
+          title: titleInput ? titleInput.value.trim() : DEFAULT_UNIQUE_ITEMS[idx].title,
+          curPrice: curInput ? curInput.value.trim() : DEFAULT_UNIQUE_ITEMS[idx].curPrice,
+          mrpPrice: mrpInput ? mrpInput.value.trim() : DEFAULT_UNIQUE_ITEMS[idx].mrpPrice,
+          imageUrl: imgInput ? imgInput.value.trim() : DEFAULT_UNIQUE_ITEMS[idx].imageUrl,
+          link: linkInput ? linkInput.value.trim() : DEFAULT_UNIQUE_ITEMS[idx].link,
+          rating: ratingInput ? ratingInput.value.trim() : DEFAULT_UNIQUE_ITEMS[idx].rating
+        });
+      });
+      return items.slice(0, 8);
+    }
+
+    function collectReviewItems() {
+      const cards = document.querySelectorAll('#customerReviewsInputsContainer .review-editor-card');
+      const reviews = [];
+      cards.forEach((card, idx) => {
+        const nameInput = card.querySelector('.rev-name-input');
+        const cityInput = card.querySelector('.rev-city-input');
+        const starsSelect = card.querySelector('.rev-stars-select');
+        const quoteInput = card.querySelector('.rev-quote-input');
+        const verifiedCheck = card.querySelector('.rev-verified-check');
+        reviews.push({
+          id: idx + 1,
+          userName: nameInput ? nameInput.value.trim() : 'Customer',
+          userCity: cityInput ? cityInput.value.trim() : 'India',
+          stars: starsSelect ? Number(starsSelect.value) || 5 : 5,
+          quote: quoteInput ? quoteInput.value.trim() : '',
+          verified: verifiedCheck ? verifiedCheck.checked : true
+        });
+      });
+      return reviews;
+    }
+
+    // ==========================================
+    // LOAD CONFIGURATION FROM SERVER
+    // ==========================================
     async function loadHomepageConfig() {
       try {
         const apiBase = window.location.origin;
-        const res = await fetch(`${apiBase}/api/homepage-config`);
-        const data = await res.json();
-        if (data.success && data.config) {
-          const cfg = data.config;
 
-          // 0. Navbar
+        // Fetch config, products and occasions in parallel
+        const [cfgRes, prodRes, occRes] = await Promise.all([
+          fetch(`${apiBase}/api/homepage-config`),
+          fetch(`${apiBase}/api/products`).catch(() => null),
+          fetch(`${apiBase}/api/occasions`).catch(() => null)
+        ]);
+
+        const cfgData = await cfgRes.json();
+        const prodData = prodRes ? await prodRes.json() : null;
+        const occData = occRes ? await occRes.json() : null;
+
+        if (prodData && prodData.success && Array.isArray(prodData.products)) {
+          ALL_PRODUCTS = prodData.products;
+        }
+
+        if (occData && occData.success && Array.isArray(occData.occasions)) {
+          ALL_OCCASIONS = occData.occasions;
+        }
+
+        if (cfgData.success && cfgData.config) {
+          const cfg = cfgData.config;
+
+          // 0. Navbar (Preserve current configuration)
           if (cfg.navbar) {
-            document.getElementById('hp_nav_enabled').checked = cfg.navbar.enabled !== false;
-            document.getElementById('hp_nav_logo').value = cfg.navbar.logoUrl || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png';
-            document.getElementById('hp_nav_logo_preview').src = cfg.navbar.logoUrl || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png';
-            document.getElementById('hp_nav_brand').value = cfg.navbar.brandName || 'Inithan Custom Gifts';
-            document.getElementById('hp_nav_tagline').value = cfg.navbar.brandTagline || 'Made with Love';
-            renderNavLinksInputs(cfg.navbar.links);
-            updateToggleStatus(document.getElementById('hp_nav_enabled'), 'navBarStatusText');
-          } else {
-            renderNavLinksInputs(DEFAULT_NAV_LINKS);
+            CURRENT_NAVBAR = cfg.navbar;
           }
 
           // 1. Hero
@@ -1360,7 +2182,10 @@
             document.getElementById('hp_rel_enabled').checked = cfg.shopRelationship.enabled !== false;
             document.getElementById('hp_rel_title').value = cfg.shopRelationship.title || 'For Relationship ❤️';
             document.getElementById('hp_rel_subtitle').value = cfg.shopRelationship.subtitle || '';
+            renderRelationshipCardsInputs(cfg.shopRelationship.items);
             updateToggleStatus(document.getElementById('hp_rel_enabled'), 'relStatusText');
+          } else {
+            renderRelationshipCardsInputs(DEFAULT_REL_ITEMS);
           }
 
           // 4. Budget
@@ -1368,25 +2193,34 @@
             document.getElementById('hp_bud_enabled').checked = cfg.giftsBudget.enabled !== false;
             document.getElementById('hp_bud_title').value = cfg.giftsBudget.title || 'Gifts for Every Budget 🎁';
             document.getElementById('hp_bud_subtitle').value = cfg.giftsBudget.subtitle || '';
+            renderBudgetCardsInputs(cfg.giftsBudget.items);
             updateToggleStatus(document.getElementById('hp_bud_enabled'), 'budStatusText');
+          } else {
+            renderBudgetCardsInputs(DEFAULT_BUDGET_ITEMS);
           }
 
-          // 5. Occasions (Product Count)
+          // 5. Occasions
           if (cfg.homeOccasions) {
             document.getElementById('hp_occ_enabled').checked = cfg.homeOccasions.enabled !== false;
             document.getElementById('hp_occ_title').value = cfg.homeOccasions.title || 'Celebrate Every Occasion 🎉';
             document.getElementById('hp_occ_subtitle').value = cfg.homeOccasions.subtitle || '';
             document.getElementById('hp_occ_max').value = cfg.homeOccasions.maxProductsCount || 8;
+            renderOccasionCardsInputs(cfg.homeOccasions.items);
             updateToggleStatus(document.getElementById('hp_occ_enabled'), 'occStatusText');
+          } else {
+            renderOccasionCardsInputs(DEFAULT_OCC_ITEMS);
           }
 
-          // 6. Unique (Product Count)
+          // 6. Unique
           if (cfg.uniqueCollection) {
             document.getElementById('hp_uniq_enabled').checked = cfg.uniqueCollection.enabled !== false;
             document.getElementById('hp_uniq_title').value = cfg.uniqueCollection.title || 'Discover Unique Creations ✨';
             document.getElementById('hp_uniq_subtitle').value = cfg.uniqueCollection.subtitle || '';
             document.getElementById('hp_uniq_max').value = cfg.uniqueCollection.maxProductsCount || 8;
+            renderUniqueCardsInputs(cfg.uniqueCollection.items);
             updateToggleStatus(document.getElementById('hp_uniq_enabled'), 'uniqStatusText');
+          } else {
+            renderUniqueCardsInputs(DEFAULT_UNIQUE_ITEMS);
           }
 
           // 7. Reviews
@@ -1395,7 +2229,10 @@
             document.getElementById('hp_rev_title').value = cfg.customerReviews.title || 'Made With Love. Loved By You. ❤️';
             document.getElementById('hp_rev_subtitle').value = cfg.customerReviews.subtitle || '';
             document.getElementById('hp_rev_max').value = cfg.customerReviews.maxReviewsCount || 3;
+            renderCustomerReviewsInputs(cfg.customerReviews.items);
             updateToggleStatus(document.getElementById('hp_rev_enabled'), 'revStatusText');
+          } else {
+            renderCustomerReviewsInputs(DEFAULT_REVIEWS);
           }
         }
       } catch (err) {
@@ -1403,54 +2240,16 @@
       }
     }
 
-    // Collect 8 Navbar Links
-    function collectNavLinks() {
-      const rows = document.querySelectorAll('#navLinksInputsContainer .edit-item-row');
-      const links = [];
-      rows.forEach((row, idx) => {
-        const textInput = row.querySelector('.nav-link-text-input');
-        const urlInput = row.querySelector('.nav-link-url-input');
-        links.push({
-          id: idx + 1,
-          text: textInput ? textInput.value.trim() : DEFAULT_NAV_LINKS[idx].text,
-          url: urlInput ? urlInput.value.trim() : DEFAULT_NAV_LINKS[idx].url
-        });
-      });
-      return links.slice(0, 8); // strictly keep count 8
-    }
-
-    // Collect 10 Category Cards
-    function collectCategoryItems() {
-      const cards = document.querySelectorAll('#categoryItemsInputsContainer .cat-card-editor');
-      const items = [];
-      cards.forEach((card, idx) => {
-        const titleInput = card.querySelector('.cat-card-title-input');
-        const imgInput = card.querySelector('.cat-card-img-input');
-        const linkInput = card.querySelector('.cat-card-link-input');
-        items.push({
-          id: idx + 1,
-          title: titleInput ? titleInput.value.trim() : DEFAULT_CAT_ITEMS[idx].title,
-          imageUrl: imgInput ? imgInput.value.trim() : DEFAULT_CAT_ITEMS[idx].imageUrl,
-          link: linkInput ? linkInput.value.trim() : DEFAULT_CAT_ITEMS[idx].link
-        });
-      });
-      return items.slice(0, 10); // strictly keep count 10
-    }
-
-    // Save Homepage Config
+    // ==========================================
+    // SAVE HOMEPAGE CONFIGURATION
+    // ==========================================
     document.getElementById('btnSaveHomepage').addEventListener('click', async () => {
       const btn = document.getElementById('btnSaveHomepage');
       btn.disabled = true;
       btn.innerHTML = '<span>⏳ Saving Changes...</span>';
 
       const payload = {
-        navbar: {
-          enabled: document.getElementById('hp_nav_enabled').checked,
-          logoUrl: document.getElementById('hp_nav_logo').value.trim(),
-          brandName: document.getElementById('hp_nav_brand').value.trim(),
-          brandTagline: document.getElementById('hp_nav_tagline').value.trim(),
-          links: collectNavLinks()
-        },
+        ...(CURRENT_NAVBAR ? { navbar: CURRENT_NAVBAR } : {}),
         hero: {
           enabled: document.getElementById('hp_hero_enabled').checked,
           mascotImageUrl: document.getElementById('hp_hero_mascot').value.trim() || DEFAULT_MASCOT_URL,
@@ -1473,30 +2272,37 @@
         shopRelationship: {
           enabled: document.getElementById('hp_rel_enabled').checked,
           title: document.getElementById('hp_rel_title').value.trim(),
-          subtitle: document.getElementById('hp_rel_subtitle').value.trim()
+          subtitle: document.getElementById('hp_rel_subtitle').value.trim(),
+          maxItems: 10,
+          items: collectRelationshipItems()
         },
         giftsBudget: {
           enabled: document.getElementById('hp_bud_enabled').checked,
           title: document.getElementById('hp_bud_title').value.trim(),
-          subtitle: document.getElementById('hp_bud_subtitle').value.trim()
+          subtitle: document.getElementById('hp_bud_subtitle').value.trim(),
+          maxItems: 7,
+          items: collectBudgetItems()
         },
         homeOccasions: {
           enabled: document.getElementById('hp_occ_enabled').checked,
           title: document.getElementById('hp_occ_title').value.trim(),
           subtitle: document.getElementById('hp_occ_subtitle').value.trim(),
-          maxProductsCount: Number(document.getElementById('hp_occ_max').value) || 8
+          maxProductsCount: Number(document.getElementById('hp_occ_max').value) || 8,
+          items: collectOccasionItems()
         },
         uniqueCollection: {
           enabled: document.getElementById('hp_uniq_enabled').checked,
           title: document.getElementById('hp_uniq_title').value.trim(),
           subtitle: document.getElementById('hp_uniq_subtitle').value.trim(),
-          maxProductsCount: Number(document.getElementById('hp_uniq_max').value) || 8
+          maxProductsCount: Number(document.getElementById('hp_uniq_max').value) || 8,
+          items: collectUniqueItems()
         },
         customerReviews: {
           enabled: document.getElementById('hp_rev_enabled').checked,
           title: document.getElementById('hp_rev_title').value.trim(),
           subtitle: document.getElementById('hp_rev_subtitle').value.trim(),
-          maxReviewsCount: Number(document.getElementById('hp_rev_max').value) || 3
+          maxReviewsCount: Number(document.getElementById('hp_rev_max').value) || 3,
+          items: collectReviewItems()
         }
       };
 
@@ -1515,7 +2321,8 @@
         });
         const data = await res.json();
         if (res.ok && data.success) {
-          alert('🎉 Homepage changes saved successfully! Open index.html to see your updated Navbar and Category cards live.');
+          showToast('🎉 All 7 Homepage Sections saved successfully!');
+          alert('🎉 All homepage changes saved successfully! Open index.html to view your updated sections live.');
         } else {
           alert(data.message || 'Error saving changes');
         }
@@ -1528,9 +2335,11 @@
       }
     });
 
-    // Reset to defaults
+    // ==========================================
+    // RESET TO FACTORY DEFAULTS
+    // ==========================================
     document.getElementById('btnResetHp').addEventListener('click', async () => {
-      if (!confirm('Are you sure you want to reset all homepage sections to factory defaults?')) return;
+      if (!confirm('Are you sure you want to reset all 7 homepage sections to factory defaults?')) return;
       try {
         const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
         const apiBase = window.location.origin;
@@ -1545,7 +2354,8 @@
 
         const data = await res.json();
         if (res.ok && data.success) {
-          alert('Homepage settings reset to defaults!');
+          showToast('Homepage reset to factory defaults!', '🔄');
+          alert('Homepage settings reset to factory defaults!');
           loadHomepageConfig();
         } else {
           alert('Error resetting homepage settings');

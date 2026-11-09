@@ -5,6 +5,13 @@ const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
 const HomepageConfig = require('../models/HomepageConfig');
+const {
+  defaultRelationshipItems,
+  defaultBudgetItems,
+  defaultOccasionItems,
+  defaultUniqueItems,
+  defaultReviewItems
+} = HomepageConfig;
 const { protect, admin } = require('../middleware/authMiddleware');
 const { uploadToS3 } = require('../utils/s3');
 
@@ -31,13 +38,13 @@ const adminAuthOptional = async (req, res, next) => {
 
 const DEFAULT_NAV_LINKS = [
   { id: 1, text: 'Home', url: 'index.html' },
-  { id: 2, text: 'All Products', url: 'products.html' },
-  { id: 3, text: 'Love & Romance', url: 'love-romance.html' },
-  { id: 4, text: 'Birthday', url: 'birthday.html' },
-  { id: 5, text: 'Special Occasions', url: 'special-occasions.html' },
-  { id: 6, text: 'For Her & Him', url: 'for-her-and-him.html' },
-  { id: 7, text: 'Corporate Gifts', url: 'corporate-gifts.html' },
-  { id: 8, text: 'Personalize', url: 'personalize.html' }
+  { id: 2, text: 'Shop', url: 'products.html' },
+  { id: 3, text: 'Categories', url: 'index.html#categories' },
+  { id: 4, text: 'Customization', url: 'personalize.html' },
+  { id: 5, text: 'Corporate & Bulk Orders', url: 'corporate-gifts.html' },
+  { id: 6, text: 'Reseller', url: 'bulk-retail.html' },
+  { id: 7, text: 'About Us', url: 'about.html' },
+  { id: 8, text: 'Contact', url: 'contact.html' }
 ];
 
 const DEFAULT_CATEGORY_ITEMS = [
@@ -134,7 +141,8 @@ const DEFAULT_CONFIG = {
   shopRelationship: {
     enabled: true,
     title: 'For Relationship ❤️',
-    subtitle: 'Find the perfect match for the people who matter most.'
+    subtitle: 'Find the perfect match for the people who matter most.',
+    items: defaultRelationshipItems
   },
   giftsBudget: {
     enabled: true,
@@ -146,25 +154,29 @@ const DEFAULT_CONFIG = {
     showUnder499: true,
     showUnder799: true,
     showUnder999: true,
-    showUnder1499: true
+    showUnder1499: true,
+    items: defaultBudgetItems
   },
   homeOccasions: {
     enabled: true,
     title: 'Celebrate Every Occasion 🎉',
     subtitle: 'Thoughtful personalized gifts crafted to make every celebration truly unforgettable.',
-    maxProductsCount: 8
+    maxProductsCount: 8,
+    items: defaultOccasionItems
   },
   uniqueCollection: {
     enabled: true,
     title: 'Discover Unique Creations ✨',
     subtitle: 'Artisan keepsakes, illuminated wonders & handcrafted gifts you won\'t find anywhere else.',
-    maxProductsCount: 8
+    maxProductsCount: 8,
+    items: defaultUniqueItems
   },
   customerReviews: {
     enabled: true,
     title: 'Made With Love. Loved By You. ❤️',
     subtitle: 'Real smiles and authentic stories from over 25,000+ happy customers across India.',
-    maxReviewsCount: 3
+    maxReviewsCount: 3,
+    items: defaultReviewItems
   }
 };
 
@@ -177,7 +189,7 @@ router.get('/', async (req, res) => {
       config = await HomepageConfig.create(DEFAULT_CONFIG);
       config = config.toObject();
     } else {
-      // Ensure navbar and shopCategory items are fully populated
+      // Ensure all sections and items are fully populated
       let needsSave = false;
       if (!config.navbar || !Array.isArray(config.navbar.links) || config.navbar.links.length < 8) {
         config.navbar = DEFAULT_CONFIG.navbar;
@@ -192,8 +204,34 @@ router.get('/', async (req, res) => {
         }
         needsSave = true;
       }
-      if (!config.shopCategory.items || !Array.isArray(config.shopCategory.items) || config.shopCategory.items.length < 10) {
+      if (!config.shopCategory || !Array.isArray(config.shopCategory.items) || config.shopCategory.items.length < 10) {
+        config.shopCategory = config.shopCategory || {};
         config.shopCategory.items = DEFAULT_CATEGORY_ITEMS;
+        needsSave = true;
+      }
+      if (!config.shopRelationship || !Array.isArray(config.shopRelationship.items) || config.shopRelationship.items.length < 10) {
+        config.shopRelationship = config.shopRelationship || {};
+        config.shopRelationship.items = defaultRelationshipItems;
+        needsSave = true;
+      }
+      if (!config.giftsBudget || !Array.isArray(config.giftsBudget.items) || config.giftsBudget.items.length < 7) {
+        config.giftsBudget = config.giftsBudget || {};
+        config.giftsBudget.items = defaultBudgetItems;
+        needsSave = true;
+      }
+      if (!config.homeOccasions || !Array.isArray(config.homeOccasions.items) || config.homeOccasions.items.length < 8) {
+        config.homeOccasions = config.homeOccasions || {};
+        config.homeOccasions.items = defaultOccasionItems;
+        needsSave = true;
+      }
+      if (!config.uniqueCollection || !Array.isArray(config.uniqueCollection.items) || config.uniqueCollection.items.length < 8) {
+        config.uniqueCollection = config.uniqueCollection || {};
+        config.uniqueCollection.items = defaultUniqueItems;
+        needsSave = true;
+      }
+      if (!config.customerReviews || !Array.isArray(config.customerReviews.items) || config.customerReviews.items.length < 3) {
+        config.customerReviews = config.customerReviews || {};
+        config.customerReviews.items = defaultReviewItems;
         needsSave = true;
       }
       if (needsSave) {

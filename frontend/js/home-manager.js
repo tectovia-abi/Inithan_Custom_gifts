@@ -165,6 +165,29 @@ function applyHomepageConfig(config, dbProducts) {
 
       const subEl = relSec.querySelector('.home-section-subtitle');
       if (subEl && config.shopRelationship.subtitle) subEl.textContent = config.shopRelationship.subtitle;
+
+      // Update 10 relationship cards
+      if (Array.isArray(config.shopRelationship.items) && config.shopRelationship.items.length > 0) {
+        const relCardEls = relSec.querySelectorAll('.relationship-showcase-grid .rel-showcase-card');
+        config.shopRelationship.items.forEach((itemData, idx) => {
+          if (relCardEls[idx]) {
+            if (itemData.title) {
+              const titleSpan = relCardEls[idx].querySelector('.rel-card-title');
+              if (titleSpan) titleSpan.textContent = itemData.title;
+            }
+            if (itemData.imageUrl) {
+              const imgEl = relCardEls[idx].querySelector('img');
+              if (imgEl) {
+                imgEl.src = itemData.imageUrl;
+                if (itemData.title) imgEl.alt = `Personalized Gifts for ${itemData.title}`;
+              }
+            }
+            if (itemData.link) {
+              relCardEls[idx].setAttribute('href', itemData.link);
+            }
+          }
+        });
+      }
     }
   }
 
@@ -180,6 +203,35 @@ function applyHomepageConfig(config, dbProducts) {
 
       const subEl = budSec.querySelector('.home-section-subtitle');
       if (subEl && config.giftsBudget.subtitle) subEl.textContent = config.giftsBudget.subtitle;
+
+      // Update both marquee groups for seamless infinite scroll
+      if (Array.isArray(config.giftsBudget.items) && config.giftsBudget.items.length > 0) {
+        const groups = budSec.querySelectorAll('.budget-marquee-group');
+        groups.forEach(group => {
+          const cards = group.querySelectorAll('.budget-pick-card');
+          config.giftsBudget.items.forEach((itemData, idx) => {
+            if (cards[idx]) {
+              if (itemData.link) cards[idx].setAttribute('href', itemData.link);
+              if (itemData.imageUrl) {
+                const img = cards[idx].querySelector('img');
+                if (img) img.src = itemData.imageUrl;
+              }
+              if (itemData.pill) {
+                const pill = cards[idx].querySelector('.budget-card-pill');
+                if (pill) pill.textContent = itemData.pill;
+              }
+              if (itemData.tag) {
+                const tag = cards[idx].querySelector('.budget-card-tag');
+                if (tag) tag.textContent = itemData.tag;
+              }
+              if (itemData.price) {
+                const price = cards[idx].querySelector('.budget-card-price');
+                if (price) price.textContent = itemData.price;
+              }
+            }
+          });
+        });
+      }
     }
   }
 
@@ -195,6 +247,40 @@ function applyHomepageConfig(config, dbProducts) {
 
       const subEl = occSec.querySelector('.home-section-subtitle');
       if (subEl && config.homeOccasions.subtitle) subEl.textContent = config.homeOccasions.subtitle;
+
+      // Update occasion product cards in both marquee groups
+      if (Array.isArray(config.homeOccasions.items) && config.homeOccasions.items.length > 0) {
+        const groups = occSec.querySelectorAll('.occasions-marquee-group');
+        groups.forEach(group => {
+          const cards = group.querySelectorAll('.occ-product-card');
+          config.homeOccasions.items.forEach((itemData, idx) => {
+            if (cards[idx]) {
+              if (itemData.tags) cards[idx].setAttribute('data-tags', itemData.tags);
+              const imgWrap = cards[idx].querySelector('.occ-prod-img-wrap');
+              if (imgWrap && itemData.link) imgWrap.setAttribute('href', itemData.link);
+              const pill = cards[idx].querySelector('.occ-badge-pill');
+              if (pill && itemData.badge) pill.textContent = itemData.badge;
+              const disc = cards[idx].querySelector('.occ-discount-tag');
+              if (disc && itemData.discount) disc.textContent = itemData.discount;
+              const img = cards[idx].querySelector('img');
+              if (img && itemData.imageUrl) img.src = itemData.imageUrl;
+              const titleLink = cards[idx].querySelector('.occ-prod-title a');
+              if (titleLink) {
+                if (itemData.title) titleLink.textContent = itemData.title;
+                if (itemData.link) titleLink.setAttribute('href', itemData.link);
+              }
+              const curPrice = cards[idx].querySelector('.occ-price-cur');
+              if (curPrice && itemData.curPrice) curPrice.textContent = itemData.curPrice;
+              const mrpPrice = cards[idx].querySelector('.occ-price-mrp');
+              if (mrpPrice && itemData.mrpPrice) mrpPrice.textContent = itemData.mrpPrice;
+              const addBtn = cards[idx].querySelector('.occ-add-btn');
+              if (addBtn && itemData.link) addBtn.setAttribute('onclick', `window.location.href='${itemData.link}'`);
+              const rating = cards[idx].querySelector('.occ-prod-rating');
+              if (rating && itemData.rating) rating.innerHTML = itemData.rating;
+            }
+          });
+        });
+      }
 
       // Dynamic Product Count limiter
       const maxCount = config.homeOccasions.maxProductsCount || 8;
@@ -215,6 +301,39 @@ function applyHomepageConfig(config, dbProducts) {
       const subEl = uniqSec.querySelector('.home-section-subtitle');
       if (subEl && config.uniqueCollection.subtitle) subEl.textContent = config.uniqueCollection.subtitle;
 
+      // Update unique product cards in both marquee groups
+      if (Array.isArray(config.uniqueCollection.items) && config.uniqueCollection.items.length > 0) {
+        const groups = uniqSec.querySelectorAll('.unique-marquee-group');
+        groups.forEach(group => {
+          const cards = group.querySelectorAll('.occ-product-card');
+          config.uniqueCollection.items.forEach((itemData, idx) => {
+            if (cards[idx]) {
+              const imgWrap = cards[idx].querySelector('.occ-prod-img-wrap');
+              if (imgWrap && itemData.link) imgWrap.setAttribute('href', itemData.link);
+              const pill = cards[idx].querySelector('.occ-badge-pill');
+              if (pill && itemData.badge) pill.textContent = itemData.badge;
+              const disc = cards[idx].querySelector('.occ-discount-tag');
+              if (disc && itemData.discount) disc.textContent = itemData.discount;
+              const img = cards[idx].querySelector('img');
+              if (img && itemData.imageUrl) img.src = itemData.imageUrl;
+              const titleLink = cards[idx].querySelector('.occ-prod-title a');
+              if (titleLink) {
+                if (itemData.title) titleLink.textContent = itemData.title;
+                if (itemData.link) titleLink.setAttribute('href', itemData.link);
+              }
+              const curPrice = cards[idx].querySelector('.occ-price-cur');
+              if (curPrice && itemData.curPrice) curPrice.textContent = itemData.curPrice;
+              const mrpPrice = cards[idx].querySelector('.occ-price-mrp');
+              if (mrpPrice && itemData.mrpPrice) mrpPrice.textContent = itemData.mrpPrice;
+              const addBtn = cards[idx].querySelector('.occ-add-btn');
+              if (addBtn && itemData.link) addBtn.setAttribute('onclick', `window.location.href='${itemData.link}'`);
+              const rating = cards[idx].querySelector('.occ-prod-rating');
+              if (rating && itemData.rating) rating.innerHTML = itemData.rating;
+            }
+          });
+        });
+      }
+
       // Dynamic Product Count limiter
       const maxCount = config.uniqueCollection.maxProductsCount || 8;
       applyMarqueeCountLimit('#unique-collection', maxCount, dbProducts);
@@ -234,12 +353,28 @@ function applyHomepageConfig(config, dbProducts) {
       const subEl = revSec.querySelector('.home-section-subtitle');
       if (subEl && config.customerReviews.subtitle) subEl.textContent = config.customerReviews.subtitle;
 
-      // Control review cards count
-      const maxReviews = config.customerReviews.maxReviewsCount || 3;
-      const reviewCards = revSec.querySelectorAll('.customer-review-card');
-      reviewCards.forEach((card, index) => {
-        card.style.display = index < maxReviews ? '' : 'none';
-      });
+      // Populate review cards dynamically from config.customerReviews.items
+      const grid = revSec.querySelector('.reviews-compact-grid');
+      if (grid && Array.isArray(config.customerReviews.items) && config.customerReviews.items.length > 0) {
+        const maxReviews = config.customerReviews.maxReviewsCount || config.customerReviews.items.length;
+        const itemsToDisplay = config.customerReviews.items.slice(0, maxReviews);
+        grid.innerHTML = itemsToDisplay.map((rev, idx) => {
+          const starsStr = '★'.repeat(Math.max(1, Math.min(5, rev.stars || 5)));
+          return `
+            <div class="review-compact-card reveal visible" style="transition-delay: ${(idx * 0.05).toFixed(2)}s;">
+              <div class="review-stars">${starsStr}</div>
+              <p class="review-quote">"${escapeHtml(rev.quote || '')}"</p>
+              <div class="review-user-row">
+                <div class="review-user-info">
+                  <span class="review-user-name">${escapeHtml(rev.userName || 'Happy Customer')}</span>
+                  <span class="review-user-city">${escapeHtml(rev.userCity || 'India')}</span>
+                </div>
+                ${rev.verified !== false ? '<span class="review-verified-badge">✓ Verified Buyer</span>' : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
     }
   }
 }

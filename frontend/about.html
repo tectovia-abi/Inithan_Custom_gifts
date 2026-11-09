@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="About Inithan Custom Gifts. Learn about our story, passion for personalized gifts, and dedication to crafting unforgettable memories with love.">
+  <meta name="keywords" content="about inithan custom gifts, custom gifts story, personalized gifts coimbatore, handcrafted gifts india">
+  <title>About Us | Inithan Custom Gifts - Made With Love</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/mobile.css">
+  <link rel="icon" type="image/png" href="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png">
+  <meta name="theme-color" content="#C41E3A">
+  <style>
+    .about-hero {
+      padding: 130px 20px 60px;
+      background: linear-gradient(135deg, #FFF5F5 0%, #FFFDF9 50%, #FDF2F8 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(196, 30, 58, 0.08);
+      color: var(--primary);
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    .about-hero-title {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      color: var(--dark);
+      line-height: 1.2;
+      max-width: 800px;
+      margin: 0 auto 16px;
+    }
+    .about-hero-title span {
+      color: var(--primary);
+    }
+    .about-hero-sub {
+      font-size: clamp(1rem, 1.5vw, 1.2rem);
+      color: var(--gray-600);
+      max-width: 680px;
+      margin: 0 auto 30px;
+      line-height: 1.6;
+    }
+    .about-stats-grid {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-top: 36px;
+    }
+    .about-stat-card {
+      background: #ffffff;
+      padding: 20px 32px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      min-width: 160px;
+    }
+    .about-stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .about-stat-label {
+      font-size: 0.82rem;
+      color: var(--gray-500);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+    .about-story-sec {
+      padding: 80px 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .about-story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      .about-story-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+    }
+    .about-story-img {
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+      object-fit: cover;
+      max-height: 420px;
+    }
+    .about-story-text h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 16px;
+    }
+    .about-story-text p {
+      color: var(--gray-600);
+      line-height: 1.7;
+      margin-bottom: 16px;
+      font-size: 1rem;
+    }
+    .about-pillars {
+      background: var(--gray-100);
+      padding: 70px 20px;
+    }
+    .about-pillars-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .pillar-card {
+      background: #ffffff;
+      padding: 30px 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+      transition: transform 0.3s ease;
+    }
+    .pillar-card:hover {
+      transform: translateY(-5px);
+    }
+    .pillar-icon {
+      font-size: 2.2rem;
+      margin-bottom: 14px;
+      display: inline-block;
+    }
+    .pillar-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+    .pillar-card p {
+      font-size: 0.9rem;
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+    .about-cta {
+      padding: 70px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #1A1A2E 0%, #2d1a2e 100%);
+      color: #ffffff;
+    }
+    .about-cta h2 {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+      color: #ffffff;
+    }
+    .about-cta p {
+      color: rgba(255, 255, 255, 0.8);
+      max-width: 600px;
+      margin: 0 auto 28px;
+      font-size: 1.05rem;
+    }
+    .about-cta-btns {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .about-btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .about-btn-primary:hover {
+      opacity: 0.9;
+    }
+    .about-btn-secondary {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .about-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <img src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png"
+        alt="Inithan Custom Gifts Logo" onerror="this.style.background='var(--primary)'; this.alt='I';">
+      <div class="nav-brand-text">
+        <span class="nav-brand-name">Inithan Custom Gifts</span>
+        <span class="nav-brand-tagline">Made with Love</span>
+      </div>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="products.html">Shop</a>
+      <a href="index.html#categories">Categories</a>
+      <a href="personalize.html">Customization</a>
+      <a href="corporate-gifts.html">Corporate &amp; Bulk Orders</a>
+      <a href="bulk-retail.html">Reseller</a>
+      <a href="about.html" class="active">About Us</a>
+      <a href="contact.html">Contact</a>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Shown when logged OUT -->
+      <a href="login.html" class="nav-auth-btn login-btn" id="navLoginBtn">LOGIN</a>
+      <a href="signup.html" class="nav-auth-btn signup-btn" id="navSignupBtn">SIGN UP</a>
+      <!-- Shown when logged IN -->
+      <span id="navUserGreet" style="display:none; color:var(--gold); font-weight:600; font-size:0.85rem;"></span>
+      <button onclick="logout()" class="nav-auth-btn login-btn" id="navLogoutBtn"
+        style="display:none; cursor:pointer; border:none;">LOGOUT</button>
+      <div class="nav-cart" id="navCart" style="cursor:pointer;" onclick="window.location.href='cart.html'">
+        <span class="cart-icon">🛒</span>
+        <span>CART</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="about-hero">
+    <div class="about-hero-badge">💕 Crafting Smiles Since Inception</div>
+    <h1 class="about-hero-title">Turning Precious Memories Into <span>Timeless Gifts</span></h1>
+    <p class="about-hero-sub">We believe every gift tells a heartfelt story. Our mission is to help you celebrate love, friendship, and cherished moments with uniquely personalized creations.</p>
+
+    <div class="about-stats-grid">
+      <div class="about-stat-card">
+        <div class="about-stat-number">50,000+</div>
+        <div class="about-stat-label">Happy Customers</div>
+      </div>
+      <div class="about-stat-card">
+        <div class="about-stat-number">4.9 / 5.0</div>
+        <div class="about-stat-label">Average Rating</div>
+      </div>
+      <div class="about-stat-card">
+        <div class="about-stat-number">100%</div>
+        <div class="about-stat-label">Personalized With Love</div>
+      </div>
+      <div class="about-stat-card">
+        <div class="about-stat-number">Pan-India</div>
+        <div class="about-stat-label">Express Delivery</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story Section -->
+  <section class="about-story-sec">
+    <div class="about-story-grid">
+      <div>
+        <img src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/hero.jpeg" alt="Handcrafted Custom Gifts" class="about-story-img" onerror="this.src='images/gift-box.png'">
+      </div>
+      <div class="about-story-text">
+        <h2>Handcrafted With Care, Crafted For Memories</h2>
+        <p>Inithan Custom Gifts was founded with a simple yet powerful vision: to make gift-giving deeply personal, thoughtful, and memorable. What started as a dedicated workshop has blossomed into a beloved custom gifts brand trusted by customers and organizations across India.</p>
+        <p>Whether it’s a thermal magic mug that reveals a cherished photo when hot coffee is poured, a laser-engraved 3D Spotify acrylic plaque playing your favourite song, or a curated employee welcome kit for your growing team — every single piece is handcrafted with precision, premium materials, and heartfelt love.</p>
+        <p>We take pride in turning your ideas and photos into stunning keepsakes that bring joy and smiles that last a lifetime.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Pillars -->
+  <section class="about-pillars">
+    <div class="about-pillars-container">
+      <div class="home-section-header" style="text-align:center;">
+        <h2 style="font-size:2rem; font-weight:800; color:var(--dark); margin-bottom:8px;">Why Choose Inithan Custom Gifts?</h2>
+        <p style="color:var(--gray-600); font-size:1rem;">Our commitment to quality, creativity, and customer delight</p>
+      </div>
+
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <span class="pillar-icon">🎨</span>
+          <h3>100% Personalized</h3>
+          <p>Add your photos, names, dates, quotes, and custom artwork to create one-of-a-kind treasures.</p>
+        </div>
+        <div class="pillar-card">
+          <span class="pillar-icon">💎</span>
+          <h3>Uncompromising Quality</h3>
+          <p>We use high-grade ceramic, crystal-clear acrylic, solid natural wood, and fade-resistant HD inks.</p>
+        </div>
+        <div class="pillar-card">
+          <span class="pillar-icon">⚡</span>
+          <h3>Fast Pan-India Delivery</h3>
+          <p>Secure, multi-layer shockproof packaging delivered right to your door anywhere in India.</p>
+        </div>
+        <div class="pillar-card">
+          <span class="pillar-icon">🤝</span>
+          <h3>Corporate &amp; Reseller Ready</h3>
+          <p>From individual keepsakes to bulk enterprise orders with custom branding, GST billing, and white-labeling.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="about-cta">
+    <h2>Ready to Create Something Special?</h2>
+    <p>Explore our wide collection of custom mugs, photo frames, 3D lamps, and hampers, or speak with our gifting specialists today.</p>
+    <div class="about-cta-btns">
+      <a href="products.html" class="about-btn-primary">Shop Gifts Now →</a>
+      <a href="corporate-gifts.html" class="about-btn-secondary">Corporate &amp; Bulk Orders</a>
+      <a href="contact.html" class="about-btn-secondary">Contact Us</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <!-- Col 1: Brand & About -->
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo-link">
+          <img id="footerLogoImg"
+            src="https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/logo.png"
+            alt="Inithan Custom Gifts" class="footer-logo-img">
+          <div class="footer-brand-text">
+            <span class="footer-brand-name">Inithan Custom Gifts</span>
+            <span class="footer-brand-tagline">Made with Love</span>
+          </div>
+        </a>
+        <p>We create beautiful, personalized gifts that celebrate your special moments. Every gift tells a unique
+          story crafted with love and care.</p>
+        <div class="footer-social">
+          <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"
+            class="social-btn social-ig">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg>
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"
+            class="social-btn social-fb">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+            </svg>
+          </a>
+          <a href="https://wa.me/919944444834" target="_blank" rel="noopener" aria-label="WhatsApp"
+            class="social-btn social-wa">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Col 2: Quick Links -->
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <div class="footer-heading-bar"></div>
+        <ul class="footer-links-list">
+          <li><a href="index.html"><span class="chevron-arrow">›</span> Home</a></li>
+          <li><a href="products.html"><span class="chevron-arrow">›</span> Products</a></li>
+          <li><a href="bulk-retail.html"><span class="chevron-arrow">›</span> Bulk / Retail</a></li>
+          <li><a href="about.html"><span class="chevron-arrow">›</span> About Us</a></li>
+          <li><a href="contact.html"><span class="chevron-arrow">›</span> Contact Us</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Categories -->
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <div class="footer-heading-bar"></div>
+        <ul class="footer-links-list">
+          <li><a href="products.html?search=Mug"><span class="chevron-arrow">›</span> Custom Mugs</a></li>
+          <li><a href="products.html?search=Frame"><span class="chevron-arrow">›</span> Photo Frames</a></li>
+          <li><a href="products.html?search=Keychain"><span class="chevron-arrow">›</span> Keychains</a></li>
+          <li><a href="products.html?search=Hamper"><span class="chevron-arrow">›</span> Gift Hampers</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Get in Touch -->
+      <div class="footer-col footer-col-contact">
+        <h4>Get in Touch</h4>
+        <div class="footer-heading-bar"></div>
+        <ul class="footer-contact">
+          <li>
+            <span class="contact-icon icon-location">📍</span>
+            <span>Inithan Custom Gifts, 12/5, North Main Street, Gandhipuram, Coimbatore - 641012, India</span>
+          </li>
+          <li>
+            <span class="contact-icon icon-phone">📞</span>
+            <a href="tel:+919944444834">+91 99444 44834</a>
+          </li>
+          <li>
+            <span class="contact-icon icon-email">✉️</span>
+            <a href="mailto:inithancustomgifts@gmail.com">inithancustomgifts@gmail.com</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <p>&copy; 2026 Inithan Custom Gifts. All Rights Reserved. Made with ❤️ in India.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp Action Button -->
+  <a href="https://wa.me/919944444834" class="whatsapp-fab" target="_blank" aria-label="Chat on WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+      <path
+        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+    </svg>
+  </a>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="mob-bottom-nav" id="mobBottomNav">
+    <a href="index.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🏠</span>
+      <span class="mob-nav-label">Home</span>
+    </a>
+    <a href="products.html" class="mob-nav-item">
+      <span class="mob-nav-icon">🛍️</span>
+      <span class="mob-nav-label">Shop</span>
+    </a>
+    <a href="bulk-retail.html" class="mob-nav-item">
+      <span class="mob-nav-icon">📦</span>
+      <span class="mob-nav-label">Bulk</span>
+    </a>
+    <a href="about.html" class="mob-nav-item active">
+      <span class="mob-nav-icon">ℹ️</span>
+      <span class="mob-nav-label">About</span>
+    </a>
+    <a href="cart.html" class="mob-nav-item mob-cart-link" id="mobCartLink">
+      <span class="mob-nav-icon">🛒</span>
+      <span class="mob-nav-label">Cart</span>
+      <span class="mob-cart-badge" id="mobCartBadge" style="display:none;">0</span>
+    </a>
+  </nav>
+
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>

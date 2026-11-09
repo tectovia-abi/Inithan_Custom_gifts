@@ -7,8 +7,10 @@
 
   let categories = [];
   let occasions = [];
+  let relationships = [];
   let currentCatImageBase64 = '';
   let currentOccImageBase64 = '';
+  let currentRelImageBase64 = '';
   let lastExpandedCatId = '';
 
   // Toast Notifications
@@ -403,6 +405,142 @@
     }
   }
 
+  // ── Relationships Logic ────────────────────────────────────────────────────
+  async function fetchRelationships() {
+    try {
+      const res = await fetch(`${API_BASE}/api/relationships`);
+      const data = await res.json();
+      if (data.success) {
+        relationships = data.relationships;
+        renderRelationships();
+      }
+    } catch (error) {
+      console.error('Error fetching relationships:', error);
+      const container = document.getElementById('relationshipsContainer');
+      if (container) container.innerHTML = '<p class="text-center" style="color:red;">Failed to load relationships.</p>';
+    }
+  }
+
+  function renderRelationships() {
+    const container = document.getElementById('relationshipsContainer');
+    if (!container) return;
+
+    if (relationships.length === 0) {
+      container.innerHTML = '<p class="text-center" style="padding: 40px; color: #666;">No relationships found. Click "+ Add New Relationship" to add one!</p>';
+      return;
+    }
+
+    container.innerHTML = `
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+        ${relationships.map(rel => `
+          <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+            <div>
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <img src="${rel.image || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'}" alt="${rel.name}" style="width: 48px; height: 48px; border-radius: 10px; object-fit: cover; border: 1px solid #eee;" onerror="this.src='https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png'">
+                  <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #1e293b;">${rel.name}</h3>
+                </div>
+                <span style="font-size: 0.75rem; font-weight: 600; padding: 3px 10px; border-radius: 12px; background: ${rel.status === 'Active' ? '#dcfce7' : '#f1f5f9'}; color: ${rel.status === 'Active' ? '#15803d' : '#64748b'};">${rel.status || 'Active'}</span>
+              </div>
+              <p style="font-size: 0.85rem; color: #64748b; margin: 0 0 15px 0; line-height: 1.4;">${rel.description || 'No description provided.'}</p>
+            </div>
+            
+            <div style="display: flex; gap: 10px; padding-top: 12px; border-top: 1px dashed #e2e8f0;">
+              <button class="btn-action btn-edit" style="flex:1;" data-action="edit-rel" data-id="${rel._id}" data-name="${rel.name.replace(/"/g, '&quot;')}" data-desc="${(rel.description || '').replace(/"/g, '&quot;')}" data-status="${rel.status || 'Active'}" data-image="${rel.image || ''}">✎ Edit</button>
+              <button class="btn-action btn-delete" style="flex:1;" data-action="delete-rel" data-id="${rel._id}">🗑️ Delete</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  function openRelModal(id = '', name = '', description = '', status = 'Active', image = '') {
+    document.getElementById('relId').value = id;
+    document.getElementById('relName').value = name;
+    document.getElementById('relDescription').value = description;
+    document.getElementById('relStatus').value = status || 'Active';
+    
+    const preview = document.getElementById('relImagePreview');
+    if (image && image !== 'undefined') {
+      currentRelImageBase64 = image;
+      preview.src = image;
+      preview.style.display = 'block';
+    } else {
+      currentRelImageBase64 = '';
+      preview.src = '';
+      preview.style.display = 'none';
+    }
+
+    document.getElementById('relModalTitle').textContent = id ? 'Edit Relationship' : 'Add Relationship';
+    document.getElementById('relModal').style.display = 'flex';
+  }
+
+  async function saveRelationship(e) {
+    e.preventDefault();
+    const id = document.getElementById('relId').value;
+    const name = document.getElementById('relName').value;
+    const description = document.getElementById('relDescription').value;
+    const status = document.getElementById('relStatus').value;
+    const image = currentRelImageBase64;
+    const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
+
+    try {
+      const method = id ? 'PUT' : 'POST';
+      const url = id ? `${API_BASE}/api/relationships/${id}` : `${API_BASE}/api/relationships`;
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ 
+          name, 
+          description, 
+          status, 
+          image: image || 'https://inithan-custom-gifts-prod-651484323514-eu-north-1-an.s3.eu-north-1.amazonaws.com/static/gift-box.png' 
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        closeModal('relModal');
+        fetchRelationships();
+        showToast(id ? 'Relationship updated successfully!' : 'Relationship added successfully!', true);
+      } else {
+        showToast(data.message || 'Error saving relationship', false);
+      }
+    } catch (error) {
+      console.error(error);
+      showToast('Failed to save relationship', false);
+    }
+  }
+
+  async function deleteRelationship(id) {
+    if (!confirm('Are you sure you want to delete this relationship?')) return;
+    const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token');
+
+    try {
+      const res = await fetch(`${API_BASE}/api/relationships/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      if (data.success) {
+        fetchRelationships();
+        showToast('Relationship deleted successfully!', true);
+      } else {
+        showToast(data.message || 'Error deleting relationship', false);
+      }
+    } catch (error) {
+      console.error(error);
+      showToast('Failed to delete relationship', false);
+    }
+  }
+
   // ── DOM Initialization ──────────────────────────────────────────────────────
   function init() {
     // Add Category button
@@ -417,11 +555,19 @@
       addOccBtn.addEventListener('click', () => openOccModal());
     }
 
-    // Tab Switcher (Categories vs Occasions)
+    // Add Relationship button
+    const addRelBtn = document.getElementById('addRelBtn');
+    if (addRelBtn) {
+      addRelBtn.addEventListener('click', () => openRelModal());
+    }
+
+    // Tab Switcher (Categories vs Occasions vs Relationships)
     const tabCatBtn = document.getElementById('tabCatBtn');
     const tabOccBtn = document.getElementById('tabOccBtn');
+    const tabRelBtn = document.getElementById('tabRelBtn');
     const catSection = document.getElementById('categoriesSection');
     const occSection = document.getElementById('occasionsSection');
+    const relSection = document.getElementById('relationshipsSection');
     const headerTitle = document.getElementById('headerTitle');
 
     function switchToCategories() {
@@ -433,8 +579,13 @@
         tabOccBtn.style.borderBottomColor = 'transparent';
         tabOccBtn.style.color = '#64748b';
       }
+      if (tabRelBtn) {
+        tabRelBtn.style.borderBottomColor = 'transparent';
+        tabRelBtn.style.color = '#64748b';
+      }
       if (catSection) catSection.style.display = 'block';
       if (occSection) occSection.style.display = 'none';
+      if (relSection) relSection.style.display = 'none';
       if (headerTitle) headerTitle.textContent = 'Manage Categories';
     }
 
@@ -447,14 +598,40 @@
         tabCatBtn.style.borderBottomColor = 'transparent';
         tabCatBtn.style.color = '#64748b';
       }
+      if (tabRelBtn) {
+        tabRelBtn.style.borderBottomColor = 'transparent';
+        tabRelBtn.style.color = '#64748b';
+      }
       if (occSection) occSection.style.display = 'block';
       if (catSection) catSection.style.display = 'none';
+      if (relSection) relSection.style.display = 'none';
       if (headerTitle) headerTitle.textContent = 'Manage Occasions';
       fetchOccasions();
     }
 
+    function switchToRelationships() {
+      if (tabRelBtn) {
+        tabRelBtn.style.borderBottomColor = 'var(--primary, #C41E3A)';
+        tabRelBtn.style.color = 'var(--primary, #C41E3A)';
+      }
+      if (tabCatBtn) {
+        tabCatBtn.style.borderBottomColor = 'transparent';
+        tabCatBtn.style.color = '#64748b';
+      }
+      if (tabOccBtn) {
+        tabOccBtn.style.borderBottomColor = 'transparent';
+        tabOccBtn.style.color = '#64748b';
+      }
+      if (relSection) relSection.style.display = 'block';
+      if (catSection) catSection.style.display = 'none';
+      if (occSection) occSection.style.display = 'none';
+      if (headerTitle) headerTitle.textContent = 'Manage Relationships';
+      fetchRelationships();
+    }
+
     if (tabCatBtn) tabCatBtn.addEventListener('click', switchToCategories);
     if (tabOccBtn) tabOccBtn.addEventListener('click', switchToOccasions);
+    if (tabRelBtn) tabRelBtn.addEventListener('click', switchToRelationships);
 
     // Global Modal Close listener delegation
     document.addEventListener('click', (e) => {
@@ -478,6 +655,11 @@
     const occForm = document.getElementById('occForm');
     if (occForm) {
       occForm.addEventListener('submit', saveOccasion);
+    }
+
+    const relForm = document.getElementById('relForm');
+    if (relForm) {
+      relForm.addEventListener('submit', saveRelationship);
     }
 
     // Image Upload listeners
@@ -509,6 +691,23 @@
             currentOccImageBase64 = evt.target.result;
             occImagePreview.src = currentOccImageBase64;
             occImagePreview.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    const relImageFile = document.getElementById('relImageFile');
+    const relImagePreview = document.getElementById('relImagePreview');
+    if (relImageFile && relImagePreview) {
+      relImageFile.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            currentRelImageBase64 = evt.target.result;
+            relImagePreview.src = currentRelImageBase64;
+            relImagePreview.style.display = 'block';
           };
           reader.readAsDataURL(file);
         }
@@ -582,13 +781,40 @@
       });
     }
 
-    // Fetch initial list of categories and occasions
+    // Event Delegation for Relationships Container
+    const relationshipsContainer = document.getElementById('relationshipsContainer');
+    if (relationshipsContainer) {
+      relationshipsContainer.addEventListener('click', (e) => {
+        const editBtn = e.target.closest('[data-action="edit-rel"]');
+        if (editBtn) {
+          openRelModal(
+            editBtn.getAttribute('data-id'),
+            editBtn.getAttribute('data-name'),
+            editBtn.getAttribute('data-desc'),
+            editBtn.getAttribute('data-status'),
+            editBtn.getAttribute('data-image')
+          );
+          return;
+        }
+
+        const deleteBtn = e.target.closest('[data-action="delete-rel"]');
+        if (deleteBtn) {
+          deleteRelationship(deleteBtn.getAttribute('data-id'));
+          return;
+        }
+      });
+    }
+
+    // Fetch initial lists
     fetchCategories();
     fetchOccasions();
+    fetchRelationships();
 
-    // Check URL hash if user clicked direct link to #occasions
+    // Check URL hash if user clicked direct link to #occasions or #relationships
     if (window.location.hash === '#occasions' || window.location.pathname.includes('admin-occasions.html')) {
       switchToOccasions();
+    } else if (window.location.hash === '#relationships' || window.location.hash === '#relations') {
+      switchToRelationships();
     }
   }
 
