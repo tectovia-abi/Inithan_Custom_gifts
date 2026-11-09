@@ -88,14 +88,6 @@ const authLimiter = rateLimit({
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/signup', authLimiter);
 
-const forgotPasswordLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 10,
-  message: { success: false, message: 'Too many verification code requests, please try again in 15 minutes.' }
-});
-app.use('/api/auth/forgot-password', forgotPasswordLimiter);
-app.use('/api/auth/resend-otp', forgotPasswordLimiter);
-
 const inquiryLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   max: 5,

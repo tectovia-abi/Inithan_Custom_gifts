@@ -6,11 +6,7 @@ const {
   getUsers,
   getProfile,
   updateProfile,
-  changePassword,
-  forgotPassword,
-  verifyOtp,
-  resetPassword,
-  resendOtp
+  changePassword
 } = require('../controllers/authController');
 const { protect, admin } = require('../middleware/authMiddleware');
 const { validateSignup, validateLogin } = require('../middleware/validationMiddleware');
@@ -24,26 +20,6 @@ router.post('/signup', validateSignup, signup);
 // @desc    Authenticate user & get token
 // @access  Public
 router.post('/login', validateLogin, login);
-
-// @route   POST /api/auth/forgot-password
-// @desc    Request WhatsApp OTP for forgot password
-// @access  Public
-router.post('/forgot-password', forgotPassword);
-
-// @route   POST /api/auth/verify-otp
-// @desc    Verify WhatsApp OTP code
-// @access  Public
-router.post('/verify-otp', verifyOtp);
-
-// @route   POST /api/auth/reset-password
-// @desc    Reset password using WhatsApp OTP or resetToken
-// @access  Public
-router.post('/reset-password', resetPassword);
-
-// @route   POST /api/auth/resend-otp
-// @desc    Resend WhatsApp OTP with 60s cooldown
-// @access  Public
-router.post('/resend-otp', resendOtp);
 
 // @route   GET /api/auth/profile
 // @desc    Get current user's profile

@@ -530,46 +530,6 @@
     </div>
   </div>
 
-  <!-- Order Cancellation Modal -->
-  <div id="cancelOrderModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.72); backdrop-filter:blur(5px); z-index:99999; align-items:center; justify-content:center; padding:16px;">
-    <div style="background:#ffffff; border-radius:18px; max-width:440px; width:100%; box-shadow:0 25px 50px rgba(0,0,0,0.3); overflow:hidden; border:1px solid #e2e8f0; animation:modalPop 0.2s ease;">
-      <div style="background:#fef2f2; border-bottom:1px solid #fecaca; padding:18px 22px; display:flex; justify-content:space-between; align-items:center;">
-        <h3 style="margin:0; font-size:1.15rem; color:#991b1b; display:flex; align-items:center; gap:8px;">
-          <span>🛑</span> Cancel Order
-        </h3>
-        <button onclick="closeCancelModal()" style="background:none; border:none; font-size:24px; cursor:pointer; color:#64748b; line-height:1;">&times;</button>
-      </div>
-      <div style="padding:22px;">
-        <p style="font-size:0.88rem; color:#475569; margin:0 0 14px; line-height:1.5;">
-          Are you sure you want to cancel order <strong id="cancelModalOrderNum" style="color:#0f172a; font-family:monospace;"></strong>?
-        </p>
-        <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:10px 12px; margin-bottom:14px; font-size:0.82rem; color:#166534; display:flex; gap:8px; align-items:flex-start;">
-          <span style="font-size:1.1rem; line-height:1;">💬</span>
-          <div>
-            <strong>WhatsApp Notification:</strong> We will automatically send a cancellation confirmation and refund tracking update to your WhatsApp.
-          </div>
-        </div>
-        <label for="cancelReasonSelect" style="display:block; font-size:0.82rem; font-weight:600; color:#334155; margin-bottom:6px;">Select Reason for Cancellation:</label>
-        <select id="cancelReasonSelect" onchange="toggleCustomReason(this.value)" style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:0.85rem; margin-bottom:10px; background:#fff; outline:none;">
-          <option value="Changed my mind">Changed my mind</option>
-          <option value="Ordered by mistake">Ordered by mistake</option>
-          <option value="Found a better price / alternative">Found a better price / alternative</option>
-          <option value="Need to change shipping address or custom text">Need to change shipping address or custom text</option>
-          <option value="Delivery will take too long">Delivery will take too long</option>
-          <option value="Other">Other reason</option>
-        </select>
-        <input type="text" id="cancelReasonCustom" placeholder="Please specify your reason" style="display:none; width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:0.85rem; margin-bottom:12px; box-sizing:border-box;">
-        
-        <div id="cancelModalAlert" style="display:none; padding:10px 12px; border-radius:8px; font-size:0.82rem; margin-bottom:12px;"></div>
-
-        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:16px;">
-          <button type="button" onclick="closeCancelModal()" style="padding:9px 18px; border-radius:8px; border:1px solid #cbd5e1; background:#fff; font-weight:600; font-size:0.85rem; cursor:pointer; color:#475569;">Keep Order</button>
-          <button type="button" id="confirmCancelBtn" onclick="submitOrderCancellation()" style="padding:9px 18px; border-radius:8px; border:none; background:#dc2626; color:#fff; font-weight:700; font-size:0.85rem; cursor:pointer; box-shadow:0 4px 12px rgba(220,38,38,0.3);">Confirm Cancellation</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script src="js/auth.js"></script>
   <script src="js/script.js"></script>
   <script>
@@ -796,15 +756,6 @@
               </div>
             </div>
 
-            ${['placed', 'processing'].includes(order.orderStatus) ? `
-              <div style="margin: 0 24px 20px 24px; padding-top: 14px; border-top: 1px dashed #e2e8f0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-                <span style="font-size:0.82rem; color:#64748b;">Need to cancel this order before shipping?</span>
-                <button onclick="openCancelModal('${order._id}', '${order.orderNumber}')" style="background:#fff; border:1px solid #ef4444; color:#dc2626; font-size:0.8rem; font-weight:700; padding:6px 14px; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:all 0.2s;">
-                  <span>❌</span> Cancel Order
-                </button>
-              </div>
-            ` : ''}
-
           </div>
         `;
       }).join('');
@@ -822,107 +773,6 @@
     function closeLightbox() {
       const modal = document.getElementById('photoLightbox');
       if (modal) modal.style.display = 'none';
-    }
-
-    let selectedCancelOrderId = '';
-    let selectedCancelOrderNum = '';
-
-    function toggleCustomReason(val) {
-      const customInput = document.getElementById('cancelReasonCustom');
-      if (customInput) {
-        customInput.style.display = val === 'Other' ? 'block' : 'none';
-        if (val === 'Other') customInput.focus();
-      }
-    }
-
-    function openCancelModal(orderId, orderNum) {
-      selectedCancelOrderId = orderId;
-      selectedCancelOrderNum = orderNum;
-      const modal = document.getElementById('cancelOrderModal');
-      const numEl = document.getElementById('cancelModalOrderNum');
-      const alertEl = document.getElementById('cancelModalAlert');
-      const customInput = document.getElementById('cancelReasonCustom');
-      const selectEl = document.getElementById('cancelReasonSelect');
-      const btn = document.getElementById('confirmCancelBtn');
-
-      if (numEl) numEl.textContent = `#${orderNum}`;
-      if (alertEl) alertEl.style.display = 'none';
-      if (btn) {
-        btn.disabled = false;
-        btn.textContent = 'Confirm Cancellation';
-      }
-      if (selectEl) selectEl.value = 'Changed my mind';
-      if (customInput) {
-        customInput.style.display = 'none';
-        customInput.value = '';
-      }
-      if (modal) modal.style.display = 'flex';
-    }
-
-    function closeCancelModal() {
-      const modal = document.getElementById('cancelOrderModal');
-      if (modal) modal.style.display = 'none';
-    }
-
-    async function submitOrderCancellation() {
-      if (!selectedCancelOrderId) return;
-      const selectEl = document.getElementById('cancelReasonSelect');
-      const customInput = document.getElementById('cancelReasonCustom');
-      const btn = document.getElementById('confirmCancelBtn');
-      const alertEl = document.getElementById('cancelModalAlert');
-
-      let reason = selectEl ? selectEl.value : 'Changed my mind';
-      if (reason === 'Other' && customInput && customInput.value.trim()) {
-        reason = customInput.value.trim();
-      }
-
-      const token = localStorage.getItem('inithat_token') || sessionStorage.getItem('inithat_token') || (typeof getCookie === 'function' ? getCookie('inithat_token') : '');
-      const API_BASE = window.API_BASE || window.location.origin;
-
-      btn.disabled = true;
-      btn.textContent = 'Cancelling...';
-
-      try {
-        const res = await fetch(`${API_BASE}/api/orders/${selectedCancelOrderId}/cancel`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ reason })
-        });
-
-        const data = await res.json();
-
-        if (res.ok && data.success) {
-          alertEl.style.display = 'block';
-          alertEl.style.background = '#f0fdf4';
-          alertEl.style.color = '#166534';
-          alertEl.style.border = '1px solid #bbf7d0';
-          alertEl.textContent = '✓ Order cancelled successfully. WhatsApp notification sent!';
-
-          setTimeout(() => {
-            closeCancelModal();
-            fetchMyOrders();
-          }, 1500);
-        } else {
-          alertEl.style.display = 'block';
-          alertEl.style.background = '#fef2f2';
-          alertEl.style.color = '#991b1b';
-          alertEl.style.border = '1px solid #fecaca';
-          alertEl.textContent = data.message || 'Failed to cancel order.';
-          btn.disabled = false;
-          btn.textContent = 'Confirm Cancellation';
-        }
-      } catch (err) {
-        alertEl.style.display = 'block';
-        alertEl.style.background = '#fef2f2';
-        alertEl.style.color = '#991b1b';
-        alertEl.style.border = '1px solid #fecaca';
-        alertEl.textContent = 'Server connection error. Please try again.';
-        btn.disabled = false;
-        btn.textContent = 'Confirm Cancellation';
-      }
     }
   </script>
 </body>
