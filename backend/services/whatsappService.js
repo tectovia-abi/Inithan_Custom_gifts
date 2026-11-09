@@ -39,6 +39,7 @@ function formatPhoneNumber(phone) {
  * Checks if real Meta credentials have been provided (not placeholder strings or empty)
  */
 function isConfigured(token, phoneNumberId) {
+  if (process.env.NODE_ENV === 'test') return false;
   if (!token || !phoneNumberId) return false;
   const t = token.trim().toLowerCase();
   const p = phoneNumberId.trim().toLowerCase();
@@ -86,7 +87,8 @@ async function sendTextMessage(to, bodyText) {
 
     if (!response.ok) {
       console.error('[WhatsApp Service] Send error response:', data);
-      return { success: false, error: data };
+      const errMsg = data?.error?.message || data?.error?.error_user_msg || 'Meta Cloud API rejected dispatch';
+      return { success: false, error: data, errorMessage: errMsg };
     }
 
     const messageId = data?.messages?.[0]?.id || `out_${Date.now()}`;
@@ -124,6 +126,14 @@ async function sendWhatsAppOtp(to, otpCode) {
   const { token, phoneNumberId, apiVersion, otpTemplateName, otpTemplateLang } = getWhatsAppConfig();
   const cleanTo = formatPhoneNumber(to);
   const bodyText = `*Inithan Custom Gifts*\n\nYour One-Time Password (OTP) for password reset is: *${otpCode}*\n\nValid for 10 minutes. Please do not share this OTP with anyone.`;
+
+  if (!cleanTo || cleanTo.length < 10) {
+    return {
+      success: false,
+      error: 'Invalid phone number',
+      errorMessage: 'Account does not have a valid 10-digit mobile number for WhatsApp delivery'
+    };
+  }
 
   // Simulated OTP mode when credentials are not yet entered
   if (!isConfigured(token, phoneNumberId)) {

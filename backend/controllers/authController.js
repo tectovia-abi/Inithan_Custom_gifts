@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 const User = require('../models/User');
 const LoginLog = require('../models/LoginLog');
 const PasswordResetOtp = require('../models/PasswordResetOtp');
@@ -19,6 +20,64 @@ const maskPhone = (phone) => {
   const visible = digits.slice(-4);
   const prefix = digits.length > 10 ? '+' + digits.slice(0, digits.length - 10) + ' ' : '';
   return `${prefix}******${visible}`;
+};
+
+// Helper function to mask email address for client privacy
+const maskEmail = (email) => {
+  if (!email || !email.includes('@')) return '****';
+  const [name, domain] = email.split('@');
+  if (name.length <= 2) return `${name[0]}*@${domain}`;
+  return `${name.slice(0, 2)}***${name.slice(-1)}@${domain}`;
+};
+
+// Helper function to send email OTP via nodemailer
+const sendEmailOtp = async (toEmail, otpCode, recipientName = 'Customer') => {
+  if (process.env.NODE_ENV === 'test') {
+    return { success: true, simulated: true, messageId: 'test_email_id' };
+  }
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    return { success: false, error: 'Email service credentials not configured in environment.' };
+  }
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER.trim(),
+        pass: process.env.EMAIL_PASS.trim()
+      }
+    });
+
+    const mailOptions = {
+      from: `"Inithan Custom Gifts" <${process.env.EMAIL_USER.trim()}>`,
+      to: toEmail,
+      subject: `Your Password Reset Verification Code: ${otpCode} - Inithan Gifts`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 520px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; background: #ffffff;">
+          <div style="background: #C41E3A; padding: 24px; text-align: center; color: white;">
+            <h2 style="margin: 0; font-size: 1.4rem;">Inithan Custom Gifts</h2>
+            <p style="margin: 6px 0 0; opacity: 0.9; font-size: 0.9rem;">Password Reset Verification Code</p>
+          </div>
+          <div style="padding: 24px; color: #334155;">
+            <p style="margin: 0 0 16px;">Hello <strong>${recipientName || 'Valued Customer'}</strong>,</p>
+            <p style="margin: 0 0 16px; line-height: 1.5;">We received a request to reset the password for your Inithan Gifts account. Please enter the One-Time Password (OTP) below into the verification prompt:</p>
+            <div style="text-align: center; margin: 24px 0;">
+              <span style="display: inline-block; font-size: 2rem; font-weight: 800; letter-spacing: 6px; padding: 12px 28px; background: #f8fafc; border: 2px dashed #C41E3A; color: #C41E3A; border-radius: 8px;">${otpCode}</span>
+            </div>
+            <p style="margin: 0 0 12px; font-size: 0.85rem; color: #64748b;">⏳ This verification code expires in <strong>10 minutes</strong>. If you did not make this request, your account remains secure and you may safely ignore this email.</p>
+          </div>
+          <div style="background: #f1f5f9; padding: 14px; text-align: center; font-size: 0.75rem; color: #94a3b8;">
+            © ${new Date().getFullYear()} Inithan Custom Gifts. All rights reserved.
+          </div>
+        </div>
+      `
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    return { success: true, messageId: info.messageId };
+  } catch (err) {
+    console.error('❌ [AUTH BACKEND] Nodemailer OTP dispatch failed:', err.message);
+    return { success: false, error: err.message };
+  }
 };
 
 // Helper function to generate JWT token
@@ -396,7 +455,7 @@ const changePassword = async (req, res) => {
   }
 };
 
-// @desc    Initiate forgot password by sending WhatsApp OTP
+// @desc    Initiate forgot password by sending WhatsApp & Email OTP
 // @route   POST /api/auth/forgot-password
 // @access  Public
 const forgotPassword = async (req, res) => {
@@ -445,7 +504,7 @@ const forgotPassword = async (req, res) => {
           success: false,
           errorType: 'COOLDOWN_ACTIVE',
           remainingSeconds,
-          message: `Please wait ${remainingSeconds} seconds before requesting a new WhatsApp OTP.`
+          message: `Please wait ${remainingSeconds} seconds before requesting a new OTP.`
         });
       }
     }
@@ -467,17 +526,77 @@ const forgotPassword = async (req, res) => {
       expiresAt
     });
 
-    // Send WhatsApp OTP
-    const waResult = await whatsappService.sendWhatsAppOtp(user.phone, otpCode);
+    // 1. Dispatch WhatsApp OTP
+    let waResult = { success: false, error: 'No phone number provided' };
+    if (user.phone) {
+      try {
+        waResult = await whatsappService.sendWhatsAppOtp(user.phone, otpCode);
+      } catch (waErr) {
+        waResult = { success: false, error: waErr.message };
+      }
+    }
 
-    console.log(`📲 [AUTH BACKEND] WhatsApp OTP dispatched to ${maskPhone(user.phone)} for user: ${user.email}`);
+    // 2. Dispatch Email OTP (if user has email)
+    let emailResult = { success: false, error: 'No email address on file' };
+    if (user.email) {
+      try {
+        emailResult = await sendEmailOtp(user.email, otpCode, user.fullName);
+      } catch (emErr) {
+        emailResult = { success: false, error: emErr.message };
+      }
+    }
+
+    const waSent = Boolean(waResult.success);
+    const emailSent = Boolean(emailResult.success);
+    const isSimulated = Boolean(waResult.simulated);
+    const anyChannelDelivered = waSent || emailSent || isSimulated;
+
+    const waErrorMsg = waSent ? null : (waResult.errorMessage || (typeof waResult.error === 'string' ? waResult.error : (waResult.error?.error?.message || waResult.error?.message || 'Meta WhatsApp delivery failed')));
+    const emailErrorMsg = emailSent ? null : (emailResult.error || 'Email dispatch failed');
+
+    console.log(`📡 [AUTH BACKEND] OTP Delivery Results for ${user.email}: WhatsApp=${waSent ? 'SENT' : 'NOT SENT'} (${waErrorMsg || 'delivered'}), Email=${emailSent ? 'SENT' : 'NOT SENT'} (${emailErrorMsg || 'delivered'})`);
+
+    const delivery = {
+      overallSent: anyChannelDelivered,
+      whatsapp: {
+        attempted: Boolean(user.phone),
+        sent: waSent,
+        simulated: isSimulated,
+        recipient: maskPhone(user.phone),
+        error: waErrorMsg
+      },
+      email: {
+        attempted: Boolean(user.email),
+        sent: emailSent,
+        recipient: maskEmail(user.email),
+        error: emailErrorMsg
+      }
+    };
+
+    let responseMessage = '';
+    if (waSent && emailSent) {
+      responseMessage = `Verification code sent to your WhatsApp (${maskPhone(user.phone)}) and Email (${maskEmail(user.email)}).`;
+    } else if (waSent) {
+      responseMessage = `Verification code sent to your WhatsApp (${maskPhone(user.phone)}).`;
+    } else if (emailSent) {
+      responseMessage = `Verification code sent to your Email (${maskEmail(user.email)}).`;
+    } else if (isSimulated) {
+      responseMessage = `Verification code generated in development simulation mode.`;
+    } else {
+      responseMessage = `Delivery Notice: Could not send OTP to external channels (WhatsApp/Email gateway credential issue).`;
+    }
+
+    const isLocalOrFailed = !anyChannelDelivered || isSimulated || (req.hostname === 'localhost' || req.hostname === '127.0.0.1');
 
     return res.status(200).json({
       success: true,
-      message: 'A 6-digit verification code has been sent to your WhatsApp number.',
+      message: responseMessage,
       email: user.email,
       maskedPhone: maskPhone(user.phone),
-      simulated: Boolean(waResult.simulated)
+      maskedEmail: maskEmail(user.email),
+      simulated: isSimulated,
+      delivery,
+      devOtp: isLocalOrFailed ? otpCode : undefined
     });
   } catch (error) {
     console.error('❌ [AUTH BACKEND] Forgot Password Error:', error);
@@ -742,14 +861,75 @@ const resendOtp = async (req, res) => {
       expiresAt
     });
 
-    const waResult = await whatsappService.sendWhatsAppOtp(user.phone, otpCode);
+    // 1. Dispatch WhatsApp OTP
+    let waResult = { success: false, error: 'No phone number provided' };
+    if (user.phone) {
+      try {
+        waResult = await whatsappService.sendWhatsAppOtp(user.phone, otpCode);
+      } catch (waErr) {
+        waResult = { success: false, error: waErr.message };
+      }
+    }
+
+    // 2. Dispatch Email OTP
+    let emailResult = { success: false, error: 'No email address on file' };
+    if (user.email) {
+      try {
+        emailResult = await sendEmailOtp(user.email, otpCode, user.fullName);
+      } catch (emErr) {
+        emailResult = { success: false, error: emErr.message };
+      }
+    }
+
+    const waSent = Boolean(waResult.success);
+    const emailSent = Boolean(emailResult.success);
+    const isSimulated = Boolean(waResult.simulated);
+    const anyChannelDelivered = waSent || emailSent || isSimulated;
+
+    const waErrorMsg = waSent ? null : (waResult.errorMessage || (typeof waResult.error === 'string' ? waResult.error : (waResult.error?.error?.message || waResult.error?.message || 'Meta WhatsApp delivery failed')));
+    const emailErrorMsg = emailSent ? null : (emailResult.error || 'Email dispatch failed');
+
+    const delivery = {
+      overallSent: anyChannelDelivered,
+      whatsapp: {
+        attempted: Boolean(user.phone),
+        sent: waSent,
+        simulated: isSimulated,
+        recipient: maskPhone(user.phone),
+        error: waErrorMsg
+      },
+      email: {
+        attempted: Boolean(user.email),
+        sent: emailSent,
+        recipient: maskEmail(user.email),
+        error: emailErrorMsg
+      }
+    };
+
+    let responseMessage = '';
+    if (waSent && emailSent) {
+      responseMessage = `New verification code sent to your WhatsApp and Email.`;
+    } else if (waSent) {
+      responseMessage = `New verification code sent to your WhatsApp (${maskPhone(user.phone)}).`;
+    } else if (emailSent) {
+      responseMessage = `New verification code sent to your Email (${maskEmail(user.email)}).`;
+    } else if (isSimulated) {
+      responseMessage = `New verification code generated in simulation mode.`;
+    } else {
+      responseMessage = `Delivery Notice: Could not send OTP to external channels (WhatsApp/Email gateway issue).`;
+    }
+
+    const isLocalOrFailed = !anyChannelDelivered || isSimulated || (req.hostname === 'localhost' || req.hostname === '127.0.0.1');
 
     return res.status(200).json({
       success: true,
-      message: 'A new 6-digit OTP has been sent to your WhatsApp number.',
+      message: responseMessage,
       email: user.email,
       maskedPhone: maskPhone(user.phone),
-      simulated: Boolean(waResult.simulated)
+      maskedEmail: maskEmail(user.email),
+      simulated: isSimulated,
+      delivery,
+      devOtp: isLocalOrFailed ? otpCode : undefined
     });
   } catch (error) {
     console.error('❌ [AUTH BACKEND] Resend OTP Error:', error);

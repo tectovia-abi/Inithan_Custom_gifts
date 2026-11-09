@@ -258,13 +258,13 @@
     <div class="modal-card">
       <button type="button" class="modal-close-btn" id="closeForgotModal" aria-label="Close modal">&times;</button>
       
-      <!-- Header with WhatsApp Branding -->
+      <!-- Header with WhatsApp & Email Branding -->
       <div class="modal-header-accent">
         <div class="wa-badge">
-          <span>💬</span> WhatsApp Verification
+          <span>💬 ✉️</span> Secure Account Verification
         </div>
         <h3 id="forgotModalTitle">Reset Password</h3>
-        <p id="forgotModalSubtitle">Recover your account using a secure One-Time Password sent directly to your WhatsApp.</p>
+        <p id="forgotModalSubtitle">Recover your account using a secure One-Time Password (OTP) dispatched to your WhatsApp and Email.</p>
       </div>
 
       <div class="modal-body">
@@ -291,8 +291,8 @@
             </div>
 
             <button type="submit" class="wa-btn" id="sendOtpBtn">
-              <span>Send WhatsApp OTP</span>
-              <span>📲</span>
+              <span>Send Verification Code</span>
+              <span>🚀</span>
             </button>
           </form>
         </div>
@@ -300,10 +300,57 @@
         <!-- STEP 2: Enter OTP & New Password -->
         <div class="wa-step" id="waStep2">
           <form id="forgotResetForm">
-            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 14px; margin-bottom:16px;">
-              <div style="font-size:0.78rem; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; font-weight:600;">OTP Sent To WhatsApp</div>
-              <div id="otpDestinationText" style="font-weight:700; color:#0f172a; font-size:0.95rem; margin-top:2px;">+91 ******0000</div>
+            <!-- Dynamic Delivery Indications Card -->
+            <div id="deliveryStatusCard" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px 14px; margin-bottom:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid #edf2f7;">
+                <span style="font-size:0.75rem; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; font-weight:700;">Delivery Status</span>
+                <span id="overallDeliveryBadge" style="font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:12px; background:#dcfce7; color:#15803d;">Dispatched</span>
+              </div>
+              
+              <!-- WhatsApp Delivery Row -->
+              <div id="whatsappDeliveryRow" style="display:flex; align-items:center; justify-content:space-between; padding:6px 0;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:1rem;">💬</span>
+                  <div>
+                    <div style="font-size:0.82rem; font-weight:600; color:#0f172a;">WhatsApp</div>
+                    <small id="whatsappRecipientText" style="color:#64748b; font-size:0.72rem;">+91 ******0000</small>
+                  </div>
+                </div>
+                <div id="whatsappStatusIndicator">
+                  <span style="font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:6px; background:#dcfce7; color:#15803d;">✓ SENT</span>
+                </div>
+              </div>
+
+              <!-- Email Delivery Row -->
+              <div id="emailDeliveryRow" style="display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-top:1px dashed #e2e8f0;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:1rem;">✉️</span>
+                  <div>
+                    <div style="font-size:0.82rem; font-weight:600; color:#0f172a;">Email</div>
+                    <small id="emailRecipientText" style="color:#64748b; font-size:0.72rem;">user@example.com</small>
+                  </div>
+                </div>
+                <div id="emailStatusIndicator">
+                  <span style="font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:6px; background:#f1f5f9; color:#64748b;">Not Attempted</span>
+                </div>
+              </div>
+
+              <!-- Diagnostic Notice if an external channel failed -->
+              <div id="deliveryDiagnosticNotice" style="display:none; margin-top:8px; padding:8px 10px; background:#fff7ed; border:1px solid #fed7aa; border-radius:8px; font-size:0.74rem; color:#9a3412; line-height:1.4;">
+              </div>
+
+              <!-- Instant Auto-Fill for Development / Recovery Code -->
+              <div id="devOtpBox" style="display:none; margin-top:10px; padding:8px 12px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; font-size:0.8rem; color:#166534; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <span style="font-size:0.75rem; color:#166534; font-weight:600;">Verification Code: </span>
+                  <code id="devOtpCode" style="font-size:0.95rem; font-weight:800; letter-spacing:2px; background:#fff; padding:2px 6px; border-radius:4px; border:1px solid #86efac; color:#15803d;">123456</code>
+                </div>
+                <button type="button" id="copyDevOtpBtn" style="border:none; background:#16a34a; color:#fff; font-size:0.72rem; font-weight:700; padding:4px 8px; border-radius:6px; cursor:pointer;">Auto-fill</button>
+              </div>
             </div>
+
+            <!-- Legacy container hidden or aliased for backwards compatibility -->
+            <div id="otpDestinationText" style="display:none;"></div>
 
             <!-- OTP Code -->
             <div class="form-group" style="margin-bottom: 10px;">

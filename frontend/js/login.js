@@ -212,6 +212,108 @@
     hideForgotAlert();
   }
 
+  // ── WhatsApp & Email Delivery Indications Helper ────────────────────────────
+  function updateDeliveryIndications(data) {
+    const delivery = data.delivery || {};
+    const overallBadge = document.getElementById('overallDeliveryBadge');
+    const waIndicator = document.getElementById('whatsappStatusIndicator');
+    const waRecipient = document.getElementById('whatsappRecipientText');
+    const emailIndicator = document.getElementById('emailStatusIndicator');
+    const emailRecipient = document.getElementById('emailRecipientText');
+    const diagnosticNotice = document.getElementById('deliveryDiagnosticNotice');
+    const devOtpBox = document.getElementById('devOtpBox');
+    const devOtpCode = document.getElementById('devOtpCode');
+
+    const wa = delivery.whatsapp || {};
+    const em = delivery.email || {};
+
+    if (waRecipient) {
+      waRecipient.textContent = wa.recipient || data.maskedPhone || 'No phone linked';
+    }
+    if (emailRecipient) {
+      emailRecipient.textContent = em.recipient || data.maskedEmail || data.email || 'No email linked';
+    }
+
+    // WhatsApp status badge
+    if (waIndicator) {
+      if (wa.sent) {
+        waIndicator.innerHTML = '<span style="font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:6px; background:#dcfce7; color:#15803d;">✓ SENT</span>';
+      } else if (wa.simulated) {
+        waIndicator.innerHTML = '<span style="font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:6px; background:#eff6ff; color:#1d4ed8;">⚡ SIMULATED</span>';
+      } else if (!wa.attempted) {
+        waIndicator.innerHTML = '<span style="font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:6px; background:#f1f5f9; color:#64748b;">Not Linked</span>';
+      } else {
+        waIndicator.innerHTML = '<span style="font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:6px; background:#fee2e2; color:#b91c1c;">✕ NOT SENT</span>';
+      }
+    }
+
+    // Email status badge
+    if (emailIndicator) {
+      if (em.sent) {
+        emailIndicator.innerHTML = '<span style="font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:6px; background:#dcfce7; color:#15803d;">✓ SENT</span>';
+      } else if (!em.attempted) {
+        emailIndicator.innerHTML = '<span style="font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:6px; background:#f1f5f9; color:#64748b;">Not Linked</span>';
+      } else {
+        emailIndicator.innerHTML = '<span style="font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:6px; background:#fee2e2; color:#b91c1c;">✕ NOT SENT</span>';
+      }
+    }
+
+    // Overall status badge
+    if (overallBadge) {
+      if (delivery.overallSent && (wa.sent || em.sent)) {
+        overallBadge.textContent = 'Delivered';
+        overallBadge.style.background = '#dcfce7';
+        overallBadge.style.color = '#15803d';
+      } else if (wa.simulated) {
+        overallBadge.textContent = 'Simulated Mode';
+        overallBadge.style.background = '#eff6ff';
+        overallBadge.style.color = '#1d4ed8';
+      } else {
+        overallBadge.textContent = 'Gateway Issue';
+        overallBadge.style.background = '#fee2e2';
+        overallBadge.style.color = '#b91c1c';
+      }
+    }
+
+    // Diagnostics if either channel failed
+    const errors = [];
+    if (wa.attempted && !wa.sent && !wa.simulated && wa.error) {
+      errors.push(`<strong>WhatsApp:</strong> ${wa.error}`);
+    }
+    if (em.attempted && !em.sent && em.error) {
+      errors.push(`<strong>Email:</strong> ${em.error}`);
+    }
+
+    if (diagnosticNotice) {
+      if (errors.length > 0) {
+        diagnosticNotice.style.display = 'block';
+        diagnosticNotice.innerHTML = `⚠️ <strong>Delivery Diagnostic:</strong><br>${errors.join('<br>')}`;
+      } else {
+        diagnosticNotice.style.display = 'none';
+      }
+    }
+
+    // Dev / Fallback OTP auto-fill box
+    if (devOtpBox && devOtpCode) {
+      if (data.devOtp) {
+        devOtpBox.style.display = 'flex';
+        devOtpCode.textContent = data.devOtp;
+        const copyBtn = document.getElementById('copyDevOtpBtn');
+        if (copyBtn) {
+          copyBtn.onclick = () => {
+            const input = document.getElementById('forgotOtp');
+            if (input) {
+              input.value = data.devOtp;
+              input.focus();
+            }
+          };
+        }
+      } else {
+        devOtpBox.style.display = 'none';
+      }
+    }
+  }
+
   // Handle Step 1: Send OTP to WhatsApp
   async function handleForgotRequest(event) {
     event.preventDefault();
@@ -227,7 +329,7 @@
     hideForgotAlert();
     btn.disabled = true;
     const originalText = btn.innerHTML;
-    btn.innerHTML = '<span>Sending WhatsApp OTP...</span> <span>⏳</span>';
+    btn.innerHTML = '<span>Sending Verification Code...</span> <span>⏳</span>';
 
     try {
       const response = await fetch(`${API_BASE}/api/auth/forgot-password`, {
@@ -240,14 +342,10 @@
 
       if (response.ok && data.success) {
         activeResetEmail = data.email || identifier;
-        const destEl = document.getElementById('otpDestinationText');
-        if (destEl) {
-          destEl.textContent = data.maskedPhone || 'your registered WhatsApp';
-        }
-
+        updateDeliveryIndications(data);
         switchForgotStep(2);
         startResendCooldown(60);
-        showForgotAlert(data.message || 'OTP dispatched to your WhatsApp!', true);
+        showForgotAlert(data.message || 'OTP verification code dispatched!', data.delivery ? data.delivery.overallSent : true);
       } else {
         showForgotAlert(data.message || 'Unable to send OTP. Please check your details.');
       }
@@ -278,8 +376,9 @@
       const data = await response.json();
 
       if (response.ok && data.success) {
+        updateDeliveryIndications(data);
         startResendCooldown(60);
-        showForgotAlert('A new OTP has been sent to your WhatsApp number!', true);
+        showForgotAlert(data.message || 'A new verification code has been dispatched!', data.delivery ? data.delivery.overallSent : true);
       } else {
         if (data.remainingSeconds) {
           startResendCooldown(data.remainingSeconds);

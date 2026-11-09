@@ -29,3 +29,4 @@ const relationshipSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 module.exports = mongoose.model('Relationship', relationshipSchema);
+
