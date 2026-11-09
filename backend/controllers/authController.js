@@ -1,7 +1,25 @@
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
+const crypto = require('crypto');
 const User = require('../models/User');
 const LoginLog = require('../models/LoginLog');
+const PasswordResetOtp = require('../models/PasswordResetOtp');
+const whatsappService = require('../services/whatsappService');
+
+// Helper function to hash OTP with salt
+const hashOtp = (otp) => {
+  const salt = process.env.JWT_SECRET || 'fallback_secret_key';
+  return crypto.createHash('sha256').update(String(otp) + salt).digest('hex');
+};
+
+// Helper function to mask phone number for client privacy
+const maskPhone = (phone) => {
+  const digits = String(phone || '').replace(/[^0-9]/g, '');
+  if (digits.length <= 4) return '****';
+  const visible = digits.slice(-4);
+  const prefix = digits.length > 10 ? '+' + digits.slice(0, digits.length - 10) + ' ' : '';
+  return `${prefix}******${visible}`;
+};
 
 // Helper function to generate JWT token
 const generateToken = (userId) => {
@@ -378,4 +396,379 @@ const changePassword = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, getUsers, getProfile, updateProfile, changePassword };
+// @desc    Initiate forgot password by sending WhatsApp OTP
+// @route   POST /api/auth/forgot-password
+// @access  Public
+const forgotPassword = async (req, res) => {
+  try {
+    const { identifier } = req.body;
+    if (!identifier || !String(identifier).trim()) {
+      return res.status(400).json({
+        success: false,
+        errorType: 'MISSING_IDENTIFIER',
+        message: 'Please provide your registered email address or mobile number.'
+      });
+    }
+
+    const trimmed = String(identifier).trim();
+    let user = null;
+
+    if (trimmed.includes('@')) {
+      user = await User.findOne({ email: trimmed.toLowerCase() });
+    } else {
+      const phoneDigits = trimmed.replace(/[^0-9]/g, '');
+      const last10 = phoneDigits.slice(-10);
+      user = await User.findOne({
+        $or: [
+          { phone: trimmed },
+          { phone: phoneDigits },
+          { phone: { $regex: `${last10}$` } }
+        ]
+      });
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        errorType: 'USER_NOT_FOUND',
+        message: 'No account was found with the provided details. Please verify your email or phone number.'
+      });
+    }
+
+    // Cooldown check (60 seconds)
+    const existingOtp = await PasswordResetOtp.findOne({ userId: user._id, isUsed: false }).sort({ createdAt: -1 });
+    if (existingOtp) {
+      const elapsedMs = Date.now() - existingOtp.createdAt.getTime();
+      if (elapsedMs < 60000) {
+        const remainingSeconds = Math.ceil((60000 - elapsedMs) / 1000);
+        return res.status(429).json({
+          success: false,
+          errorType: 'COOLDOWN_ACTIVE',
+          remainingSeconds,
+          message: `Please wait ${remainingSeconds} seconds before requesting a new WhatsApp OTP.`
+        });
+      }
+    }
+
+    // Generate secure 6-digit OTP (100000 - 999999)
+    const otpCode = crypto.randomInt(100000, 1000000).toString();
+    const otpHash = hashOtp(otpCode);
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    // Invalidate prior unused OTP records
+    await PasswordResetOtp.deleteMany({ userId: user._id });
+
+    // Store new OTP
+    await PasswordResetOtp.create({
+      userId: user._id,
+      email: user.email,
+      phone: user.phone,
+      otpHash,
+      expiresAt
+    });
+
+    // Send WhatsApp OTP
+    const waResult = await whatsappService.sendWhatsAppOtp(user.phone, otpCode);
+
+    console.log(`📲 [AUTH BACKEND] WhatsApp OTP dispatched to ${maskPhone(user.phone)} for user: ${user.email}`);
+
+    return res.status(200).json({
+      success: true,
+      message: 'A 6-digit verification code has been sent to your WhatsApp number.',
+      email: user.email,
+      maskedPhone: maskPhone(user.phone),
+      simulated: Boolean(waResult.simulated)
+    });
+  } catch (error) {
+    console.error('❌ [AUTH BACKEND] Forgot Password Error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'An error occurred while preparing your verification code. Please try again later.'
+    });
+  }
+};
+
+// @desc    Verify WhatsApp OTP code
+// @route   POST /api/auth/verify-otp
+// @access  Public
+const verifyOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email and 6-digit OTP are required.'
+      });
+    }
+
+    const cleanEmail = String(email).trim().toLowerCase();
+    const cleanOtp = String(otp).trim();
+
+    const otpRecord = await PasswordResetOtp.findOne({
+      email: cleanEmail,
+      isUsed: false
+    }).sort({ createdAt: -1 });
+
+    if (!otpRecord) {
+      return res.status(400).json({
+        success: false,
+        errorType: 'OTP_NOT_FOUND',
+        message: 'No active OTP request found. Please request a new verification code.'
+      });
+    }
+
+    // Check expiration
+    if (new Date() > otpRecord.expiresAt) {
+      return res.status(400).json({
+        success: false,
+        errorType: 'OTP_EXPIRED',
+        message: 'The OTP code has expired. Please request a fresh one.'
+      });
+    }
+
+    // Check max attempts
+    if (otpRecord.attempts >= otpRecord.maxAttempts) {
+      return res.status(429).json({
+        success: false,
+        errorType: 'MAX_ATTEMPTS_EXCEEDED',
+        message: 'Maximum verification attempts exceeded. Please request a new OTP.'
+      });
+    }
+
+    // Check hash
+    const inputHash = hashOtp(cleanOtp);
+    if (inputHash !== otpRecord.otpHash) {
+      otpRecord.attempts += 1;
+      await otpRecord.save();
+      const remaining = otpRecord.maxAttempts - otpRecord.attempts;
+      return res.status(400).json({
+        success: false,
+        errorType: 'INVALID_OTP',
+        message: `Incorrect OTP code. ${remaining > 0 ? remaining + ' attempt(s) remaining.' : 'Please request a new code.'}`
+      });
+    }
+
+    // Generate short-lived reset token (15 mins)
+    const resetToken = jwt.sign(
+      { userId: otpRecord.userId, email: cleanEmail, purpose: 'PASSWORD_RESET' },
+      process.env.JWT_SECRET || 'fallback_secret_key',
+      { expiresIn: '15m' }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: 'OTP verified successfully.',
+      resetToken
+    });
+  } catch (error) {
+    console.error('❌ [AUTH BACKEND] Verify OTP Error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error verifying OTP code.'
+    });
+  }
+};
+
+// @desc    Reset password using verified resetToken OR email + otp
+// @route   POST /api/auth/reset-password
+// @access  Public
+const resetPassword = async (req, res) => {
+  try {
+    const { email, otp, resetToken, newPassword, confirmPassword } = req.body;
+
+    if (!newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a new password.'
+      });
+    }
+
+    if (newPassword.length < 8) {
+      return res.status(400).json({
+        success: false,
+        message: 'New password must be at least 8 characters long.'
+      });
+    }
+
+    const hasUpper = /[A-Z]/.test(newPassword);
+    const hasLower = /[a-z]/.test(newPassword);
+    const hasNumSym = /[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(newPassword);
+
+    if (!hasUpper || !hasLower || !hasNumSym) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password must include uppercase (A-Z), lowercase (a-z), and at least one number or symbol.'
+      });
+    }
+
+    if (confirmPassword && newPassword !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Passwords do not match.'
+      });
+    }
+
+    let userId = null;
+
+    if (resetToken) {
+      try {
+        const decoded = jwt.verify(resetToken, process.env.JWT_SECRET || 'fallback_secret_key');
+        if (decoded.purpose !== 'PASSWORD_RESET') {
+          return res.status(401).json({ success: false, message: 'Invalid reset authorization token.' });
+        }
+        userId = decoded.userId;
+      } catch (jwtErr) {
+        return res.status(401).json({
+          success: false,
+          errorType: 'TOKEN_EXPIRED',
+          message: 'Reset authorization session expired. Please verify your OTP again.'
+        });
+      }
+    } else if (email && otp) {
+      const cleanEmail = String(email).trim().toLowerCase();
+      const cleanOtp = String(otp).trim();
+      const otpRecord = await PasswordResetOtp.findOne({ email: cleanEmail, isUsed: false }).sort({ createdAt: -1 });
+
+      if (!otpRecord) {
+        return res.status(400).json({ success: false, message: 'No active OTP request found.' });
+      }
+      if (new Date() > otpRecord.expiresAt) {
+        return res.status(400).json({ success: false, message: 'OTP has expired. Please request a new code.' });
+      }
+      if (hashOtp(cleanOtp) !== otpRecord.otpHash) {
+        return res.status(400).json({ success: false, message: 'Invalid OTP code.' });
+      }
+      userId = otpRecord.userId;
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: 'Verification credential missing (OTP or reset token required).'
+      });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User account not found.'
+      });
+    }
+
+    // Save new password - pre('save') hook handles bcrypt hashing
+    user.password = newPassword;
+    await user.save();
+
+    // Clean up OTP records for this user
+    await PasswordResetOtp.deleteMany({ userId: user._id });
+
+    console.log(`🔐 [AUTH BACKEND] Password successfully reset for user: ${user.email}`);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Your password has been reset successfully! You can now log in.'
+    });
+  } catch (error) {
+    console.error('❌ [AUTH BACKEND] Reset Password Error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error resetting password.'
+    });
+  }
+};
+
+// @desc    Resend WhatsApp OTP with 60s cooldown
+// @route   POST /api/auth/resend-otp
+// @access  Public
+const resendOtp = async (req, res) => {
+  try {
+    const { email, identifier } = req.body;
+    const lookupKey = String(email || identifier || '').trim();
+
+    if (!lookupKey) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email or mobile number is required to resend OTP.'
+      });
+    }
+
+    let user = null;
+    if (lookupKey.includes('@')) {
+      user = await User.findOne({ email: lookupKey.toLowerCase() });
+    } else {
+      const phoneDigits = lookupKey.replace(/[^0-9]/g, '');
+      const last10 = phoneDigits.slice(-10);
+      user = await User.findOne({
+        $or: [
+          { phone: lookupKey },
+          { phone: phoneDigits },
+          { phone: { $regex: `${last10}$` } }
+        ]
+      });
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User account not found.'
+      });
+    }
+
+    // Check cooldown
+    const existingOtp = await PasswordResetOtp.findOne({ userId: user._id, isUsed: false }).sort({ createdAt: -1 });
+    if (existingOtp) {
+      const elapsedMs = Date.now() - existingOtp.createdAt.getTime();
+      if (elapsedMs < 60000) {
+        const remainingSeconds = Math.ceil((60000 - elapsedMs) / 1000);
+        return res.status(429).json({
+          success: false,
+          errorType: 'COOLDOWN_ACTIVE',
+          remainingSeconds,
+          message: `Please wait ${remainingSeconds} seconds before requesting a new OTP.`
+        });
+      }
+    }
+
+    const otpCode = crypto.randomInt(100000, 1000000).toString();
+    const otpHash = hashOtp(otpCode);
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+    await PasswordResetOtp.deleteMany({ userId: user._id });
+    await PasswordResetOtp.create({
+      userId: user._id,
+      email: user.email,
+      phone: user.phone,
+      otpHash,
+      expiresAt
+    });
+
+    const waResult = await whatsappService.sendWhatsAppOtp(user.phone, otpCode);
+
+    return res.status(200).json({
+      success: true,
+      message: 'A new 6-digit OTP has been sent to your WhatsApp number.',
+      email: user.email,
+      maskedPhone: maskPhone(user.phone),
+      simulated: Boolean(waResult.simulated)
+    });
+  } catch (error) {
+    console.error('❌ [AUTH BACKEND] Resend OTP Error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error resending OTP.'
+    });
+  }
+};
+
+module.exports = {
+  signup,
+  login,
+  getUsers,
+  getProfile,
+  updateProfile,
+  changePassword,
+  forgotPassword,
+  verifyOtp,
+  resetPassword,
+  resendOtp
+};

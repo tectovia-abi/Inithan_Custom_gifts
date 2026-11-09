@@ -2,6 +2,7 @@ const express = require('express');
 const router  = express.Router();
 const Order   = require('../models/Order');
 const { protect, admin } = require('../middleware/authMiddleware');
+const whatsappService = require('../services/whatsappService');
 
 // ── Valid status-transition map ───────────────────────────────────────────────
 // Enforces business state transitions server-side.
@@ -242,6 +243,13 @@ router.put('/:id/status', protect, admin, async (req, res) => {
 
     console.log(`[AUDIT] Order #${order.orderNumber} status changed: '${oldStatus}' -> '${status}' by ${handler.name} (${handler.role})`);
 
+    // Dispatch WhatsApp cancellation notice if transitioned to cancelled
+    if (status === 'cancelled') {
+      whatsappService.sendOrderCancellation(order, note, `${handler.role}: ${handler.name}`).catch(err => {
+        console.error('⚠️ [WhatsApp] Failed to dispatch order cancellation:', err.message);
+      });
+    }
+
     return res.status(200).json({
       success: true,
       message: `Order status updated to '${status}'.`,
@@ -395,6 +403,77 @@ router.put('/:id/address', protect, async (req, res) => {
   } catch (err) {
     console.error('PUT /orders/:id/address error:', err);
     return res.status(500).json({ success: false, message: 'Failed to update shipping address.' });
+  }
+});
+
+// ── POST /api/orders/:id/cancel — Customer/Admin: Cancel order & notify on WhatsApp ─
+router.post('/:id/cancel', protect, async (req, res) => {
+  try {
+    const { reason } = req.body;
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ success: false, message: 'Order not found.' });
+
+    const isOwner = order.userId.toString() === req.user._id.toString();
+    if (!isOwner && !req.user.isAdmin) {
+      return res.status(403).json({ success: false, message: 'Access denied.' });
+    }
+
+    if (order.orderStatus === 'cancelled') {
+      return res.status(400).json({ success: false, message: 'This order is already cancelled.' });
+    }
+
+    if (['shipped', 'delivered'].includes(order.orderStatus)) {
+      return res.status(400).json({
+        success: false,
+        message: `Order cannot be cancelled because it has already been ${order.orderStatus}. Please contact customer support.`
+      });
+    }
+
+    const cancelReason = (reason || 'Cancelled by customer').trim();
+    const oldStatus = order.orderStatus;
+    const handler = {
+      userId: req.user._id,
+      name: req.user.fullName || (isOwner ? 'Customer' : 'Admin'),
+      role: req.user.isAdmin ? 'admin' : 'customer'
+    };
+    const now = new Date();
+
+    order.orderStatus = 'cancelled';
+    order.lastHandledBy = handler;
+    order.lastUpdatedAt = now;
+
+    order.statusHistory.push({
+      status: 'cancelled',
+      changedAt: now,
+      changedBy: req.user._id
+    });
+
+    order.activityLog.push({
+      type: 'cancelled',
+      oldValue: oldStatus,
+      newValue: 'cancelled',
+      performedBy: handler,
+      note: cancelReason,
+      createdAt: now
+    });
+
+    await order.save();
+
+    console.log(`🛑 [AUDIT] Order #${order.orderNumber} cancelled by ${handler.name} (${handler.role}): "${cancelReason}"`);
+
+    // Dispatch WhatsApp Order Cancellation notification
+    whatsappService.sendOrderCancellation(order, cancelReason, handler.name).catch(err => {
+      console.error('⚠️ [WhatsApp] Failed to dispatch order cancellation notification:', err.message);
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Your order has been cancelled successfully. A confirmation message has been sent to your WhatsApp.',
+      order
+    });
+  } catch (err) {
+    console.error('POST /orders/:id/cancel error:', err);
+    return res.status(500).json({ success: false, message: 'Failed to cancel order.' });
   }
 });
 

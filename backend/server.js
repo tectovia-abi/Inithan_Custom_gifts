@@ -60,6 +60,7 @@ app.use(cors((req, callback) => {
     !origin || 
     origin === 'null' || 
     allowedOrigins.includes(origin) ||
+    (origin && origin.includes('onrender.com')) ||
     /^http:\/\/localhost:\d+$/.test(origin) ||
     /^http:\/\/127\.0\.0\.1:\d+$/.test(origin) ||
     (origin && (origin.includes('facebook.com') || origin.includes('meta.com')))
@@ -87,6 +88,14 @@ const authLimiter = rateLimit({
 });
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/signup', authLimiter);
+
+const forgotPasswordLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { success: false, message: 'Too many verification code requests, please try again in 15 minutes.' }
+});
+app.use('/api/auth/forgot-password', forgotPasswordLimiter);
+app.use('/api/auth/resend-otp', forgotPasswordLimiter);
 
 const inquiryLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,

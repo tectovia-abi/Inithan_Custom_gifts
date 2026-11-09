@@ -10,6 +10,7 @@ const { protect }                    = require('../middleware/authMiddleware');
 const Product                        = require('../models/Product');
 const Order                          = require('../models/Order');
 const { validatePincodeAgainstAddress } = require('../services/addressService');
+const whatsappService                = require('../services/whatsappService');
 
 // ── Dynamic env reload ────────────────────────────────────────────────────────
 function loadEnv() {
@@ -338,6 +339,11 @@ router.post('/verify-payment', protect, async (req, res) => {
     });
 
     console.log('ORDER CREATED IN DB:', order.orderNumber);
+
+    // ── 7. Dispatch WhatsApp Order Confirmation ───────────────────────────
+    whatsappService.sendOrderConfirmation(order).catch(waErr => {
+      console.error('⚠️ [WhatsApp] Order confirmation dispatch error:', waErr.message);
+    });
 
     return res.status(201).json({
       success: true,
